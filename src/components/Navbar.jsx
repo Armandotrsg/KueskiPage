@@ -6,6 +6,7 @@ import { Navigation } from "../shared/Navigation";
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
+    // Componente para renderizar los items de la barra de navegación
     const NavigationItems = ({ name, path, icon }) => {
         return (
             <li>
@@ -39,7 +40,7 @@ export const Navbar = () => {
                 />
             </button>
             {/* Barra de navegación */}
-            <div className="flex flex-col gap-x-4 items-center">
+            <div className="flex flex-col gap-x-4 items-center space-y-7">
                 {/* Logo */}
                 <div className="flex flex-row items-center justify-center gap-x-2">
                     <img
@@ -55,8 +56,9 @@ export const Navbar = () => {
                         Kueski
                     </h1>
                 </div>
+                {/* Navegación */}
                 <nav className="flex">
-                    <ul className="pt-6 flex flex-col space-y-10">
+                    <ul className="pt-6 flex flex-col space-y-9">
                         {Navigation.map((item, index) => (
                             <NavigationItems key={index} {...item} />
                         ))}

@@ -15,7 +15,7 @@ export const Navigation = [
     },
     {
         name: "Tutoriales",
-        path: "/tutoriales",
+        path: "/tutorial",
         icon: tutorial,
     },
 ];
