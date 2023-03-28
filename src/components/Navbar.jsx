@@ -28,8 +28,8 @@ export const Navbar = () => {
     return (
         <aside
             className={`${
-                isOpen ? "w-56" : "w-20"
-            } h-screen bg-blue-500 relative duration-500 ease-in-out`}
+                isOpen ? "w-56 min-w-[40%] md:min-w-[224px]" : "w-20 min-w-[20%] md:min-w-[80px]"
+            }  h-screen bg-blue-500 relative duration-500 ease-in-out`}
         >
             {/* Botón para ocultar y mostrar la navbar */}
             <button onClick={() => setIsOpen(!isOpen)}>
@@ -44,7 +44,7 @@ export const Navbar = () => {
             {/* Barra de navegación */}
             <div className="flex flex-col gap-x-4 items-center space-y-7">
                 {/* Logo */}
-                <div className="flex flex-row items-center justify-center gap-x-2">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-x-2">
                     <img
                         src={kueskiLogo}
                         alt="Logo de Kueski"
