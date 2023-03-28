@@ -1,18 +1,20 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import arrow from "../assets/img/arrow.svg";
 import kueskiLogo from "../assets/img/kueskiLogo.png";
 import { Navigation } from "../shared/Navigation";
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const location = useLocation();
 
     // Componente para renderizar los items de la barra de navegación
     const NavigationItems = ({ name, path, icon }) => {
         return (
-            <li>
+            <li className={`flex w-full items-center justify-center ${path === location.pathname ? "border-r-[5px] border-lime-500" : ""}`}>
                 <a
                     href={path}
-                    className={`text-white text-sm flex flex-row items-center gap-x-4 p-2 hover:bg-gray-400 rounded-md`}
+                    className={`text-white text-sm flex flex-row items-center justify-center gap-x-4 p-2 hover:bg-gray-400 duration-200 ease-in-out rounded-md`}
                 >
                     <img src={icon} alt={name} className="w-6 h-6" />
                     <span className={`${!isOpen ? "hidden" : ""} duration-200`}>
@@ -57,8 +59,8 @@ export const Navbar = () => {
                     </h1>
                 </div>
                 {/* Navegación */}
-                <nav className="flex">
-                    <ul className="pt-6 flex flex-col space-y-9">
+                <nav className="flex w-full">
+                    <ul className="pt-6 flex flex-col space-y-9 w-full">
                         {Navigation.map((item, index) => (
                             <NavigationItems key={index} {...item} />
                         ))}
