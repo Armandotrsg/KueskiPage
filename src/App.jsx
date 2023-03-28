@@ -3,9 +3,6 @@ import {
     Routes,
     Route,
     Navigate,
-    useLocation,
-    useNavigate,
-    useParams,
 } from "react-router-dom";
 import { Clientes } from "./components/Clientes";
 import { Navbar } from "./components/Navbar";
