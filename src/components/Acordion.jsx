@@ -2,7 +2,7 @@ import arrow from "../assets/img/arrow.svg";
 
 export const Acordion = ({ question, answer}) => {
     return (
-        <div className="relative w-[400px] overflow-hidden">
+        <div className="relative w-[400px] overflow-hidden rounded-md">
             {/* Question */}
             <input type="checkbox" className="peer absolute top-0 inset-x-0 w-full h-12 opacity-0 z-10 cursor-pointer"/>
             <div className="bg-blue-500 h-12 w-full pl-5 flex items-center">
@@ -11,7 +11,7 @@ export const Acordion = ({ question, answer}) => {
                 </h1>
             </div>
             {/* Arrow */}
-            <div className="absolute top-0 right-3 text-white transition-transform duration-500 rotate-0 peer-checked:rotate-180">
+            <div className="absolute top-3 right-3 text-white transition-transform duration-500 rotate-180 peer-checked:rotate-90">
                 <img src={arrow} alt="Arrow" className="w-6 h-6"/>
             </div>
             {/* Answer */}

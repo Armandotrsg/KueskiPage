@@ -41,7 +41,7 @@ export const Tutorial = () => {
             </div>
             {/* Acordión para las FAQ's */}
             <div className="flex flex-col items-start ml-10 justify-center w-full bg-white">
-                {
+                {   
                     FaqsData.map((item, index) => {
                         return <Acordion key={index} {...item} />
                     })
