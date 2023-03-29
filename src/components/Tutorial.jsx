@@ -4,13 +4,13 @@ import { FaqsData } from "../shared/FaqsData";
 
 export const Tutorial = () => {
     return (
-        <div className="flex flex-col items-center bg-gray-100 h-screen overflow-scroll">
+        <main className="flex flex-col items-center bg-gray-100 h-screen overflow-scroll">
             {/* Título */}
             <div className="flex text-center my-10">
                 <h1 className="text-[2.5rem] font-bold ml-4">🤔 ¿Tienes Preguntas? </h1>
             </div>
             {/* Video */}
-            <div className="flex flex-col items-center justify-center mt-5 ">
+            <section className="flex flex-col items-center justify-center mt-5 ">
                 {/* Div para título del video */}
                 <div className="flex items-center">
                     <h2 className="text-[1.5rem] font-bold ml-4">Tutorial</h2>
@@ -31,22 +31,24 @@ export const Tutorial = () => {
                         Your browser does not support the video tag.
                     </video>
                 </div>
-            </div>
+            </section>
             {/* Div para las FAQ's */}
-            <div className="flex flex-col md:flex-row items-center justify-center md:mt-48 w-full bg-white">
-                <div className="flex text-center items-center justify-center p-5 w-[50%]">
-                    <h2 className="text-[2rem] font-bold">📚 Preguntas Frecuentes</h2>
+            <section>
+                <div className="flex flex-col md:flex-row items-center justify-center md:mt-48 w-full bg-white">
+                    <div className="flex text-center items-center justify-center p-5 w-[50%]">
+                        <h2 className="text-[2rem] font-bold">📚 Preguntas Frecuentes</h2>
+                    </div>
+                    <img src={faqs} alt="FAQ's" className="md:w-[45%] mx-auto"/>
                 </div>
-                <img src={faqs} alt="FAQ's" className="md:w-[45%] mx-auto"/>
-            </div>
-            {/* Acordión para las FAQ's */}
-            <div className="flex flex-col items-start p-10 justify-center w-full bg-white">
-                {   
-                    FaqsData.map((item, index) => {
-                        return <Acordion key={index} {...item} />
-                    })
-                }
-            </div>  
-        </div>
+                {/* Acordión para las FAQ's */}
+                <div className="flex flex-col items-start p-10 justify-center w-full bg-white">
+                    {   
+                        FaqsData.map((item, index) => {
+                            return <Acordion key={index} {...item} />
+                        })
+                    }
+                </div>  
+            </section>
+        </main>
     );
 };
