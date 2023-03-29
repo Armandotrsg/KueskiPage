@@ -40,7 +40,7 @@ export const Tutorial = () => {
                 <img src={faqs} alt="FAQ's" className="md:w-[45%] mx-auto"/>
             </div>
             {/* Acordión para las FAQ's */}
-            <div className="flex flex-col items-start ml-10 justify-center w-full bg-white">
+            <div className="flex flex-col items-start p-10 justify-center w-full bg-white">
                 {   
                     FaqsData.map((item, index) => {
                         return <Acordion key={index} {...item} />
