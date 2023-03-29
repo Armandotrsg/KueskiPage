@@ -13,7 +13,7 @@ export const Tutorial = () => {
             <section className="flex flex-col items-center justify-center mt-5 ">
                 {/* Div para título del video */}
                 <div className="flex items-center">
-                    <h2 className="text-[1.5rem] font-bold ml-4">Tutorial</h2>
+                    <h2 className="text-[1.5em] font-bold ml-4 mb-5">¡Este video te puede ayudar 🎥!</h2>
                 </div>
                 {/*Div para la posición del video*/}
                 <div className="w-4/5 md:w-2/3 lg:w-2/3 h-96">
