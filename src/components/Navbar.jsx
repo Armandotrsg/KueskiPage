@@ -11,15 +11,20 @@ export const Navbar = () => {
     // Componente para renderizar los items de la barra de navegación
     const NavigationItems = ({ name, path, icon }) => {
         return (
-            <li className={`flex w-full items-center justify-center ${path === location.pathname ? "border-r-[5px] border-lime-500" : ""}`}>
+            <li className={`flex w-full items-center justify-center border-r-[5px] ${path === location.pathname ? "border-lime-500" : "border-transparent"}`}>
                 <a
                     href={path}
-                    className={`text-white text-sm flex flex-row items-center justify-center gap-x-4 p-2 hover:bg-gray-400 duration-200 ease-in-out rounded-md`}
+                    className={`text-white text-sm w-[70%] flex flex-row items-center justify-center p-2 hover:bg-gray-400 duration-200 ease-in-out rounded-md`}
                 >
-                    <img src={icon} alt={name} className="w-6 h-6" />
-                    <span className={`${!isOpen ? "hidden" : ""} duration-200`}>
-                        {name}
-                    </span>
+                    <div className={`flex flex-col items-center justify-center ${!isOpen ? "w-[100%]" : "w-[50%]"} `}>
+                        <img src={icon} alt={name} className="w-6 h-6" />
+                    </div>
+                    <div className={`flex flex-col w-[50%] items-start justify-center text-left ${!isOpen ? "hidden" : ""}`}>
+                        <span className="flex">
+                            {name}
+                        </span>
+                        <div></div>
+                    </div>
                 </a>
             </li>
         );
@@ -28,8 +33,8 @@ export const Navbar = () => {
     return (
         <aside
             className={`${
-                isOpen ? "w-56 min-w-[40%] md:min-w-[224px]" : "w-20 min-w-[20%] md:min-w-[80px]"
-            }  h-screen bg-blue-500 relative duration-500 ease-in-out`}
+                isOpen ? "w-56 min-w-[40%] md:min-w-[224px]" : "w-20 min-w-[15%] md:min-w-[80px]"
+            }  h-screen bg-blue-500 flex flex-col justify-start relative duration-500 ease-in-out`}
         >
             {/* Botón para ocultar y mostrar la navbar */}
             <button onClick={() => setIsOpen(!isOpen)}>
@@ -44,7 +49,7 @@ export const Navbar = () => {
             {/* Barra de navegación */}
             <div className="flex flex-col gap-x-4 items-center space-y-7">
                 {/* Logo */}
-                <div className="flex flex-col md:flex-row items-center justify-center gap-x-2">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-x-2 mt-5">
                     <img
                         src={kueskiLogo}
                         alt="Logo de Kueski"
