@@ -23,7 +23,6 @@ export const Navbar = () => {
                         <span className="flex">
                             {name}
                         </span>
-                        <div></div>
                     </div>
                 </a>
             </li>
