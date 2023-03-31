@@ -14,7 +14,7 @@ export const Navbar = () => {
             <li className={`flex w-full items-center justify-center border-r-[5px] ${path === location.pathname ? "border-lime-500" : "border-transparent"}`}>
                 <a
                     href={path}
-                    className={`text-white text-sm w-[70%] flex flex-row items-center justify-center p-2 hover:bg-gray-400 duration-200 ease-in-out rounded-md`}
+                    className={`text-white text-md w-[70%] flex flex-row items-center justify-center p-2 hover:bg-gray-400 duration-200 ease-in-out rounded-md`}
                 >
                     <div className={`flex flex-col items-center justify-center ${!isOpen ? "w-[100%]" : "w-[50%]"} `}>
                         <img src={icon} alt={name} className="w-6 h-6" />

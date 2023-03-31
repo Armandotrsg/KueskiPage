@@ -15,7 +15,7 @@ export const Acordion = ({question, answer}) => {
                 <img src={arrow} alt="Arrow" className="w-6 h-6"/>
             </div>
             {/* Answer */}
-            <div  className="transition-all duration-500 origin-top max-h-0 peer-checked:max-h-80">
+            <div  className="transition-all duration-500 origin-top max-h-0 peer-checked:max-h-96">
                 <div className="p-4">
                     <p>
                         {answer}
