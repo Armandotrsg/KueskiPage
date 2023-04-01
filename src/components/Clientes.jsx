@@ -8,7 +8,7 @@ export const Clientes = () => {
         fetch("http://localhost:3001/api/users")
             .then((res) => res.json())
             .then((data) => {
-                setData(data.c0.name);
+                setData(data[0].name);
                 console.log(data); // Imprime la respuesta completa del servidor en la consola del navegador
             })
             .catch((error) => {
