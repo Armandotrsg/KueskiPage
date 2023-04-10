@@ -13,6 +13,11 @@ const connection = mysql.createConnection({
   database: process.env.MYSQL_DATABASE
 });
 
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Conectado a la base de datos!');
+});
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(bodyParser.json());
@@ -123,12 +128,3 @@ app.post("/api/arco_registers", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
-
-/*connection.connect((error) => {
-  if (error) {
-    console.error('Error al conectar con la base de datos:', error);
-    return;
-  }
-
-  console.log('Conexión a la base de datos establecida correctamente');
-});*/
