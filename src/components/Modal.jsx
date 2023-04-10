@@ -24,7 +24,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
                 {/* Closing button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-2 right-2 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600 flex justify-center items-center"
+                    className="absolute top-1 right-1 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600 flex justify-center items-center"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
