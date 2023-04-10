@@ -6,16 +6,54 @@ const fs = require("fs");
 const mysql = require('mysql');
 require('dotenv').config();
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 10,
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE
 });
 
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Conectado a la base de datos!');
+pool.getConnection(function (err, connection) {
+  if (err) {
+    console.error(err);
+  } else {
+    connection.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      address_id INT,
+      ADD FOREIGN KEY
+      edad INT NOT NULL,
+      PRIMARY KEY (id)
+    );
+    `, function (err, results, fields) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(results);
+        console.log("Query exitosa")
+      }
+      connection.release(); // <-- libera la conexión después de realizar la consulta
+    });
+  }
+});
+
+pool.getConnection(function (err, connection) {
+  if (err) {
+    console.error(err);
+  } else {
+    connection.query(`
+    SHOW DATABASES;
+    `, function (err, results, fields) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(results);
+        console.log("Query exitosa")
+      }
+      connection.release(); // <-- libera la conexión después de realizar la consulta
+    });
+  }
 });
 
 const PORT = process.env.PORT || 3001;
