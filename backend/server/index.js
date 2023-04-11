@@ -14,48 +14,6 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DATABASE
 });
 
-pool.getConnection(function (err, connection) {
-  if (err) {
-    console.error(err);
-  } else {
-    connection.query(`
-    CREATE TABLE IF NOT EXISTS users (
-      user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      address_id INT,
-      ADD FOREIGN KEY
-      edad INT NOT NULL,
-      PRIMARY KEY (id)
-    );
-    `, function (err, results, fields) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(results);
-        console.log("Query exitosa")
-      }
-      connection.release(); // <-- libera la conexión después de realizar la consulta
-    });
-  }
-});
-
-pool.getConnection(function (err, connection) {
-  if (err) {
-    console.error(err);
-  } else {
-    connection.query(`
-    SHOW DATABASES;
-    `, function (err, results, fields) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(results);
-        console.log("Query exitosa")
-      }
-      connection.release(); // <-- libera la conexión después de realizar la consulta
-    });
-  }
-});
-
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(bodyParser.json());
@@ -67,12 +25,24 @@ app.use(cors({
 // Users --------------------------
 
 app.get("/api/users", (req, res) => {
-  fs.readFile( __dirname + "/" + "users.json", "utf8", (err, data) => {
+  var answer;
+  pool.getConnection(function (err, connection) {
     if (err) {
-      res.status(500).send("No se pudo leer la base de datos.");
+      console.error(err);
+    } else {
+      connection.query(`
+      SELECT * FROM users;
+      `, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+          answer = JSON.stringify(results, null, 2);
+          res.end(answer);
+          console.log("Query exitosa");
+        }
+        connection.release(); // <-- libera la conexión después de realizar la consulta
+      });
     }
-    console.log( data );
-    res.end( data );
   });
 });
 
