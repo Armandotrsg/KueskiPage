@@ -3,7 +3,7 @@
 // The component returns a div element that contains the backdrop and the actual modal. The backdrop is visible when the isOpen prop is true, and invisible when the isOpen prop is false. The modal is visible when the isOpen prop is true, and invisible when the isOpen prop is false.
 // The onClose function is called when the user clicks outside of the modal.
 
-export const Modal = ({ isOpen, onClose, children }) => {
+export const Modal = ({ isOpen, onClose, className, children }) => {
     return (
         // Backdrop
         <div
@@ -18,7 +18,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
             <main
                 className={`bg-white rounded-xl shadow p-6 transition-all ${
                     isOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"
-                } max-w-[75%] max-h-[75%] overflow-auto]`}
+                } overflow-auto ${className}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Closing button */}
