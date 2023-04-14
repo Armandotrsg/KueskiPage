@@ -43,3 +43,51 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
         </div>
     );
 };
+
+export const ModalTitle = ({children}) => {
+    return (
+        <div className="flex justify-center">
+            <h1 className="text-2xl font-bold">{children}</h1>
+        </div>
+    );
+}
+
+export const ModalCol = ({ children }) => {
+    if (children[0].type.name === "UserData") {
+        return (
+            <section className="flex w-[100%] md:w-[50%] justify-center">
+                <ul className="flex flex-col space-y-6 p-6">
+                    {children}
+                </ul>
+            </section>
+        );
+    } else {
+        return (
+            <section className="flex w-[100%] md:w-[50%] justify-center">
+                <div className="flex flex-col space-y-6 p-6">
+                    {children}
+                </div>
+            </section>
+        );
+    }
+}
+
+export const ColSection = ({title, children}) => {
+    return(
+        <section className="flex flex-col space-y-4 text-center">
+            <h3 className="text-xl font-semibold">{title}</h3>
+             <ul>
+                {children}
+             </ul>
+        </section>
+    )
+}
+
+export const UserData = ({atributo, valor}) => {
+    return (
+        <li className="flex flex-row">
+            <h5 className="text-lg font-semibold">{atributo}: &nbsp;</h5>
+            <p className="text-lg text-gray-900">{valor}</p>
+        </li>
+    );
+}

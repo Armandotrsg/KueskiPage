@@ -1,58 +1,13 @@
-import { Modal } from "./Modal";
+import { Modal, ModalCol, ModalTitle, ColSection, UserData } from "./Modal";
 
 export const ModalAcceso = ({ isOpen, onClose }) => {
-    const UserData = ({atributo, valor}) => {
-        return (
-            <li className="flex flex-row">
-                <h5 className="text-lg font-semibold">{atributo}: &nbsp;</h5>
-                <p className="text-md text-gray-900">{valor}</p>
-            </li>
-        );
-    }
-    const ModalCol = ({children}) => {
-        if (children[0].type.name === "UserData") {
-            return (
-                <section className="flex w-[50%] justify-center">
-                    <ul className="flex flex-col space-y-6 p-6">
-                        {children}
-                    </ul>
-                </section>
-            );
-        } else {
-            return (
-                <section className="flex w-[50%] justify-center">
-                    <div className="flex flex-col space-y-6 p-6">
-                        {children}
-                    </div>
-                </section>
-            );
-        }
-        
-    }
-    const ColSection = ({title, children}) => {
-        return(
-            <section className="flex flex-col space-y-4 text-center">
-                <h3 className="text-xl font-semibold">{title}</h3>
-                 <ul>
-                    {children}
-                 </ul>
-            </section>
-        )
-    }
-    const ModalTitle = ({children}) => {
-        return (
-            <div className="flex justify-center">
-                <h1 className="text-2xl font-bold">{children}</h1>
-            </div>
-        );
-    }
     return (
-        <Modal isOpen={isOpen} onClose={onClose} className={`w-[75%] h-[75%]`}>
-            <div className="flex flex-col">
+        <Modal isOpen={isOpen} onClose={onClose} className={`w-[90%] sm:w-[75%] h-[75%]`}>
+            <div className="flex flex-col flex-wrap">
                 {/* Título */}
-                <ModalTitle>Derecho de Acceso (A) </ModalTitle>
+                <ModalTitle>Derecho de Acceso </ModalTitle>
                 {/* Primera columna con datos del usuario */}
-                <div className="flex flex-row">
+                <div className="flex flex-row flex-wrap">
                     <ModalCol>
                         <UserData atributo="Nombre" valor="Juan Perez" />
                         <UserData atributo="Correo" valor="juan@yahoo.com" />
@@ -74,7 +29,7 @@ export const ModalAcceso = ({ isOpen, onClose }) => {
                         </ColSection>
                     </ModalCol>
                 </div>
-                <section className="flex flex-row justify-end items-end space-x-4">
+                <section className="flex flex-row justify-center md:justify-end items-end space-x-4">
                     <button
                         onClick={onClose}
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
