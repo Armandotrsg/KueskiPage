@@ -19,13 +19,16 @@ export const ModalAcceso = ({ isOpen, onClose }) => {
                         <UserData atributo="Correo" valor="juan@yahoo.com" />
                         <UserData atributo="Contraseña" valor="********" />
                     </ModalCol>
-                    {/* Segunda columna con dirección e identificaciones */}
+                    {/* Segunda columna con dirección, identificaciones y user_data */}
                     <ModalCol>
                         <ColSection title="Dirección">
                             <UserData atributo="Calle" valor="Main Street" />
                         </ColSection>
                         <ColSection title="Identificaciones">
                             <UserData atributo="INE" valor="12345678" />
+                        </ColSection>
+                        <ColSection title={"Otros"}>
+                            <UserData atributo="Contactos" valor="Otro" />
                         </ColSection>
                     </ModalCol>
                 </ModalContainer>

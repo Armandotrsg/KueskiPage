@@ -53,7 +53,7 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
  */
 export const ModalTitle = ({children}) => {
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center m-2">
             <h1 className="text-2xl font-bold">{children}</h1>
         </div>
     );
@@ -77,10 +77,10 @@ export const ModalContainer = ({children}) => {
  * @param children - The JSX to be rendered inside the ModalCol component. Must be UserData components or ColSection components
  * @returns 
  */
-export const ModalCol = ({ children }) => {
+export const ModalCol = ({children }) => {
     if (children[0].type.name === "UserData") {
         return (
-            <section className="flex w-[100%] md:w-[50%] justify-center">
+            <section className={`flex w-[100%] md:w-[50%] justify-center `}>
                 <ul className="flex flex-col space-y-6 p-6">
                     {children}
                 </ul>
@@ -88,7 +88,7 @@ export const ModalCol = ({ children }) => {
         );
     } else {
         return (
-            <section className="flex w-[100%] md:w-[50%] justify-center">
+            <section className={`flex w-[100%] md:w-[50%] justify-center `}>
                 <div className="flex flex-col space-y-6 p-6">
                     {children}
                 </div>

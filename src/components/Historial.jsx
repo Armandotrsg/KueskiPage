@@ -10,7 +10,7 @@ export const Historial = () => {
                 onClick={() => setIsOpen(true)}
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 ml-4 rounded"
             > Modal Acceso </button>
-            <ModalAcceso isOpen={isOpen} onClose={() => setIsOpen(false)} />
+            {isOpen && <ModalAcceso isOpen={isOpen} onClose={() => setIsOpen(false)} />}
         </div>
     )
 }
