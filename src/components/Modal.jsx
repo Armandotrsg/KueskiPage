@@ -3,6 +3,8 @@
 // The component returns a div element that contains the backdrop and the actual modal. The backdrop is visible when the isOpen prop is true, and invisible when the isOpen prop is false. The modal is visible when the isOpen prop is true, and invisible when the isOpen prop is false.
 // The onClose function is called when the user clicks outside of the modal.
 
+import { useState } from "react";
+
 export const Modal = ({ isOpen, onClose, className, children }) => {
     return (
         // Backdrop
@@ -31,7 +33,7 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
                         width="16"
                         height="16"
                         fill="currentColor"
-                        class="bi bi-x"
+                        className="bi bi-x"
                         viewBox="0 0 16 16"
                     >
                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
@@ -44,6 +46,11 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
     );
 };
 
+/**
+ * ModalTitle
+ * @param children - The text to be rendered inside the ModalTitle component
+ * @returns The modal title JSX
+ */
 export const ModalTitle = ({children}) => {
     return (
         <div className="flex justify-center">
@@ -52,6 +59,24 @@ export const ModalTitle = ({children}) => {
     );
 }
 
+/**
+ * 
+ * @param children - The JSX to be rendered inside the ModalContainer component. Must be ModalCol components
+ * @returns 
+ */
+export const ModalContainer = ({children}) => {
+    return(
+        <div className="flex flex-row flex-wrap">
+            {children}
+        </div>
+    )
+}
+
+/**
+ * 
+ * @param children - The JSX to be rendered inside the ModalCol component. Must be UserData components or ColSection components
+ * @returns 
+ */
 export const ModalCol = ({ children }) => {
     if (children[0].type.name === "UserData") {
         return (
@@ -72,6 +97,12 @@ export const ModalCol = ({ children }) => {
     }
 }
 
+/**
+ * 
+ * @param title - The title of the section
+ * @param children - The JSX to be rendered inside the ColSection component. Must be UserData components
+ * @returns 
+ */
 export const ColSection = ({title, children}) => {
     return(
         <section className="flex flex-col space-y-4 text-center">
@@ -83,11 +114,48 @@ export const ColSection = ({title, children}) => {
     )
 }
 
-export const UserData = ({atributo, valor}) => {
+/**
+ * 
+ * @param atributo - The attribute name of the user data
+ * @param valor - The value of the user data
+ * @param useCheckbox - Whether or not to use a checkbox
+ * @param useInputText - Whether or not to use an input text
+ * @returns 
+ */
+export const UserData = ({atributo, valor, useCheckbox, useInputText}) => {
+    const [isChecked, setIsChecked] = useState(false);
+    const [inputText, setInputText] = useState(valor);
+    
+    let checkbox = null;
+    if (useCheckbox) {
+        checkbox = (
+            <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={(e) => setIsChecked(e.target.checked)}
+                className="mr-2"
+            />
+        );
+    }
+    let input = null;
+    if (useInputText) {
+        input = (
+            <input
+                type="text"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                className={`text-lg border-[1px] ${!isChecked ? "border-gray-300" : "border-gray-400"} rounded-md p-1`}
+                disabled={!isChecked}
+            />
+        );
+    }
     return (
-        <li className="flex flex-row">
+        <li className={`flex flex-row ${input || useCheckbox ? "items-center" : ""}`}>
+            {checkbox}
             <h5 className="text-lg font-semibold">{atributo}: &nbsp;</h5>
-            <p className="text-lg text-gray-900">{valor}</p>
+            {
+                useInputText ? input : <p className="text-lg text-gray-900">{valor}</p>
+            }
         </li>
     );
 }

@@ -1,4 +1,4 @@
-import { Modal, ModalCol, ModalTitle, ColSection, UserData } from "./Modal";
+import { Modal, ModalCol, ModalTitle, ColSection, UserData, ModalContainer } from "./Modal";
 
 export const ModalAcceso = ({ isOpen, onClose }) => {
     return (
@@ -7,7 +7,7 @@ export const ModalAcceso = ({ isOpen, onClose }) => {
                 {/* Título */}
                 <ModalTitle>Derecho de Acceso </ModalTitle>
                 {/* Primera columna con datos del usuario */}
-                <div className="flex flex-row flex-wrap">
+                <ModalContainer>
                     <ModalCol>
                         <UserData atributo="Nombre" valor="Juan Perez" />
                         <UserData atributo="Correo" valor="juan@yahoo.com" />
@@ -28,7 +28,8 @@ export const ModalAcceso = ({ isOpen, onClose }) => {
                             <UserData atributo="INE" valor="12345678" />
                         </ColSection>
                     </ModalCol>
-                </div>
+                </ModalContainer>
+                {/* Botones */}
                 <section className="flex flex-row justify-center md:justify-end items-end space-x-4">
                     <button
                         onClick={onClose}
@@ -40,7 +41,6 @@ export const ModalAcceso = ({ isOpen, onClose }) => {
                     > Descargar PDF </button>
                 </section>
             </div>
-
         </Modal>
     );
 }
