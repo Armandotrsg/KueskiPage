@@ -18,7 +18,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
             <main
                 className={`bg-white rounded-xl shadow p-6 transition-all ${
                     isOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"
-                }`}
+                } max-w-[75%] max-h-[75%] overflow-auto]`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Closing button */}
