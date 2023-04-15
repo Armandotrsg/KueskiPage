@@ -19,7 +19,7 @@ export const Navbar = () => {
                     <div className={`flex flex-col items-center justify-center ${!isOpen ? "w-[100%]" : "w-[50%]"} `}>
                         <img src={icon} alt={name} className="w-6 h-6" />
                     </div>
-                    <div className={`flex flex-col w-[50%] items-start justify-center text-left ${!isOpen ? "hidden" : ""}`}>
+                    <div className={`flex flex-col w-[50%] items-start justify-center text-left text-xs sm:text-sm md:text-md lg:text-lg ${!isOpen ? "hidden" : ""}`}>
                         <span className="flex">
                             {name}
                         </span>
@@ -32,7 +32,7 @@ export const Navbar = () => {
     return (
         <aside
             className={`${
-                isOpen ? "w-56 min-w-[40%] md:min-w-[224px]" : "w-20 min-w-[15%] md:min-w-[80px]"
+                isOpen ? "w-56 min-w-[43%] md:min-w-[224px]" : "w-20 min-w-[20%] md:min-w-[80px]"
             }  h-screen bg-blue-500 flex flex-col justify-start relative duration-500 ease-in-out`}
         >
             {/* Botón para ocultar y mostrar la navbar */}
