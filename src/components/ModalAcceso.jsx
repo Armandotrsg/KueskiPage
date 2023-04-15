@@ -75,7 +75,7 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            className={`w-[90%] sm:w-[75%] h-[75%]`}
+            className={`w-[98%] sm:w-[75%] h-[75%]`}
         >
             <div className="flex flex-col flex-wrap">
                 {/* Título */}

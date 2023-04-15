@@ -20,7 +20,7 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
             <main
                 className={`bg-white rounded-xl shadow p-6 transition-all ${
                     isOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"
-                } overflow-auto ${className}`}
+                } overflow-x-hidden ${className}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Closing button */}
@@ -140,14 +140,14 @@ export const UserData = ({ atributo, valor, useCheckbox, useInputText, inputType
                 onChange={(e) => setInputText(e.target.value)}
                 className={`text-lg border-[1px] ${
                     !isChecked ? "border-gray-300" : "border-gray-400"
-                } rounded-md p-1 ml-1 w-[40%]`}
+                } rounded-md p-1 ml-1 w-[100%] lg:w-[80%] xl:w-[50%]`}
                 disabled={!isChecked}
             />
         );
     }
     return (
         <li
-            className={`flex flex-row ${
+            className={`flex flex-row flex-wrap ${
                 input || useCheckbox ? "items-center" : ""
             }`}
         >
