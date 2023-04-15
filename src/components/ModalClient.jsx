@@ -66,7 +66,7 @@ import { UserData } from "./UserData";
     ],
 }; */
 
-export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight }) => {
+export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, children }) => {
     const keys = Object.keys(userData);
     const addressesKeys = Object.keys(userData.addresses[0]);
     const identificationKeys = Object.keys(userData.identification[0]);
@@ -192,22 +192,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight }
                     </ModalCol>
                 </ModalContainer>
                 {/* Botones */}
-                <section className="flex flex-row justify-center md:justify-end items-end space-x-4">
-                    <button
-                        onClick={onClose}
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                    >
-                        {" "}
-                        Cerrar{" "}
-                    </button>
-                    <button
-                        onClick={onClose}
-                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-                    >
-                        {" "}
-                        Descargar PDF{" "}
-                    </button>
-                </section>
+                {children}
             </div>
         </Modal>
     );
