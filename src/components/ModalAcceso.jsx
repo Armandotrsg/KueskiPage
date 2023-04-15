@@ -100,11 +100,6 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
                                                     ? userData[key].toString()
                                                     : "N/A"
                                             }
-                                            useCheckbox
-                                            useInputText
-                                            inputType={
-                                                key 
-                                            }
                                         />
                                     );
                                 }
