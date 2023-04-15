@@ -128,6 +128,8 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
                                                                       ].toString()
                                                                     : "N/A"
                                                             }
+                                                            useCheckbox
+                                                            useInputText
                                                         />
                                                     );
                                                 }

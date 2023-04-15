@@ -4,8 +4,10 @@
 // The onClose function is called when the user clicks outside of the modal.
 
 import { useState } from "react";
+import { Checkbox } from "./Checkbox";
 
 export const Modal = ({ isOpen, onClose, className, children }) => {
+    if (!isOpen) return null;
     return (
         // Backdrop
         <div
@@ -105,18 +107,13 @@ export const ColSection = ({ title, children }) => {
  * @returns
  */
 export const UserData = ({ atributo, valor, useCheckbox, useInputText, inputType = "text" }) => {
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(true);
     const [inputText, setInputText] = useState(valor);
 
     let checkbox = null;
     if (useCheckbox) {
         checkbox = (
-            <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={(e) => setIsChecked(e.target.checked)}
-                className="mr-2"
-            />
+            <Checkbox isChecked={isChecked} setIsChecked={setIsChecked} />
         );
     }
     let input = null;
@@ -139,9 +136,9 @@ export const UserData = ({ atributo, valor, useCheckbox, useInputText, inputType
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 className={`text-lg border-[1px] ${
-                    !isChecked ? "border-gray-300" : "border-gray-400"
-                } rounded-md p-1 ml-1 w-[100%] lg:w-[80%] xl:w-[50%]`}
-                disabled={!isChecked}
+                    isChecked ? "border-gray-300" : "border-gray-400"
+                } rounded-md p-1 ml-1 mt-2 w-[100%] lg:w-[80%] xl:w-[50%]`}
+                disabled={isChecked}
             />
         );
     }
