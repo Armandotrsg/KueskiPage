@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ModalAcceso } from "./ModalAcceso"
+import { ModalClient } from "./ModalClient"
 export const Historial = () => {
     const [isOpen, setIsOpen] = useState(false)
     let userData = {
@@ -69,7 +69,7 @@ export const Historial = () => {
             >
                 Abrir modal
             </button>
-            <ModalAcceso isOpen={isOpen} onClose={() => setIsOpen(false)} userData={userData} />
+            <ModalClient isOpen={isOpen} onClose={() => setIsOpen(false)} userData={userData} arcoRight={"Acceso"} />
         </div>
     )
 }

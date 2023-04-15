@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Checkbox } from "./Checkbox";
 
 
-export const UserData = ({ atributo, valor, useCheckbox, useInputText }) => {
+export const UserData = ({ atributo, valor, isEditable }) => {
     const [isChecked, setIsChecked] = useState(true);
     const [inputText, setInputText] = useState(valor);
 
     let input = null;
-    if (useInputText) {
+    if (isEditable) {
         let _atributo;
         if (atributo === "email") {
             _atributo = "email";
@@ -15,8 +15,6 @@ export const UserData = ({ atributo, valor, useCheckbox, useInputText }) => {
             _atributo = "date";
         } else if (atributo === "phone_number") {
             _atributo = "tel";
-        } else if (atributo.includes("_at")) {
-            _atributo = "date";
         } else {
             _atributo = "text";
         }
@@ -35,12 +33,12 @@ export const UserData = ({ atributo, valor, useCheckbox, useInputText }) => {
     return (
         <li
             className={`flex flex-row flex-wrap ${
-                input || useCheckbox ? "items-center" : ""
+                input || isEditable ? "items-center" : ""
             }`}
         >
-            {useCheckbox && <Checkbox isChecked={isChecked} setIsChecked={setIsChecked} />}
+            {isEditable && <Checkbox isChecked={isChecked} setIsChecked={setIsChecked} />}
             <h5 className="text-lg font-semibold">{atributo}: &nbsp;</h5>
-            {useInputText ? (
+            {isEditable ? (
                 input
             ) : (
                 <p className="text-lg text-gray-900">{valor}</p>

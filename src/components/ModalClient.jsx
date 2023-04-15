@@ -66,7 +66,7 @@ import { UserData } from "./UserData";
     ],
 }; */
 
-export const ModalAcceso = ({ isOpen, onClose, userData }) => {
+export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight }) => {
     const keys = Object.keys(userData);
     const addressesKeys = Object.keys(userData.addresses[0]);
     const identificationKeys = Object.keys(userData.identification[0]);
@@ -79,7 +79,7 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
         >
             <div className="flex flex-col flex-wrap">
                 {/* Título */}
-                <ModalTitle>Derecho de Acceso </ModalTitle>
+                <ModalTitle>{`Derecho de ${arcoRight}`} </ModalTitle>
                 {/* Primera columna con datos del usuario */}
                 <ModalContainer>
                     <ModalCol>
@@ -100,6 +100,7 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
                                                     ? userData[key].toString()
                                                     : "N/A"
                                             }
+                                            isEditable={key !== "user_id" && isEditable && !key.includes("_at")}
                                         />
                                     );
                                 }
@@ -128,6 +129,7 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
                                                                       ].toString()
                                                                     : "N/A"
                                                             }
+                                                            isEditable={key !== "identification_id" && isEditable && !key.includes("_at")}
                                                         />
                                                     );
                                                 }
@@ -159,6 +161,7 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
                                                               ].toString()
                                                             : "N/A"
                                                     }
+                                                    isEditable={key !== "address_id" && isEditable && !key.includes("_at")}
                                                 />
                                             );
                                         })}
@@ -180,6 +183,7 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
                                                       ].toString()
                                                     : "N/A"
                                             }
+                                            isEditable={isEditable}
                                         />
                                     );
                                 })}
