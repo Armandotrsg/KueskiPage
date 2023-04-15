@@ -3,9 +3,6 @@
 // The component returns a div element that contains the backdrop and the actual modal. The backdrop is visible when the isOpen prop is true, and invisible when the isOpen prop is false. The modal is visible when the isOpen prop is true, and invisible when the isOpen prop is false.
 // The onClose function is called when the user clicks outside of the modal.
 
-import { useState } from "react";
-import { Checkbox } from "./Checkbox";
-
 export const Modal = ({ isOpen, onClose, className, children }) => {
     if (!isOpen) return null;
     return (
@@ -98,63 +95,3 @@ export const ColSection = ({ title, children }) => {
     );
 };
 
-/**
- *
- * @param atributo - The attribute name of the user data
- * @param valor - The value of the user data
- * @param useCheckbox - Whether or not to use a checkbox
- * @param useInputText - Whether or not to use an input text
- * @returns
- */
-export const UserData = ({ atributo, valor, useCheckbox, useInputText, inputType = "text" }) => {
-    const [isChecked, setIsChecked] = useState(true);
-    const [inputText, setInputText] = useState(valor);
-
-    let checkbox = null;
-    if (useCheckbox) {
-        checkbox = (
-            <Checkbox isChecked={isChecked} setIsChecked={setIsChecked} />
-        );
-    }
-    let input = null;
-    if (useInputText) {
-        let _inputType;
-        if (inputType === "email") {
-            _inputType = "email";
-        } else if (inputType === "date_of_birth") {
-            _inputType = "date";
-        } else if (inputType === "phone_number") {
-            _inputType = "tel";
-        } else if (inputType.includes("_at")) {
-            _inputType = "date";
-        } else {
-            _inputType = "text";
-        }
-        input = (
-            <input
-                type={_inputType}
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                className={`text-lg border-[1px] ${
-                    isChecked ? "border-gray-300" : "border-gray-400"
-                } rounded-md p-1 ml-1 mt-2 w-[100%] lg:w-[80%] xl:w-[50%]`}
-                disabled={isChecked}
-            />
-        );
-    }
-    return (
-        <li
-            className={`flex flex-row flex-wrap ${
-                input || useCheckbox ? "items-center" : ""
-            }`}
-        >
-            {checkbox}
-            <h5 className="text-lg font-semibold">{atributo}: &nbsp;</h5>
-            {useInputText ? (
-                input
-            ) : (
-                <p className="text-lg text-gray-900">{valor}</p>
-            )}
-        </li>
-    );
-};

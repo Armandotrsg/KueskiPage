@@ -3,9 +3,9 @@ import {
     ModalCol,
     ModalTitle,
     ColSection,
-    UserData,
     ModalContainer,
 } from "./Modal";
+import { UserData } from "./UserData";
 
 /* userData = {
     user_id: 1,
@@ -128,8 +128,6 @@ export const ModalAcceso = ({ isOpen, onClose, userData }) => {
                                                                       ].toString()
                                                                     : "N/A"
                                                             }
-                                                            useCheckbox
-                                                            useInputText
                                                         />
                                                     );
                                                 }
