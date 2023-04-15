@@ -81,7 +81,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                 {/* Título */}
                 <ModalTitle>{`Derecho de ${arcoRight}`} </ModalTitle>
                 {/* Primera columna con datos del usuario */}
-                <ModalContainer>
+
+                <ModalContainer isEditable={isEditable}>
                     <ModalCol>
                         <ColSection title="Datos personales">
                             {keys.map((key, index) => {
@@ -190,9 +191,9 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                             </ColSection>
                         )}
                     </ModalCol>
+                    {/* Botones */}
+                    {children}
                 </ModalContainer>
-                {/* Botones */}
-                {children}
             </div>
         </Modal>
     );

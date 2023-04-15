@@ -63,8 +63,16 @@ export const ModalTitle = ({ children }) => {
  * @param children - The JSX to be rendered inside the ModalContainer component. Must be ModalCol components
  * @returns
  */
-export const ModalContainer = ({ children }) => {
-    return <div className="flex flex-row flex-wrap">{children}</div>;
+export const ModalContainer = ({ isEditable, children }) => {
+    if (isEditable) {
+        return (
+            <form className="flex flex-row flex-wrap">{children}</form>
+        )
+    } else {
+        return (
+            <div className="flex flex-row flex-wrap">{children}</div>
+        )
+    }
 };
 
 /**

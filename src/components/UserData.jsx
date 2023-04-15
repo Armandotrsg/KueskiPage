@@ -27,6 +27,7 @@ export const UserData = ({ atributo, valor, isEditable }) => {
                     isChecked ? "border-gray-300" : "border-gray-400"
                 } rounded-md p-1 ml-1 mt-2 w-[100%] lg:w-[80%] xl:w-[50%]`}
                 disabled={isChecked}
+                required
             />
         );
     }
