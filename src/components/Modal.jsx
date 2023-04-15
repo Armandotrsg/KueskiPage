@@ -51,81 +51,63 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
  * @param children - The text to be rendered inside the ModalTitle component
  * @returns The modal title JSX
  */
-export const ModalTitle = ({children}) => {
+export const ModalTitle = ({ children }) => {
     return (
         <div className="flex justify-center m-2">
             <h1 className="text-2xl font-bold">{children}</h1>
         </div>
     );
-}
+};
 
 /**
- * 
+ *
  * @param children - The JSX to be rendered inside the ModalContainer component. Must be ModalCol components
- * @returns 
+ * @returns
  */
-export const ModalContainer = ({children}) => {
-    return(
-        <div className="flex flex-row flex-wrap">
-            {children}
-        </div>
-    )
-}
+export const ModalContainer = ({ children }) => {
+    return <div className="flex flex-row flex-wrap">{children}</div>;
+};
 
 /**
- * 
+ *
  * @param children - The JSX to be rendered inside the ModalCol component. Must be UserData components or ColSection components
- * @returns 
+ * @returns
  */
-export const ModalCol = ({children }) => {
-    if (children[0].type.name === "UserData") {
-        return (
-            <section className={`flex w-[100%] md:w-[50%] justify-center `}>
-                <ul className="flex flex-col space-y-6 p-6">
-                    {children}
-                </ul>
-            </section>
-        );
-    } else {
-        return (
-            <section className={`flex w-[100%] md:w-[50%] justify-center `}>
-                <div className="flex flex-col space-y-6 p-6">
-                    {children}
-                </div>
-            </section>
-        );
-    }
-}
+export const ModalCol = ({ children }) => {
+    return (
+        <section className={`flex w-[100%] md:w-[50%] justify-center `}>
+            <div className="flex flex-col space-y-6 p-6">{children}</div>
+        </section>
+    );
+};
 
 /**
- * 
+ *
  * @param title - The title of the section
  * @param children - The JSX to be rendered inside the ColSection component. Must be UserData components
- * @returns 
+ * @returns
  */
-export const ColSection = ({title, children}) => {
-    return(
+export const ColSection = ({ title, children }) => {
+    return (
         <section className="flex flex-col space-y-4 text-center">
             <h3 className="text-xl font-semibold">{title}</h3>
-             <ul>
-                {children}
-             </ul>
+            <ul className="flex flex-col space-y-4">{children}</ul>
         </section>
-    )
-}
+    );
+};
 
 /**
- * 
+ *
  * @param atributo - The attribute name of the user data
  * @param valor - The value of the user data
  * @param useCheckbox - Whether or not to use a checkbox
  * @param useInputText - Whether or not to use an input text
- * @returns 
+ * @returns
  */
-export const UserData = ({atributo, valor, useCheckbox, useInputText}) => {
+export const UserData = ({ atributo, valor, useCheckbox, useInputText, inputType = "text" }) => {
     const [isChecked, setIsChecked] = useState(false);
     const [inputText, setInputText] = useState(valor);
-    
+
     let checkbox = null;
     if (useCheckbox) {
         checkbox = (
@@ -139,23 +121,43 @@ export const UserData = ({atributo, valor, useCheckbox, useInputText}) => {
     }
     let input = null;
     if (useInputText) {
+        let _inputType;
+        if (inputType === "email") {
+            _inputType = "email";
+        } else if (inputType === "date_of_birth") {
+            _inputType = "date";
+        } else if (inputType === "phone_number") {
+            _inputType = "tel";
+        } else if (inputType.includes("_at")) {
+            _inputType = "date";
+        } else {
+            _inputType = "text";
+        }
         input = (
             <input
-                type="text"
+                type={_inputType}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className={`text-lg border-[1px] ${!isChecked ? "border-gray-300" : "border-gray-400"} rounded-md p-1`}
+                className={`text-lg border-[1px] ${
+                    !isChecked ? "border-gray-300" : "border-gray-400"
+                } rounded-md p-1 ml-1 w-[40%]`}
                 disabled={!isChecked}
             />
         );
     }
     return (
-        <li className={`flex flex-row ${input || useCheckbox ? "items-center" : ""}`}>
+        <li
+            className={`flex flex-row ${
+                input || useCheckbox ? "items-center" : ""
+            }`}
+        >
             {checkbox}
             <h5 className="text-lg font-semibold">{atributo}: &nbsp;</h5>
-            {
-                useInputText ? input : <p className="text-lg text-gray-900">{valor}</p>
-            }
+            {useInputText ? (
+                input
+            ) : (
+                <p className="text-lg text-gray-900">{valor}</p>
+            )}
         </li>
     );
-}
+};
