@@ -7,7 +7,7 @@ export const Historial = () => {
         setShowFeedback(true);
         setTimeout(() => {
             setShowFeedback(false);
-        }, 2000);
+        }, 3500);
     }
 
     return (
