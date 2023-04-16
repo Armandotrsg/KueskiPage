@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 
-export const Feedback = ({ feedback, isVisible, setIsVisible }) => {
-
-    const hide = () => {
-        setIsVisible(false);
-    }
-
-    useEffect(() => {
-        setTimeout(() => {
-            hide();
-        }, 2000);
-    }, []);
-
-    if (!isVisible) return null;
+export const Feedback = ({ feedback }) => {
+    
     return (
         <div className={"absolute flex flex-col top-2 right-2 w-fit bg-white rounded-md shadow-lg text-start"}>
             <p className="text-sm font-bold px-4 py-2">{feedback}</p>
