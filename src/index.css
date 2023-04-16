@@ -10,4 +10,17 @@
     .accordion-body {
         @apply max-h-0 overflow-hidden transition-all duration-300 ease-out;
     }
+
+    .progress-bar {
+        animation: decrease 2s linear normal;
+    }
+
+    @keyframes decrease {
+        0% {
+            width: 100%;
+        }
+        100% {
+            width: 0%;
+        }
+    }
 }
