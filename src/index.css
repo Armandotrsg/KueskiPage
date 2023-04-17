@@ -7,7 +7,78 @@
         @apply py-4 px-6 cursor-pointer;
     }
 
-    .accordion-body {
+    .accordion- {
         @apply max-h-0 overflow-hidden transition-all duration-300 ease-out;
+    }
+
+    .switch {
+        @apply h-[24px] relative cursor-pointer;
+    }
+    .switch input {
+        @apply hidden;
+    }
+    .switch input + span {
+        @apply block h-[24px] leading-[24px] text-[#99a3ba] relative whitespace-nowrap transition-colors duration-300 ease-out;
+    }
+    .switch input + span:before,
+    .switch input + span:after {
+        @apply absolute rounded-[12px] content-[""];
+    }
+    .switch input + span:before {
+        @apply top-0 left-0 w-[42px] h-[24px] bg-[#e4ecfa] transition-all duration-300 ease-out;
+    }
+    .switch input + span:after {
+        @apply w-[18px] h-[18px] bg-white top-[3px] left-[3px] transition-all duration-[0.45s] ease-out;
+        box-shadow: 0 1px 3px rgba(18, 22, 33, 0.1);
+    }
+    .switch input + span em {
+        @apply w-[8px] h-[7px] bg-[#99a3ba] absolute left-[8px] bottom-[7px] rounded-[2px] block z-10 transition-all duration-[0.45s] ease-out;
+    }
+    .switch input + span em:before {
+        @apply absolute w-[2px] h-[2px] rounded-[1px] bg-white block left-[50%] top-[50%] mt-[-1px] ml-[-1px] content-[""];
+    }
+    .switch input + span em:after {
+        @apply content-[""] block rounded-tl-[4px] rounded-tr-[4px] border-[1px] border-solid border-[#99a3ba] border-b-0 w-[6px] h-[4px] left-[1px] bottom-[6px] absolute z-10  transition-all duration-[0.45s] ease-out;
+        transform-origin: 0 100%;
+        transform: rotate(-35deg) translate(0, 1px);
+    }
+    .switch input + span strong {
+        @apply font-normal relative block top-[1px];
+    }
+    .switch input + span strong:before,
+    .switch input + span strong:after {
+        @apply text-[14px] font-medium block;
+        font-family: "Mukta Malar", Arial;
+        -webkit-backface-visibility: hidden;
+    }
+
+    .switch input:checked + span:before {
+        background: rgba(86, 40, 238, 0.35);
+    }
+    .switch input:checked + span:after {
+        @apply bg-white transform translate-x-[18px];
+    }
+    .switch input:checked + span em {
+        @apply bg-[#5628ee] transform translate-x-[18px];
+    }
+    .switch input:checked + span em:after {
+        @apply border-[#5628ee] transform rotate-0 translate-x-0 translate-y-0;
+    }
+    .switch input:checked + span strong:before {
+        @apply opacity-0 invisible transform translate-x-[-2px] transition-all duration-[0.3s] ease-out;
+    }
+    .switch input:checked + span strong:after {
+        @apply opacity-100 visible transform translate-x-0 transition-all duration-[0.3s] ease-out;
+    }
+
+    .switch {
+        @apply flex mr-[3.5em];
+    }
+
+    .dribbble {
+        @apply fixed block right-[20px] bottom-[20px];
+    }
+    .dribbble img {
+        @apply block h-[28px];
     }
 }
