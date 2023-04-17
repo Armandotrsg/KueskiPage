@@ -16,5 +16,5 @@ export const Historial = () => {
             <button onClick={() => showMessage()}>Mostrar feedback</button>
             {showFeedback && <Feedback feedback="Se actualizó la base de datos" />}
         </div>
-    )
-}
+    );
+};
