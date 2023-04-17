@@ -79,8 +79,8 @@ export const Historial = () => {
       isEditable={isEditable}
       arcoRight={arcoRight}
     >
-        <button onClick={() => {console.log("HOLA")}}>Guardar cambios</button>
-        <button onClick={() => {console.log("HOLA")}}>Cancelar</button>
+        <button onClick={() => {console.log("HOLA")}} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-3 ml-3">Guardar</button>
+        <button onClick={() => {console.log("HOLA")}} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-3 ml-3">Cancelar</button>
     </ModalClient>
         </div>
     )
