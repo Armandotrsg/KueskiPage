@@ -7,147 +7,81 @@
         @apply py-4 px-6 cursor-pointer;
     }
 
-    .accordion-{
+    .accordion- {
         @apply max-h-0 overflow-hidden transition-all duration-300 ease-out;
     }
 
     .switch {
-        height: 24px;
-        display: block;
-        position: relative;
-        cursor: pointer;
-      }
-      .switch input {
-        display: none;
-      }
-      .switch input + span {
-        min-height: 24px;
-        line-height: 24px;
-        display: block;
-        color: #99A3BA;
-        position: relative;
-        white-space: nowrap;
-        transition: color 0.3s ease;
-      }
-      .switch input + span:before, .switch input + span:after {
-        content: '';
-        position: absolute;
-        border-radius: 12px;
-      }
-      .switch input + span:before {
-        top: 0;
-        left: 0;
-        width: 42px;
-        height: 24px;
-        background: #E4ECFA;
-        transition: all 0.3s ease;
-      }
-      .switch input + span:after {
-        width: 18px;
-        height: 18px;
-        background: #fff;
-        top: 3px;
-        left: 3px;
+        @apply h-[24px] relative cursor-pointer;
+    }
+    .switch input {
+        @apply hidden;
+    }
+    .switch input + span {
+        @apply block h-[24px] leading-[24px] text-[#99a3ba] relative whitespace-nowrap transition-colors duration-300 ease-out;
+    }
+    .switch input + span:before,
+    .switch input + span:after {
+        @apply absolute rounded-[12px] content-[""];
+    }
+    .switch input + span:before {
+        @apply top-0 left-0 w-[42px] h-[24px] bg-[#e4ecfa] transition-all duration-300 ease-out;
+    }
+    .switch input + span:after {
+        @apply w-[18px] h-[18px] bg-white top-[3px] left-[3px] transition-all duration-[0.45s] ease-out;
+
         box-shadow: 0 1px 3px rgba(18, 22, 33, 0.1);
-        transition: all 0.45s ease;
-      }
-      .switch input + span em {
-        width: 8px;
-        height: 7px;
-        background: #99A3BA;
-        position: absolute;
-        left: 8px;
-        bottom: 7px;
-        border-radius: 2px;
-        display: block;
-        z-index: 1;
-        transition: all 0.45s ease;
-      }
-      .switch input + span em:before {
-        content: '';
-        width: 2px;
-        height: 2px;
-        border-radius: 1px;
-        background: #fff;
-        position: absolute;
-        display: block;
-        left: 50%;
-        top: 50%;
-        margin: -1px 0 0 -1px;
-      }
-      .switch input + span em:after {
-        content: '';
-        display: block;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        border: 1px solid #99A3BA;
-        border-bottom: 0;
-        width: 6px;
-        height: 4px;
-        left: 1px;
-        bottom: 6px;
-        position: absolute;
-        z-index: 1;
+    }
+    .switch input + span em {
+        @apply w-[8px] h-[7px] bg-[#99a3ba] absolute left-[8px] bottom-[7px] rounded-[2px] block z-10 transition-all duration-[0.45s] ease-out;
+    }
+    .switch input + span em:before {
+        @apply absolute w-[2px] h-[2px] rounded-[1px] bg-white block left-[50%] top-[50%] mt-[-1px] ml-[-1px] content-[""];
+    }
+    .switch input + span em:after {
+        @apply content-[""] block rounded-tl-[4px] rounded-tr-[4px] border-[1px] border-solid border-[#99a3ba] border-b-0 w-[6px] h-[4px] left-[1px] bottom-[6px] absolute z-10  transition-all duration-[0.45s] ease-out;
         transform-origin: 0 100%;
-        transition: all 0.45s ease;
         transform: rotate(-35deg) translate(0, 1px);
-      }
-      .switch input + span strong {
-        font-weight: normal;
-        position: relative;
-        display: block;
-        top: 1px;
-      }
-      .switch input + span strong:before, .switch input + span strong:after {
-        font-size: 14px;
-        font-weight: 500;
-        display: block;
-        font-family: 'Mukta Malar', Arial;
+    }
+    .switch input + span strong {
+        @apply font-normal relative block top-[1px];
+    }
+    .switch input + span strong:before,
+    .switch input + span strong:after {
+        @apply text-[14px] font-medium block;
+        font-family: "Mukta Malar", Arial;
         -webkit-backface-visibility: hidden;
-      }
-      
-      .switch input:checked + span:before {
+    }
+
+    .switch input:checked + span:before {
         background: rgba(86, 40, 238, 0.35);
-      }
-      .switch input:checked + span:after {
-        background: #fff;
-        transform: translate(18px, 0);
-      }
-      .switch input:checked + span em {
-        transform: translate(18px, 0);
-        background: #5628EE;
-      }
-      .switch input:checked + span em:after {
-        border-color: #5628EE;
-        transform: rotate(0deg) translate(0, 0);
-      }
-      .switch input:checked + span strong:before {
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        transform: translate(-2px, 0);
-      }
-      .switch input:checked + span strong:after {
-        opacity: 1;
-        visibility: visible;
-        transform: translate(0, 0);
-        transition: all 0.3s ease 0.2s;
-      }
+    }
+    .switch input:checked + span:after {
+        @apply bg-white transform translate-x-[18px];
+    }
+    .switch input:checked + span em {
+        @apply bg-[#5628ee] transform translate-x-[18px];
+    }
+    .switch input:checked + span em:after {
+        @apply border-[#5628ee] transform rotate-0 translate-x-0 translate-y-0;
+    }
+    .switch input:checked + span strong:before {
+        @apply opacity-0 invisible transform translate-x-[-2px] transition-all duration-[0.3s] ease-out;
+    }
+    .switch input:checked + span strong:after {
+        @apply opacity-100 visible transform translate-x-0 transition-all duration-[0.3s] ease-out;
+    }
 
-      .switch {
-        display: flex;
-        margin-right: 3.5em;
-      }
+    .switch {
+        @apply flex mr-[3.5em];
+    }
 
-      .dribbble {
-        position: fixed;
-        display: block;
-        right: 20px;
-        bottom: 20px;
-      }
-      .dribbble img {
+    .dribbble {
+        @apply fixed block right-[20px] bottom-[20px];
+    }
+    .dribbble img {
+        @apply block h-[28px];
         display: block;
         height: 28px;
-      }
-      
+    }
 }
