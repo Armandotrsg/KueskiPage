@@ -29,7 +29,6 @@
     }
     .switch input + span:after {
         @apply w-[18px] h-[18px] bg-white top-[3px] left-[3px] transition-all duration-[0.45s] ease-out;
-
         box-shadow: 0 1px 3px rgba(18, 22, 33, 0.1);
     }
     .switch input + span em {
@@ -81,7 +80,5 @@
     }
     .dribbble img {
         @apply block h-[28px];
-        display: block;
-        height: 28px;
     }
 }
