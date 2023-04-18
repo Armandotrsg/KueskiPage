@@ -107,8 +107,8 @@ export const Clientes = () => {
                 <label for="table-search" class="sr-only">
                     Search
                 </label>
-                <div class="relative mt-1">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <div class="flex flex-row-reverse relative mt-1 space-x-4">
+                    <div class="absolute inset-y-0 left-3.5 flex items-center pl-3 pointer-events-none">
                         <svg
                             class="w-5 h-5 text-gray-500 dark:text-gray-400"
                             aria-hidden="true"
@@ -125,7 +125,7 @@ export const Clientes = () => {
                     </div>
 
                     {/* Seleccionar el filtro que se desea aplicar */}
-                   <select value={searchBy} onChange={handleSearchByChange} class="pb-1 flex w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400">
+                   <select value={searchBy} onChange={handleSearchByChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-white dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="nombre">Nombre</option>
                         <option value="apellidoPaterno">Apellido Paterno</option>
                         <option value="apellidoMaterno">Apellido Materno</option>
