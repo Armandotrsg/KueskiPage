@@ -6,9 +6,10 @@ export const Clientes = () => {
     const [tableData, setTableData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState("");
+    const [searchBy, setSearchBy] = useState("name"); // Por defecto, buscar en la columna "name"
 
     const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
-    const filtroBusqueda = ["ID", "Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC"];
+    //const filtroBusqueda = ["ID", "Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC"];
 
     const handleDropdownToggle = () => {
         setDropdownMenuOpen(!dropdownMenuOpen);
@@ -19,7 +20,7 @@ export const Clientes = () => {
     const columns = [
         {
             name: "ID",
-            selector: "id",
+            selector: row => row.id,
             sortable: true,
             center: true,
             grow: 0.5,
@@ -29,7 +30,7 @@ export const Clientes = () => {
         },
         {
             name: "Nombre",
-            selector: "nombre",
+            selector: row => row.name,
             sortable: true,
             center: true,
             grow: 1,
@@ -38,7 +39,7 @@ export const Clientes = () => {
         },
         {
             name: "Apellido Paterno",
-            selector: "apellidoPaterno",
+            selector: row => row.apellidoPaterno,
             sortable: true,
             center: true,
             grow: 1,
@@ -47,7 +48,7 @@ export const Clientes = () => {
         },
         {
             name: "Apellido Materno",
-            selector: "apellidoMaterno",
+            selector: row => row.apellidoMaterno,
             sortable: true,
             center: true,
             grow: 1,
@@ -56,7 +57,7 @@ export const Clientes = () => {
         },
         {
             name: "CURP",
-            selector: "curp",
+            selector: row => row.curp,
             sortable: true,
             center: true,
             grow: 1,
@@ -65,7 +66,7 @@ export const Clientes = () => {
         },
         {
             name: "RFC",
-            selector: "rfc",
+            selector: row => row.rfc,
             sortable: true,
             center: true,
             grow: 1,
@@ -84,7 +85,6 @@ export const Clientes = () => {
         setSearchText(e.target.value);
     };
 
-    const [searchBy, setSearchBy] = useState("name"); // Por defecto, buscar en la columna "name"
 
     const handleSearchByChange = (e) => { // Función para manejar el cambio de campo de búsqueda
         setSearchBy(e.target.value);
@@ -126,7 +126,7 @@ export const Clientes = () => {
 
                     {/* Seleccionar el filtro que se desea aplicar */}
                    <select value={searchBy} onChange={handleSearchByChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-white dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="nombre">Nombre</option>
+                        <option value="name">Nombre</option>
                         <option value="apellidoPaterno">Apellido Paterno</option>
                         <option value="apellidoMaterno">Apellido Materno</option>
                         <option value="curp">CURP</option>
