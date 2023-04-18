@@ -8,6 +8,7 @@ export const Clientes = () => {
     const [searchText, setSearchText] = useState("");
 
     const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
+    const filtroBusqueda = ["ID", "Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC"];
 
     const handleDropdownToggle = () => {
         setDropdownMenuOpen(!dropdownMenuOpen);
@@ -28,7 +29,7 @@ export const Clientes = () => {
         },
         {
             name: "Nombre",
-            selector: "name",
+            selector: "nombre",
             sortable: true,
             center: true,
             grow: 1,
@@ -83,9 +84,17 @@ export const Clientes = () => {
         setSearchText(e.target.value);
     };
 
-    const filteredData = tableData.filter((item) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
+    const [searchBy, setSearchBy] = useState("name"); // Por defecto, buscar en la columna "name"
+
+    const handleSearchByChange = (e) => { // Función para manejar el cambio de campo de búsqueda
+        setSearchBy(e.target.value);
+        setSearchText(""); // Borrar texto de búsqueda al cambiar el campo de búsqueda
+    };
+      
+    const filteredData = tableData.filter((item) => // Buscar en el campo seleccionado
+    item[searchBy].toLowerCase().includes(searchText.toLowerCase())
     );
+      
 
     return (
         <div className="flex flex-col pl-5 pr-5 pb-5 h-screen w-screen overflow-scroll">
@@ -94,7 +103,7 @@ export const Clientes = () => {
             <div class=" overflow-x-auto shadow-md sm:rounded-lg mt-5"></div>
 
             {/*Busqueda*/}
-            <div class="pb-4 bg-white dark:bg-white ">
+            <div class="flex pb-4 bg-white dark:bg-white ">
                 <label for="table-search" class="sr-only">
                     Search
                 </label>
@@ -114,6 +123,17 @@ export const Clientes = () => {
                             ></path>
                         </svg>
                     </div>
+
+                    {/* Seleccionar el filtro que se desea aplicar */}
+                   <select value={searchBy} onChange={handleSearchByChange} class="pb-1 flex w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400">
+                        <option value="nombre">Nombre</option>
+                        <option value="apellidoPaterno">Apellido Paterno</option>
+                        <option value="apellidoMaterno">Apellido Materno</option>
+                        <option value="curp">CURP</option>
+                        <option value="rfc">RFC</option>
+                        {/* Añadir más opciones según tus necesidades */}
+                    </select>
+
                     <input
                         type="text"
                         value={searchText}
