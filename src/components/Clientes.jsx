@@ -7,6 +7,7 @@ export const Clientes = () => {
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState("");
     const [searchBy, setSearchBy] = useState("name"); // Por defecto, buscar en la columna "name"
+    const [actionButton, setActionButton] = useState("Acceso");
 
     const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
     //const filtroBusqueda = ["ID", "Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC"];
@@ -150,11 +151,10 @@ export const Clientes = () => {
                     id="dropdownAction"
                     onClick={handleDropdownToggle}
                     data-dropdown-toggle="dropdownAction"
-                    className="flex w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400"
+                    className="flex w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 "
                     type="button"
                 >
-                    <span className="sr-only">Action button</span>
-                    Acción
+                    {actionButton}
                     <svg
                         className="w-3 h-3 ml-2"
                         aria-hidden="true"
@@ -175,7 +175,7 @@ export const Clientes = () => {
                 {dropdownMenuOpen && (
                     <div
                         id="dropdownActionButton"
-                        className="flex z-10 w-max text-black bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-100 dark:hover:border-gray-100 dark:focus:ring-gray-200"
+                        className="absolute flex z-10 w-max text-black bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-100 dark:hover:border-gray-100 dark:focus:ring-gray-200"
                     >
                         <ul
                             className="py-1 text-sm text-black dark:text-black"
@@ -183,7 +183,8 @@ export const Clientes = () => {
                         >
                             {arcoRights.map((arcoRight, index) => {
                                 return (
-                                    <li key={index}>
+                                    <li key={index} onClick={() => {setActionButton(arcoRight); setDropdownMenuOpen(false);}}>
+                                        
                                         <a
                                             href="#"
                                             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm"
