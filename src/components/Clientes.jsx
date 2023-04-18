@@ -114,7 +114,7 @@ export const Clientes = () => {
                     </button>
 
                     {dropdownMenuOpen && (
-                        <div id="dropdownActionButton" class="flex z-10 w-max text-black bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-200 dark:focus:ring-gray-400">
+                        <div id="dropdownActionButton" class="flex z-10 w-max text-black bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-100 dark:hover:border-gray-100 dark:focus:ring-gray-200">
                             <ul class="py-1 text-sm text-black dark:text-black" aria-labelledby="dropdownActionButton">
                                 <li>
                                     <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm">A-Acceso</a>
