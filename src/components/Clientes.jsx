@@ -163,7 +163,7 @@ export const Clientes = () => {
                         >
                             {arcoRights.map((arcoRight, index) => {
                                 return (
-                                    <li>
+                                    <li key={index}>
                                         <a
                                             href="#"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm"
