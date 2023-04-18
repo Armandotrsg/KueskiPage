@@ -94,6 +94,7 @@ export const Clientes = () => {
             {/*Título de la página*/}
             <h1 className="text-2xl font-bold">Clientes</h1>
             <div class=" overflow-x-auto shadow-md sm:rounded-lg mt-5"></div>
+
                 {/*Busqueda*/}
                 <div class="pb-4 bg-white dark:bg-white ">
                     <label for="table-search" class="sr-only">Search</label>
@@ -104,50 +105,41 @@ export const Clientes = () => {
                         <input type="text" value={searchText} onChange={handleSearch} id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-white-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar"/>
                     </div>
                 </div>
-                <div>
-                    {/* Creación de la tabla*/}
-                    <DataTable columns={columns} data={filteredData} progressPending={loading} pagination searchable class="z-0 w-full text-sm text-left text-black dark:text-black">
-                    </DataTable>
-
-                    {/*Filtro ARCO*/}
-                    <button id="dropdownAction" onClick = {handleDropdownToggle} data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400" type="button">
-                        <span class="sr-only left-96">Action button</span>
+                {/*Filtro ARCO*/}
+                <div class="pb-1 bg-white dark:bg-white d-flex justify-content-start">
+                    <button id="dropdownAction" onClick = {handleDropdownToggle} data-dropdown-toggle="dropdownAction" class="flex w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400" type="button">
+                        <span class="sr-only">Action button</span>
                         Acción
                         <svg class="w-3 h-3 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
 
                     {dropdownMenuOpen && (
-                        <div id="dropdownActionButton" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-300 dark:divide-gray-200">
-                            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
+                        <div id="dropdownActionButton" class="flex z-10 w-max text-black bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-400 dark:focus:ring-gray-200">
+                            <ul class="py-1 text-sm text-black dark:text-black" aria-labelledby="dropdownActionButton">
                                 <li>
-                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">A-Acceso</a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm">A-Acceso</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">R-Rectificación</a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm">R-Rectificación</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">C-Cancelación</a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm">C-Cancelación</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">O-Oposición</a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm">O-Oposición</a>
                                 </li>
                             </ul>
-                            <div class="py-1">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete User</a>
-                            </div>
                         </div>
                     )}
-                    
                 </div>
-            {/*
-            <DataTable
-                title="Data"
-                columns={columns}
-                data={filteredData}
-                progressPending={loading}
-                pagination
-                searchable
-            />*/}
+
+                <div>
+                    
+
+                    {/* Creación de la tabla*/}
+                    <DataTable columns={columns} data={filteredData} progressPending={loading} pagination searchable class="z-0 w-full text-sm text-left text-black dark:text-black">
+                    </DataTable>
+                </div>
         </div>
     )
 }
