@@ -3,15 +3,22 @@ const cors = require('cors');
 const express = require("express");
 const bodyParser = require('body-parser');
 const fs = require("fs");
-const mysql = require('mysql');
+const url = require('url');
+const mysql = require('mysql2');
 require('dotenv').config();
 
+const connectionUrl = url.parse(process.env.DATABASE_URL);
+const auth = connectionUrl.auth.split(':');
+
 const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE
+  host: connectionUrl.hostname,
+  port: connectionUrl.port,
+  user: auth[0],
+  password: auth[1],
+  database: connectionUrl.pathname.substr(1),
+  ssl: {
+    rejectUnauthorized: true
+  }
 });
 
 const PORT = process.env.PORT || 3001;
