@@ -29,6 +29,10 @@ app.use(cors({
   origin: 'http://localhost:5173'
 }));
 
+const isObjectEmpty = (objectName) => {
+  return JSON.stringify(objectName) === "{}";
+};
+
 // Users --------------------------
 
 app.get("/api/users", (req, res) => {
@@ -55,24 +59,42 @@ app.get("/api/users", (req, res) => {
 
 app.get("/api/users/:id", (req, res) => {
   const id = req.params.id;
-  fs.readFile( __dirname + "/" + "users.json", "utf8", (err, data) => {
+  let answer;
+  pool.getConnection(function (err, connection) {
+    let query = `SELECT * FROM users WHERE user_id = ` + id + `;`;
     if (err) {
-      res.status(500).send("No se pudo leer la base de datos.");
-    }
-    const users = JSON.parse(data);
-    const user = users[id];
-
-    if (user !== undefined) { // Verificar si user está definido y no es undefined
-      console.log(user);
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(user, null, 2));
+      console.error(err);
     } else {
-      res.status(404).send("Usuario \"" + id + "\" no encontrado.");
+      connection.query(
+        query
+        , function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else if (!results || results.length === 0) {
+          res.status(401).send("No se encontró al usuario.");
+          console.log("Query sin resultados");
+        } else {
+          const answer = JSON.stringify(results, null, 2);
+          res.send(answer);
+          console.log("Query exitosa");
+        }
+        connection.release(); // <-- libera la conexión después de realizar la consulta
+      });
     }
   });
 });
 
 app.patch("/api/users/:id", (req, res) => {
+  const id = req.params.id;
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).send('No se pudo interpretar la información recibida.');
+  }
+
+  console.log(req.body);
+  res.end("Cambio realizado.")
+});
+
+/*app.patch("/api/users/:id", (req, res) => {
   const id = req.params.id;
   if (Object.keys(req.body).length === 0) {
     return res.status(400).send('No se pudo interpretar la información recibida.');
@@ -93,7 +115,7 @@ app.patch("/api/users/:id", (req, res) => {
       res.status(404).send("Usuario \"" + id + "\" no encontrado.");
     }
   });
-});
+});*/
 
 app.delete("/api/users/:id", (req, res) => {
   const id = req.params.id;
