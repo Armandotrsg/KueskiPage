@@ -3,7 +3,7 @@
 ## Endpoint "/api/users"
 
 ### GET "all"
-Permite acceder a todos los usuarios regresando una lista de objetos con todos los usuarios en cada una de sus direcciones.
+Permite acceder a todos los usuarios regresando una lista de objetos con todos los usuarios en cada una de sus direcciones (obtiene un campo del *JSON* con cada combinación de user y address que esten relacionadas).
 
 Para este método se utiliza el siguiente endpoint:
 ```
