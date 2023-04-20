@@ -90,52 +90,72 @@ app.patch("/api/users/:id", (req, res) => {
     return res.status(400).send('No se pudo interpretar la información recibida.');
   }
 
-  console.log(req.body);
-  res.end("Cambio realizado.")
+  const column = req.body.column;
+  const new_val = req.body.data;
+
+  const query = "UPDATE users SET " + column + " = '" + new_val + "' WHERE user_id = " + id + ";";
+  console.log(query);
+  
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.error(err);
+      res.status(500).send("No se pudo conectar a la base de datos.");
+      return;
+    }
+    connection.query(
+      query
+      , function (err, results, fields) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("No se pudo leer la base de datos.");
+      } else {
+        console.log("Query exitosa");
+      }
+      connection.release(); // <-- libera la conexión después de realizar la consulta
+      res.end("Cambio realizado.");
+    });
+  });
 });
 
-/*app.patch("/api/users/:id", (req, res) => {
-  const id = req.params.id;
-  if (Object.keys(req.body).length === 0) {
-    return res.status(400).send('No se pudo interpretar la información recibida.');
-  }
-
-  fs.readFile( __dirname + "/" + "users.json", "utf8", (err, data) => {
-    if (err) {
-      res.status(500).send("No se pudo leer la base de datos.");
-    }
-    const users = JSON.parse(data);
-    const user = users[id];
-
-    if (user !== undefined) { // Verificar si user está definido y no es undefined
-      console.log(user);
-      console.log("Modificado por:\n", req.body)
-      res.end("Recibido.");
-    } else {
-      res.status(404).send("Usuario \"" + id + "\" no encontrado.");
-    }
-  });
-});*/
-
 app.delete("/api/users/:id", (req, res) => {
+  // Encontrar usuario y sus datos
   const id = req.params.id;
-  if (Object.keys(req.body).length === 0) {
-    return res.status(400).send('No se pudo interpretar la información recibida.');
-  }
-
-  fs.readFile( __dirname + "/" + "users.json", "utf8", (err, data) => {
+  let answer;
+  pool.getConnection(function (err, connection) {
+    let query = `SELECT * FROM users WHERE user_id = ` + id + `;`;
     if (err) {
-      res.status(500).send("No se pudo leer la base de datos.");
-    }
-    const users = JSON.parse(data);
-    const user = users[id];
-
-    if (user !== undefined) { // Verificar si user está definido y no es undefined
-      console.log(user);
-      console.log("Modificado por:\n", req.body)
-      res.end("Recibido.");
+      console.error(err);
     } else {
-      res.status(404).send("Usuario \"" + id + "\" no encontrado.");
+      connection.query(
+        query
+        , function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else if (!results || results.length === 0) {
+          res.status(401).send("No se encontró al usuario.");
+          console.log("Query sin resultados");
+        } else {
+          answer = JSON.stringify(results, null, 2);
+          console.log("Usuario encontrado, comenzando proceso de borrado...");
+
+          const columns = Object.keys(results[0]);
+          columns.forEach(column => {
+            if (column != 'user_id'){
+              query = "UPDATE users SET " + column + " = NULL WHERE user_id = " + id + ";";
+              connection.query(
+                query
+                , function (err, results, fields) {
+                if (err) {
+                  console.error(err);
+                  res.status(500).send("No se pudo leer la base de datos.");
+                }
+              });
+            }
+          });
+        }
+        connection.release(); // <-- libera la conexión después de realizar la consulta
+        res.end("Usuario nulificado.");
+      });
     }
   });
 });
