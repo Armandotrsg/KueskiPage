@@ -107,10 +107,20 @@ app.patch("/api/users/:id", (req, res) => {
   const column = req.body.column;
   const new_val = req.body.data;
 
-  const query = "";
+  var query = "";
 
-  if (column != "address") {
+  if (!column.sector) {
+    console.log("Normal Patch.");
     query = "UPDATE users SET " + column + " = '" + new_val + "' WHERE user_id = " + id + ";";
+  }
+  else if (column.sector === "addresses"){
+    console.log("Address Patch.");
+    if (column.mode === "single"){
+      query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND address_id = " + column.address_id + ";";
+    }
+    else if (column.mode === "multiple"){
+      query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
+    }
   }
   
   console.log(query);
