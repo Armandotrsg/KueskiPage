@@ -107,7 +107,12 @@ app.patch("/api/users/:id", (req, res) => {
   const column = req.body.column;
   const new_val = req.body.data;
 
-  const query = "UPDATE users SET " + column + " = '" + new_val + "' WHERE user_id = " + id + ";";
+  const query = "";
+
+  if (column != "address") {
+    query = "UPDATE users SET " + column + " = '" + new_val + "' WHERE user_id = " + id + ";";
+  }
+  
   console.log(query);
   
   pool.getConnection(function (err, connection) {
