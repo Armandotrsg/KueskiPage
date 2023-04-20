@@ -74,9 +74,22 @@ app.get("/api/users/:id", (req, res) => {
           res.status(401).send("No se encontró al usuario.");
           console.log("Query sin resultados");
         } else {
-          const answer = JSON.stringify(results, null, 2);
-          res.send(answer);
-          console.log("Query exitosa");
+          const users_results = results;
+
+          query = "SELECT * FROM addresses WHERE user_id = " + id;
+
+          connection.query(
+          query
+          , function (err, results, fields) {
+            if (err) {
+              res.status(500).send("No se pudo leer la base de datos.");
+            } else {
+              users_results[0].addresses = results;
+              const answer = JSON.stringify(users_results, null, 2);
+              res.send(answer);
+              console.log("Query exitosa");
+            }
+          });
         }
         connection.release(); // <-- libera la conexión después de realizar la consulta
       });
