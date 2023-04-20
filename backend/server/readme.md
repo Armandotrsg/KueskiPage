@@ -13,7 +13,7 @@ Para este método se utiliza el siguiente endpoint:
 ### GET "id"
 Permite acceder a un usiario en especifico dado un **user_id**. También incluye un campo donde se listan todos sus *addresses*.
 
-Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin comillas):
+Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin utilizar las llaves del campo inferior):
 ```
 /api/users/{id}
 ```
@@ -53,7 +53,7 @@ El resto de los campos funcionan igual. A continuación se muestra un ejemplo:
     "data": "Guanajuato"
 }
 ```
-Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin comillas):
+Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin utilizar las llaves del campo inferior):
 ```
 /api/users/{id}
 ```
@@ -61,7 +61,7 @@ Para este método se utiliza el siguiente endpoint (reemplaza id por el id a bus
 ### DELETE "id"
 Este método se utiliza para nullificar todos los datos relacionados a un **user_id** específico. No los borra, simplemente los vuelve *NULL*, a menos que el campo **is_client** sea *TRUE*.
 
-Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin comillas):
+Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin utilizar las llaves del campo inferior):
 ```
 /api/users/{id}
 ```
