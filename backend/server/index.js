@@ -42,11 +42,12 @@ app.get("/api/users", (req, res) => {
       console.error(err);
     } else {
       connection.query(`
-      SELECT * FROM users;
+      SELECT * FROM users LEFT JOIN addresses ON users.user_id = addresses.user_id;
       `, function (err, results, fields) {
         if (err) {
           res.status(500).send("No se pudo leer la base de datos.");
         } else {
+          console.log(results);
           answer = JSON.stringify(results, null, 2);
           res.end(answer);
           console.log("Query exitosa");
