@@ -1,0 +1,26 @@
+{
+    "0": {
+       "user_id" : "016485",
+       "address_id" : "84576",
+       "name": "Juan",
+       "first_last_name": "Pérez",
+       "second_last_name": "Espinoza",
+       "born_date": "01/05/1993",
+       "nationality": "Mexicano/a",
+       "state_of_birth": "Colima",
+       "economic_activity": "Comprador",
+       "curp": "FPES01648574",
+       "gender": "Hombre",
+       "phone_number": "5847419683",
+       "email": "juan123@gmail.com",
+       "user_data": {
+            "economic_deficit": "+50000",
+            "credit_bureau": "false"
+       },
+       "is_client": "true",
+       "is_blocked": "false",
+       "created_at": "17/08/2016",
+       "updated_at": "23/03/2018",
+       "deleted_at": "NA"
+    }
+}
