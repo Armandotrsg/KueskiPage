@@ -87,9 +87,21 @@ app.get("/api/users/:id", (req, res) => {
               res.status(500).send("No se pudo leer la base de datos.");
             } else {
               users_results[0].addresses = results;
-              const answer = JSON.stringify(users_results, null, 2);
-              res.send(answer);
-              console.log("Query exitosa");
+
+              query = "SELECT * FROM identification WHERE user_id = " + id;
+
+              connection.query(
+                query
+                , function (err, results, fields) {
+                  if (err) {
+                    res.status(500).send("No se pudo leer la base de datos.");
+                  } else {
+                    users_results[0].identifications = results;
+                    const answer = JSON.stringify(users_results, null, 2);
+                    res.send(answer);
+                    console.log("Query exitosa");
+                  }
+                });
             }
           });
         }

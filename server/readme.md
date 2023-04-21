@@ -11,7 +11,7 @@ Para este método se utiliza el siguiente endpoint:
 ```
 
 ### GET "id"
-Permite acceder a un usiario en especifico dado un **user_id**. También incluye un campo donde se listan todos sus *addresses*.
+Permite acceder a un usiario en especifico dado un **user_id**. También incluye un campo donde se listan todos sus *addresses* y toda *identification*.
 
 Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin utilizar las llaves del campo inferior):
 ```
