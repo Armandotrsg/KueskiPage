@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const fs = require("fs");
 const url = require('url');
 const mysql = require('mysql2');
+const path = require("path");
 require('dotenv').config();
 
 const connectionUrl = url.parse(process.env.DATABASE_URL);
@@ -255,6 +256,15 @@ app.post("/api/arco_registers", (req, res) => {
   }
   console.log('El cuerpo de la peticion:', req.body);
   res.end( "Recibido!" );
+});
+
+// Esto hace que NodeJS sirva los archivos resultado del build de ReactJS
+// Esto va antes de nuestros endpoints pero después de la declaración de app.
+app.use(express.static(path.resolve("client/build")));
+// Todas las peticiones GET que no manejamos ahora regresarán nuestra React App
+// Agrega esto antes del “app.listen”
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve("client/build", "index.html"));
 });
 
 // Listen ---------------------------|
