@@ -123,8 +123,6 @@ app.patch("/api/users/:id", (req, res) => {
     }
   }
   
-  console.log(query);
-  
   pool.getConnection(function (err, connection) {
     if (err) {
       console.error(err);
@@ -146,9 +144,10 @@ app.patch("/api/users/:id", (req, res) => {
   });
 });
 
-app.delete("/api/users/:id", (req, res) => {
+app.delete("/api/users/:id", async (req, res) => {
   // Encontrar usuario y sus datos
   const id = req.params.id;
+
   pool.getConnection(function (err, connection) {
     let query = `SELECT * FROM users WHERE user_id = ` + id + `;`;
     if (err) {
@@ -168,26 +167,73 @@ app.delete("/api/users/:id", (req, res) => {
         } else {
           console.log("Usuario encontrado en users, comenzando proceso de borrado...");
 
+          query = "UPDATE users SET ";
           const columns = Object.keys(results[0]);
           columns.forEach(column => {
             if (column != 'user_id'){
-              query = "UPDATE users SET " + column + " = NULL WHERE user_id = " + id + ";";
+              query += column + " = NULL, ";
+            }
+          });
+
+          query = query.substring(0, query.length - 2);
+          query += " WHERE user_id = " + id + ";";
+
+          connection.query(
+            query
+            , function (err, results, fields) {
+            if (err) {
+              console.error(err);
+              res.status(500).send("No se pudo leer la base de datos.");
+            } else {
+              console.log("Query en user exitosa");
+
+              query = `SELECT * FROM addresses WHERE user_id = ` + id + `;`;
               connection.query(
                 query
                 , function (err, results, fields) {
                 if (err) {
-                  console.error(err);
                   res.status(500).send("No se pudo leer la base de datos.");
+                } else if (!results || results.length === 0) {
+                  console.log("Query sin resultados en address.");
+                  res.end("User nulificado sin address.");
+                } else {
+                  console.log("Usuario encontrado en address, comenzando proceso de borrado...");
+        
+                  query = "UPDATE addresses SET ";
+                  const columns = Object.keys(results[0]);
+                  columns.forEach(column => {
+                    if (column != 'user_id' && column != 'address_id'){
+                      query += column + " = NULL, ";
+                    }
+                  });
+        
+                  query = query.substring(0, query.length - 2);
+                  query += " WHERE user_id = " + id + ";";
+        
+                  connection.query(
+                    query
+                    , function (err, results, fields) {
+                    if (err) {
+                      console.error(err);
+                      res.status(500).send("No se pudo leer la base de datos.");
+                    } else {
+                      console.log("Query en address exitosa");
+                      res.end("Usuario modificado totalmente.");
+                    }
+                  });
                 }
+                
+                connection.release(); // <-- libera la conexión después de realizar la consulta
               });
             }
           });
-          connection.release(); // <-- libera la conexión después de realizar la consulta
-          console.log("Query en user exitosa");
-          res.end("Usuario nulificado.")
         }
+        
+        connection.release(); // <-- libera la conexión después de realizar la consulta
       });
     }
+
+    connection.release(); // <-- libera la conexión después de realizar la consulta
   });
 });
 
