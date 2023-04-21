@@ -3,5 +3,5 @@ export const Historial = () => {
         <div>
             <h1 className="text-2xl font-bold ml-4">Historial</h1>
         </div>
-    )
-}
+    );
+};

@@ -1,0 +1,202 @@
+[
+    {
+      "id": 1,
+      "name": "Luz",
+      "apellidoPaterno": "Tellez",
+      "apellidoMaterno": "Sandoval",
+      "curp": "LIMV47832HGFWE",
+      "rfc": "TASE5741QWER"
+    },
+    {
+      "id": 2,
+      "name": "Leticia",
+      "apellidoPaterno": "Jimenez",
+      "apellidoMaterno": "Cervantes",
+      "curp": "GIJC96857LKUYT",
+      "rfc": "JCLE3201TREW"
+    },
+    {
+      "id": 3,
+      "name": "Aldo",
+      "apellidoPaterno": "Hernandez",
+      "apellidoMaterno": "Perez",
+      "curp": "JIHA47285WERQD",
+      "rfc": "HEPJ1024YUIO"
+    },
+    {
+      "id": 4,
+      "name": "Natalia",
+      "apellidoPaterno": "Garcia",
+      "apellidoMaterno": "Salazar",
+      "curp": "GUNA56871HJFDW",
+      "rfc": "GASA0456RTYU"
+    },
+    {
+      "id": 5,
+      "name": "Gabriela",
+      "apellidoPaterno": "Santos",
+      "apellidoMaterno": "Molina",
+      "curp": "GOGS75238POIUY",
+      "rfc": "SAMO2487YTRW"
+    },
+    {
+      "id": 6,
+      "name": "Oscar",
+      "apellidoPaterno": "Perez",
+      "apellidoMaterno": "Vazquez",
+      "curp": "LOPO21569NBVCF",
+      "rfc": "PEVA0123HJUJ"
+    },
+    {
+      "id": 7,
+      "name": "Maria",
+      "apellidoPaterno": "Gonzalez",
+      "apellidoMaterno": "Martinez",
+      "curp": "SAGM23198POIUY",
+      "rfc": "GOMA7456YTRW"
+    },
+    {
+      "id": 8,
+      "name": "Maria Guadalupe",
+      "apellidoPaterno": "Carrilo",
+      "apellidoMaterno": "Martinez",
+      "curp": "CAME140622MSZXFN02",
+      "rfc": "CAMA140622KY5"
+    },
+    {
+      "id": 9,
+      "name": "Fabiola",
+      "apellidoPaterno": "Pisa",
+      "apellidoMaterno": "Enriquez",
+      "curp": "CASA140622HMSVZD02",
+      "rfc": "CAFE140622KW6"
+    },
+    {
+      "id": 10,
+      "name": "Jorge",
+      "apellidoPaterno": "Perez",
+      "apellidoMaterno": "Smith",
+      "curp": "PESJ140622HMSZCN01",
+      "rfc": "PESJ140622BJ3"
+    },
+    {
+      "id": 11,
+      "name": "Fernando",
+      "apellidoPaterno": "Gomez",
+      "apellidoMaterno": "Garcia",
+      "curp": "TURB52437NFKLR",
+      "rfc": "GOFE3571JMSX"
+    },
+    {
+      "id": 12,
+      "name": "Jazmin",
+      "apellidoPaterno": "Ramos",
+      "apellidoMaterno": "Reyes",
+      "curp": "LONJ39582KSDPG",
+      "rfc": "RAJA9403BPVQ"
+    },
+    {
+      "id": 13,
+      "name": "Gustavo",
+      "apellidoPaterno": "Salinas",
+      "apellidoMaterno": "Fernandez",
+      "curp": "NACG78543HJTRX",
+      "rfc": "SAFG1405KNDL"
+    },
+    {
+      "id": 14,
+      "name": "Ana",
+      "apellidoPaterno": "Gutierrez",
+      "apellidoMaterno": "Gonzalez",
+      "curp": "JEDN74382LMKFR",
+      "rfc": "GUAJ3642PFQZ"
+    },
+    {
+      "id": 15,
+      "name": "Ricardo",
+      "apellidoPaterno": "Torres",
+      "apellidoMaterno": "Mendez",
+      "curp": "PARV09345TSLJQ",
+      "rfc": "TOMR4801ZKHL"
+    },
+    {
+      "id": 16,
+      "name": "Carla",
+      "apellidoPaterno": "Lopez",
+      "apellidoMaterno": "Garcia",
+      "curp": "KAFR23109ZUIPL",
+      "rfc": "LOCG4589DFTY"
+    },
+    {
+      "id": 17,
+      "name": "Juan Carlos",
+      "apellidoPaterno": "Hernandez",
+      "apellidoMaterno": "Martinez",
+      "curp": "ZUMD54872PTNFA",
+      "rfc": "HEMJ2310GTDF"
+    },
+    {
+      "id": 18,
+      "name": "Ana Karen",
+      "apellidoPaterno": "Garcia",
+      "apellidoMaterno": "Lopez",
+      "curp": "LIKT78391ZMSDF",
+      "rfc": "ANKG2310KJFD"
+    },
+    {
+      "id": 19,
+      "name": "Rodrigo",
+      "apellidoPaterno": "Gonzalez",
+      "apellidoMaterno": "Santana",
+      "curp": "KOPD24981XCBDF",
+      "rfc": "ROGS2310CFKD"
+    },
+    {
+      "id": 20,
+      "name": "Veronica",
+      "apellidoPaterno": "Sanchez",
+      "apellidoMaterno": "Garcia",
+      "curp": "HUIT10264YXZPO",
+      "rfc": "VESG2310PKDF"
+    },
+    {
+      "id": 21,
+      "name": "Miguel",
+      "apellidoPaterno": "Martinez",
+      "apellidoMaterno": "Vazquez",
+      "curp": "MIPZ78429IKVSD",
+      "rfc": "MIGM2310PKDF"
+    },
+    {
+      "id": 22,
+      "name": "Fernanda",
+      "apellidoPaterno": "Gonzalez",
+      "apellidoMaterno": "Mendoza",
+      "curp": "KOPI23984ZLSDF",
+      "rfc": "FEGM2310KJFD"
+    },
+    {
+      "id": 23,
+      "name": "Jose Luis",
+      "apellidoPaterno": "Santos",
+      "apellidoMaterno": "Gutierrez",
+      "curp": "SAJP34829XCHFS",
+      "rfc": "JLSG2310PKDF"
+    },
+    {
+      "id": 24,
+      "name": "Paulina",
+      "apellidoPaterno": "Flores",
+      "apellidoMaterno": "Cruz",
+      "curp": "CRPF23918OKLSA",
+      "rfc": "PAFG2310KJFD"
+    },
+    {
+      "id": 25,
+      "name": "Daniel",
+      "apellidoPaterno": "Diaz",
+      "apellidoMaterno": "Perez",
+      "curp": "PIAD83264LKJSD",
+      "rfc": "DIDP2310PKDF"
+    }        
+  ]
