@@ -43,7 +43,7 @@ app.get("/api/users", (req, res) => {
       console.error(err);
     } else {
       connection.query(`
-      SELECT * FROM users LEFT JOIN addresses ON users.user_id = addresses.user_id;
+      SELECT * FROM users LEFT JOIN addresses ON users.user_id = addresses.user_id LEFT JOIN identification ON users.user_id=identification.user_id;
       `, function (err, results, fields) {
         if (err) {
           res.status(500).send("No se pudo leer la base de datos.");

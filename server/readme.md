@@ -33,22 +33,22 @@ Ejemplo del *JSON* a pasar:
 ```
 En caso de querer modificar algún dato dentro de alguno de sus addreses, se deberá enviar el siguente formato en el *JSON*.
 En el siguente ejemplo se deben considerar los siguientes campos del *JSON*:
-+ sector: Indica cual tabla se va a modificar.
++ sector: Indica cual tabla se va a modificar (puede ser *addresses* o *identification*).
 + mode: Indica la modalidad de la modificación.
     
-    + single: Modifica solo el address especifico que se pasa en el campo **address_id**.
-    + multiple: Modifica todos los address que esten relacionados con el campo **user_id** que se pasa en el endpoint de la URL. Es opcional especificar el **address_id** si se utiliza esta modalidad.
+    + single: Modifica solo el address especifico que se pasa en el campo **address_id** o **identification_id**.
+    + multiple: Modifica todos los address que esten relacionados con el campo **user_id** que se pasa en el endpoint de la URL. Es opcional especificar el **address_id** o el **identification_id** si se utiliza esta modalidad.
 + name: Es el nombre de la columna a modificar.
-+ address_id: Especifica el id del address cuando se utiliza la modalidad single.
++ address_id/identification_id: Especifica el id del address o del identification cuando se utiliza la modalidad single.
 
 El resto de los campos funcionan igual. A continuación se muestra un ejemplo:
 ```
 {
     "column": {
-        "sector": "identification",
+        "sector": "address",
         "mode": "single",
         "name": "state",
-        "identification_id": 0
+        "address_id": 0
     },
     "data": "Guanajuato"
 }
