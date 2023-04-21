@@ -149,7 +149,6 @@ app.patch("/api/users/:id", (req, res) => {
 app.delete("/api/users/:id", (req, res) => {
   // Encontrar usuario y sus datos
   const id = req.params.id;
-  let answer;
   pool.getConnection(function (err, connection) {
     let query = `SELECT * FROM users WHERE user_id = ` + id + `;`;
     if (err) {
@@ -163,9 +162,11 @@ app.delete("/api/users/:id", (req, res) => {
         } else if (!results || results.length === 0) {
           res.status(401).send("No se encontró al usuario.");
           console.log("Query sin resultados");
+        } else if (results[0].is_client === 1) {
+          res.status(402).send("Usuario es cliente, no se puede nulificar.");
+          console.log("Query sin resultados");
         } else {
-          answer = JSON.stringify(results, null, 2);
-          console.log("Usuario encontrado, comenzando proceso de borrado...");
+          console.log("Usuario encontrado en users, comenzando proceso de borrado...");
 
           const columns = Object.keys(results[0]);
           columns.forEach(column => {
@@ -181,9 +182,10 @@ app.delete("/api/users/:id", (req, res) => {
               });
             }
           });
+          connection.release(); // <-- libera la conexión después de realizar la consulta
+          console.log("Query en user exitosa");
+          res.end("Usuario nulificado.")
         }
-        connection.release(); // <-- libera la conexión después de realizar la consulta
-        res.end("Usuario nulificado.");
       });
     }
   });
