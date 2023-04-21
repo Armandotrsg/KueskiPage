@@ -59,7 +59,7 @@ Para este método se utiliza el siguiente endpoint (reemplaza id por el id a bus
 ```
 
 ### DELETE "id"
-Este método se utiliza para nullificar todos los datos relacionados a un **user_id** específico. No los borra, simplemente los vuelve *NULL*, a menos que el campo **is_client** sea *TRUE*.
+Este método se utiliza para nullificar todos los datos relacionados a un **user_id** específico tanto en *users* como en todos los renglones asociados a este user en *addresses*. No los borra, simplemente los vuelve *NULL*, a menos que el campo **is_client** sea *TRUE*.
 
 Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin utilizar las llaves del campo inferior):
 ```
