@@ -211,9 +211,11 @@ app.delete("/api/users/:id", async (req, res) => {
         } else if (!results || results.length === 0) {
           res.status(401).send("No se encontró al usuario.");
           console.log("Query sin resultados");
+          return;
         } else if (results[0].is_client === 1) {
           res.status(402).send("Usuario es cliente, no se puede nulificar.");
           console.log("Query sin resultados");
+          return;
         } else {
           console.log("Usuario encontrado en users, comenzando proceso de borrado...");
 
@@ -234,8 +236,9 @@ app.delete("/api/users/:id", async (req, res) => {
             if (err) {
               console.error(err);
               res.status(500).send("No se pudo leer la base de datos.");
+              return;
             } else {
-              console.log("Query en user exitosa");
+              console.log("Query en users exitosa");
 
               query = `SELECT * FROM addresses WHERE user_id = ` + id + `;`;
               connection.query(
@@ -245,9 +248,45 @@ app.delete("/api/users/:id", async (req, res) => {
                   res.status(500).send("No se pudo leer la base de datos.");
                 } else if (!results || results.length === 0) {
                   console.log("Query sin resultados en address.");
-                  res.end("User nulificado sin address.");
+
+                  query = `SELECT * FROM identification WHERE user_id = ` + id + `;`;
+                  connection.query(
+                    query
+                    , function (err, results, fields) {
+                    if (err) {
+                      res.status(500).send("No se pudo leer la base de datos.");
+                    } else if (!results || results.length === 0) {
+                      console.log("Query sin resultados en identification.");
+                    } else {
+                      console.log("Usuario encontrado en identification, comenzando proceso de borrado...");
+            
+                      query = "UPDATE identification SET ";
+                      const columns = Object.keys(results[0]);
+                      columns.forEach(column => {
+                        if (column != 'user_id' && column != 'identification_id'){
+                          query += column + " = NULL, ";
+                        }
+                      });
+            
+                      query = query.substring(0, query.length - 2);
+                      query += " WHERE user_id = " + id + ";";
+            
+                      connection.query(
+                        query
+                        , function (err, results, fields) {
+                        if (err) {
+                          console.error(err);
+                          res.status(500).send("No se pudo leer la base de datos.");
+                        } else {
+                          console.log("Query en identification exitosa");
+                          res.end("Usuario nullificado.");
+                          return;
+                        }
+                      });
+                    }
+                  });
                 } else {
-                  console.log("Usuario encontrado en address, comenzando proceso de borrado...");
+                  console.log("Usuario encontrado en addresses, comenzando proceso de borrado...");
         
                   query = "UPDATE addresses SET ";
                   const columns = Object.keys(results[0]);
@@ -267,13 +306,51 @@ app.delete("/api/users/:id", async (req, res) => {
                       console.error(err);
                       res.status(500).send("No se pudo leer la base de datos.");
                     } else {
-                      console.log("Query en address exitosa");
-                      res.end("Usuario modificado totalmente.");
+                      console.log("Query en addresses exitosa");
+
+                      query = `SELECT * FROM identification WHERE user_id = ` + id + `;`;
+                      connection.query(
+                        query
+                        , function (err, results, fields) {
+                        if (err) {
+                          res.status(500).send("No se pudo leer la base de datos.");
+                        } else if (!results || results.length === 0) {
+                          console.log("Query sin resultados en identification.");
+                        } else {
+                          console.log("Usuario encontrado en identification, comenzando proceso de borrado...");
+                
+                          query = "UPDATE identification SET ";
+                          const columns = Object.keys(results[0]);
+                          columns.forEach(column => {
+                            if (column != 'user_id' && column != 'identification_id'){
+                              query += column + " = NULL, ";
+                            }
+                          });
+                
+                          query = query.substring(0, query.length - 2);
+                          query += " WHERE user_id = " + id + ";";
+                
+                          connection.query(
+                            query
+                            , function (err, results, fields) {
+                            if (err) {
+                              console.error(err);
+                              res.status(500).send("No se pudo leer la base de datos.");
+                            } else {
+                              console.log("Query en identification exitosa");
+                              res.end("Usuario nullificado.");
+                              connection.release();
+                              return;
+                            }
+                          });
+                        }
+                      });
+ 
+                      res.end("Usuario nullificado.");
+                      connection.release(); // <-- libera la conexión después de realizar la consulta
                     }
                   });
                 }
-                
-                connection.release(); // <-- libera la conexión después de realizar la consulta
               });
             }
           });
