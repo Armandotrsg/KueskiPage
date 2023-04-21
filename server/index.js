@@ -117,23 +117,59 @@ app.patch("/api/users/:id", (req, res) => {
     return res.status(400).send('No se pudo interpretar la información recibida.');
   }
 
+  if (!req.body.column || !req.body.data) {
+    res.status(402).send("Formato incorrecto.");
+    return;
+  }
+
   const column = req.body.column;
   const new_val = req.body.data;
 
   var query = "";
 
-  if (!column.sector) {
+  if (typeof column === 'string') {
     console.log("Normal Patch.");
     query = "UPDATE users SET " + column + " = '" + new_val + "' WHERE user_id = " + id + ";";
   }
   else if (column.sector === "addresses"){
+    if (!column.mode || !column.name) {
+      res.status(402).send("Formato incorrecto.");
+      return;
+    }
     console.log("Address Patch.");
     if (column.mode === "single"){
+      if (!column.address_id) {
+        res.status(402).send("Formato incorrecto.");
+        console.log("Aborted");
+        return;
+      }
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND address_id = " + column.address_id + ";";
     }
     else if (column.mode === "multiple"){
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
     }
+  }
+  else if (column.sector === "identification"){
+    if (!column.mode || !column.name) {
+      res.status(402).send("Formato incorrecto.");
+      return;
+    }
+    console.log("Identification Patch.");
+    if (column.mode === "single"){
+      if (!column.identification_id) {
+        res.status(402).send("Formato incorrecto.");
+        console.log("Aborted");
+        return;
+      }
+      query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND identification_id = " + column.identification_id + ";";
+    }
+    else if (column.mode === "multiple"){
+      query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
+    }
+  }
+  else {
+    res.status(402).send("Formato incorrecto.");
+    return;
   }
   
   pool.getConnection(function (err, connection) {
@@ -148,6 +184,7 @@ app.patch("/api/users/:id", (req, res) => {
       if (err) {
         console.error(err);
         res.status(500).send("No se pudo leer la base de datos.");
+        return;
       } else {
         console.log("Query exitosa");
       }

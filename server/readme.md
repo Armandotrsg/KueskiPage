@@ -45,10 +45,10 @@ El resto de los campos funcionan igual. A continuación se muestra un ejemplo:
 ```
 {
     "column": {
-        "sector": "addresses",
+        "sector": "identification",
         "mode": "single",
         "name": "state",
-        "address_id": 0
+        "identification_id": 0
     },
     "data": "Guanajuato"
 }
