@@ -43,7 +43,7 @@ app.get("/api/users", (req, res) => {
       console.error(err);
     } else {
       connection.query(`
-      SELECT * FROM users LEFT JOIN addresses ON users.user_id = addresses.user_id;
+      SELECT * FROM users LEFT JOIN addresses ON users.user_id = addresses.user_id LEFT JOIN identification ON users.user_id=identification.user_id;
       `, function (err, results, fields) {
         if (err) {
           res.status(500).send("No se pudo leer la base de datos.");
@@ -87,9 +87,21 @@ app.get("/api/users/:id", (req, res) => {
               res.status(500).send("No se pudo leer la base de datos.");
             } else {
               users_results[0].addresses = results;
-              const answer = JSON.stringify(users_results, null, 2);
-              res.send(answer);
-              console.log("Query exitosa");
+
+              query = "SELECT * FROM identification WHERE user_id = " + id;
+
+              connection.query(
+                query
+                , function (err, results, fields) {
+                  if (err) {
+                    res.status(500).send("No se pudo leer la base de datos.");
+                  } else {
+                    users_results[0].identifications = results;
+                    const answer = JSON.stringify(users_results, null, 2);
+                    res.send(answer);
+                    console.log("Query exitosa");
+                  }
+                });
             }
           });
         }
@@ -105,23 +117,59 @@ app.patch("/api/users/:id", (req, res) => {
     return res.status(400).send('No se pudo interpretar la información recibida.');
   }
 
+  if (!req.body.column || !req.body.data) {
+    res.status(402).send("Formato incorrecto.");
+    return;
+  }
+
   const column = req.body.column;
   const new_val = req.body.data;
 
   var query = "";
 
-  if (!column.sector) {
+  if (typeof column === 'string') {
     console.log("Normal Patch.");
     query = "UPDATE users SET " + column + " = '" + new_val + "' WHERE user_id = " + id + ";";
   }
   else if (column.sector === "addresses"){
+    if (!column.mode || !column.name) {
+      res.status(402).send("Formato incorrecto.");
+      return;
+    }
     console.log("Address Patch.");
     if (column.mode === "single"){
+      if (!column.address_id) {
+        res.status(402).send("Formato incorrecto.");
+        console.log("Aborted");
+        return;
+      }
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND address_id = " + column.address_id + ";";
     }
     else if (column.mode === "multiple"){
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
     }
+  }
+  else if (column.sector === "identification"){
+    if (!column.mode || !column.name) {
+      res.status(402).send("Formato incorrecto.");
+      return;
+    }
+    console.log("Identification Patch.");
+    if (column.mode === "single"){
+      if (!column.identification_id) {
+        res.status(402).send("Formato incorrecto.");
+        console.log("Aborted");
+        return;
+      }
+      query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND identification_id = " + column.identification_id + ";";
+    }
+    else if (column.mode === "multiple"){
+      query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
+    }
+  }
+  else {
+    res.status(402).send("Formato incorrecto.");
+    return;
   }
   
   pool.getConnection(function (err, connection) {
@@ -136,6 +184,7 @@ app.patch("/api/users/:id", (req, res) => {
       if (err) {
         console.error(err);
         res.status(500).send("No se pudo leer la base de datos.");
+        return;
       } else {
         console.log("Query exitosa");
       }
@@ -162,9 +211,11 @@ app.delete("/api/users/:id", async (req, res) => {
         } else if (!results || results.length === 0) {
           res.status(401).send("No se encontró al usuario.");
           console.log("Query sin resultados");
+          return;
         } else if (results[0].is_client === 1) {
           res.status(402).send("Usuario es cliente, no se puede nulificar.");
           console.log("Query sin resultados");
+          return;
         } else {
           console.log("Usuario encontrado en users, comenzando proceso de borrado...");
 
@@ -185,8 +236,9 @@ app.delete("/api/users/:id", async (req, res) => {
             if (err) {
               console.error(err);
               res.status(500).send("No se pudo leer la base de datos.");
+              return;
             } else {
-              console.log("Query en user exitosa");
+              console.log("Query en users exitosa");
 
               query = `SELECT * FROM addresses WHERE user_id = ` + id + `;`;
               connection.query(
@@ -196,9 +248,45 @@ app.delete("/api/users/:id", async (req, res) => {
                   res.status(500).send("No se pudo leer la base de datos.");
                 } else if (!results || results.length === 0) {
                   console.log("Query sin resultados en address.");
-                  res.end("User nulificado sin address.");
+
+                  query = `SELECT * FROM identification WHERE user_id = ` + id + `;`;
+                  connection.query(
+                    query
+                    , function (err, results, fields) {
+                    if (err) {
+                      res.status(500).send("No se pudo leer la base de datos.");
+                    } else if (!results || results.length === 0) {
+                      console.log("Query sin resultados en identification.");
+                    } else {
+                      console.log("Usuario encontrado en identification, comenzando proceso de borrado...");
+            
+                      query = "UPDATE identification SET ";
+                      const columns = Object.keys(results[0]);
+                      columns.forEach(column => {
+                        if (column != 'user_id' && column != 'identification_id'){
+                          query += column + " = NULL, ";
+                        }
+                      });
+            
+                      query = query.substring(0, query.length - 2);
+                      query += " WHERE user_id = " + id + ";";
+            
+                      connection.query(
+                        query
+                        , function (err, results, fields) {
+                        if (err) {
+                          console.error(err);
+                          res.status(500).send("No se pudo leer la base de datos.");
+                        } else {
+                          console.log("Query en identification exitosa");
+                          res.end("Usuario nullificado.");
+                          return;
+                        }
+                      });
+                    }
+                  });
                 } else {
-                  console.log("Usuario encontrado en address, comenzando proceso de borrado...");
+                  console.log("Usuario encontrado en addresses, comenzando proceso de borrado...");
         
                   query = "UPDATE addresses SET ";
                   const columns = Object.keys(results[0]);
@@ -218,13 +306,51 @@ app.delete("/api/users/:id", async (req, res) => {
                       console.error(err);
                       res.status(500).send("No se pudo leer la base de datos.");
                     } else {
-                      console.log("Query en address exitosa");
-                      res.end("Usuario modificado totalmente.");
+                      console.log("Query en addresses exitosa");
+
+                      query = `SELECT * FROM identification WHERE user_id = ` + id + `;`;
+                      connection.query(
+                        query
+                        , function (err, results, fields) {
+                        if (err) {
+                          res.status(500).send("No se pudo leer la base de datos.");
+                        } else if (!results || results.length === 0) {
+                          console.log("Query sin resultados en identification.");
+                        } else {
+                          console.log("Usuario encontrado en identification, comenzando proceso de borrado...");
+                
+                          query = "UPDATE identification SET ";
+                          const columns = Object.keys(results[0]);
+                          columns.forEach(column => {
+                            if (column != 'user_id' && column != 'identification_id'){
+                              query += column + " = NULL, ";
+                            }
+                          });
+                
+                          query = query.substring(0, query.length - 2);
+                          query += " WHERE user_id = " + id + ";";
+                
+                          connection.query(
+                            query
+                            , function (err, results, fields) {
+                            if (err) {
+                              console.error(err);
+                              res.status(500).send("No se pudo leer la base de datos.");
+                            } else {
+                              console.log("Query en identification exitosa");
+                              res.end("Usuario nullificado.");
+                              connection.release();
+                              return;
+                            }
+                          });
+                        }
+                      });
+ 
+                      res.end("Usuario nullificado.");
+                      connection.release(); // <-- libera la conexión después de realizar la consulta
                     }
                   });
                 }
-                
-                connection.release(); // <-- libera la conexión después de realizar la consulta
               });
             }
           });
@@ -260,11 +386,11 @@ app.post("/api/arco_registers", (req, res) => {
 
 // Esto hace que NodeJS sirva los archivos resultado del build de ReactJS
 // Esto va antes de nuestros endpoints pero después de la declaración de app.
-app.use(express.static(path.resolve("client/build")));
+app.use(express.static(path.resolve("client/dist")));
 // Todas las peticiones GET que no manejamos ahora regresarán nuestra React App
 // Agrega esto antes del “app.listen”
 app.get("*", (req, res) => {
-    res.sendFile(path.resolve("client/build", "index.html"));
+    res.sendFile(path.resolve("client/dist", "index.html"));
 });
 
 // Listen ---------------------------|
