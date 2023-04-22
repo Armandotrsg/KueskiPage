@@ -1,32 +1,7 @@
-/*
-import React from "react";
-
-export const Clientes = () => {
-
-    const [data, setData] = React.useState(null);
-
-    React.useEffect(() => {
-        fetch("/api/users")
-            .then((res) => res.json())
-            .then((data) => {
-                setData(data[0].name);
-                console.log(data); // Imprime la respuesta completa del servidor en la consola del navegador
-            })
-            .catch((error) => {
-                console.log(error); // Imprime cualquier error en la consola del navegador
-            });
-    }, []);
-    
-
-    return (
-        <div className="flex">
-            <h1 className="text-2xl font-bold ml-4">Clientes</h1>
-            <p>{!data ? "Loading...": data}</p>
-*/
-
 import DataTable from "react-data-table-component";
 import { useState, useEffect } from "react";
-import data from "../shared/data.json";
+import { userData } from "../shared/clientes";
+import {ModalClient} from "./ModalClient"
 
 export const Clientes = () => {
     const [tableData, setTableData] = useState([]);
@@ -34,6 +9,9 @@ export const Clientes = () => {
     const [searchText, setSearchText] = useState("");
     const [searchBy, setSearchBy] = useState("name"); // Por defecto, buscar en la columna "name"
     const [actionButton, setActionButton] = useState("Acceso");
+    const [selectedRow, setSelectedRow] = useState(null); //Para cargar los datos de la fila seleccionada
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
 
     const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
     //const filtroBusqueda = ["ID", "Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC"];
@@ -43,6 +21,17 @@ export const Clientes = () => {
     };
 
     const [dropdownMenuOpen, setDropdownMenuOpen] = useState(false);
+
+    const data = [
+        {
+          id: userData.user_id,
+          name: userData.name,
+          apellidoPaterno: userData.first_last_name,
+          apellidoMaterno: userData.second_last_name,
+          curp: userData.curp,
+          rfc: "", // Debes obtener el RFC desde userData si lo tienes disponible.
+        },
+      ];
 
     const columns = [
         {
@@ -100,8 +89,16 @@ export const Clientes = () => {
             width: "flex",
             format: (row) => <div>{row.rfc}</div>,
         },
-    ];
-
+        {
+            name: 'Ver',
+            selector: 'id',
+            sortable: false,
+            cell: (row) => <button onClick={() => handleView(row)}>Ver</button>,
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+          },
+    ];   
     useEffect(() => {
         setLoading(true);
         setTableData(data);
@@ -117,10 +114,16 @@ export const Clientes = () => {
         setSearchBy(e.target.value);
         setSearchText(""); // Borrar texto de búsqueda al cambiar el campo de búsqueda
     };
-      
+    
+    
     const filteredData = tableData.filter((item) => // Buscar en el campo seleccionado
     item[searchBy].toLowerCase().includes(searchText.toLowerCase())
     );
+
+    const handleView = (row) => {
+        setSelectedRow(row);
+        setIsModalOpen(true);
+      };
       
 
     return (
@@ -150,16 +153,28 @@ export const Clientes = () => {
                             ></path>
                         </svg>
                     </div>
+                    
+                    
+                    {/* Filtro pra la busqueda */}
+                    <div className="flex pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4">
+                        <label htmlFor="FiltroBusqueda" className="flex text-lg text-center font-semibold font-sm top-4 text-gray-900 dark:text-black">Filtro de busqueda:</label>
+                        <select 
+                            id="FiltroBusqueda" 
+                            value={searchBy} 
+                            onChange={handleSearchByChange}
+                            data-dropdown-toggle="dropdownAction"
+                            className="flex w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400"
+                            type="button"
+                        >
+                            <option value="name">Nombre</option>
+                            <option value="apellidoPaterno">Apellido Paterno</option>
+                            <option value="apellidoMaterno">Apellido Materno</option>
+                            <option value="curp">CURP</option>
+                            <option value="rfc">RFC</option>
+                        </select>
+                        
+                    </div>
 
-                    {/* Seleccionar el filtro que se desea aplicar */}
-                   <select value={searchBy} onChange={handleSearchByChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-white dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="name">Nombre</option>
-                        <option value="apellidoPaterno">Apellido Paterno</option>
-                        <option value="apellidoMaterno">Apellido Materno</option>
-                        <option value="curp">CURP</option>
-                        <option value="rfc">RFC</option>
-                        {/* Añadir más opciones según tus necesidades */}
-                    </select>
 
                     <input
                         type="text"
@@ -222,9 +237,10 @@ export const Clientes = () => {
                     </div>
                 )}
             </div>
-
+                            
             <div>
                 {/* Creación de la tabla*/}
+                                 
                 <DataTable
                     columns={columns}
                     data={filteredData}
@@ -232,8 +248,15 @@ export const Clientes = () => {
                     pagination
                     searchable
                     className="z-0 w-full text-sm text-left text-black dark:text-black"
-                ></DataTable>
+                    
+                >
+                </DataTable>      
+
+                {selectedRow && (
+                    <ModalClient isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} userData={selectedRow} />
+                )}  
             </div>
+
         </div>
     );
 };
