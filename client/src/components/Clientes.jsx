@@ -199,7 +199,7 @@
                         </div>
 
                         {/* Filtro pra la busqueda */}
-                        <div className="flex pb-1 bg-white dark:bg-white d-flex justify-content-start lg:w-1/2 mt-5 items-center lg:mt-0 items-center">
+                        <div className="flex pb-1 bg-white dark:bg-white d-flex justify-content-start lg:w-1/2 mt-5 lg:mt-0 items-center">
                             <label htmlFor="FiltroBusqueda" className="flex text-lg text-center font-semibold font-sm top-10 text-gray-900 dark:text-black">Filtro de búsqueda:</label>
                             <select 
                                 id="FiltroBusqueda" 
