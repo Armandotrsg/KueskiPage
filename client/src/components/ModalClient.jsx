@@ -12,7 +12,7 @@ import { Alert } from "./Alert";
 import { useState } from "react";
 import { Feedback } from "./Feedback";
 
-export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, children }) => {
+export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, children, loadData }) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isAlert2Open, setIsAlert2Open] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
@@ -24,8 +24,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
         setShowFeedback(true);
         setTimeout(() => {
             setShowFeedback(false);
-            //Reload the page
-            window.location.reload();
+            loadData();
         }, 3500);
     }
 

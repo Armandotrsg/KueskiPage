@@ -97,10 +97,9 @@
                 allowOverflow: true,
                 button: true,
             },
-        ];  
-
-        //Carga todos los datos de los "users" desde la API
-        useEffect(() => {
+        ];
+        
+        const loadData = () => {
             setLoading(true);
             fetch("/api/users")
                 .then((response) => response.json())
@@ -115,6 +114,11 @@
                 })
                 .catch((error) => console.log(error))
                 .finally(() => setLoading(false));
+        }
+
+        //Carga todos los datos de los "users" desde la API
+        useEffect(() => {
+            loadData();
         }, [shouldRefetch]); // add shouldRefetch as a dependency
 
         const handleRefresh = () => {
@@ -284,7 +288,7 @@
                             pagination
                             className="z-0 w-full text-sm text-left text-black dark:text-black"
                             />
-                           <ModalClient isOpen={modalOpen} arcoRight={modalarcoRight} isEditable={modalisEditable} onClose={() => setModalOpen(false)} userData={modalData}/>
+                           <ModalClient isOpen={modalOpen} arcoRight={modalarcoRight} isEditable={modalisEditable} onClose={() => setModalOpen(false)} userData={modalData} loadData={loadData}/>
                          </>
                     )}
                 </div>
