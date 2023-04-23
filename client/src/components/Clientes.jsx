@@ -12,6 +12,8 @@
         const [shouldRefetch, setShouldRefetch] = useState(false);
         const [modalOpen, setModalOpen] = useState(false);
         const [modalData, setModalData] = useState(null);
+        const [modalisEditable, setModalisEditable] = useState(false);
+        const [modalarcoRight, setModalarchoRight] = useState(null);
 
 
         const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
@@ -121,7 +123,7 @@
                 .then((data) => {
                     setActionButton("Ver");
                     setModalData(data[0]);
-                    setModalOpen(true);
+                    setModalOpen(true);       
                     console.log(data[0]);
                 }
             )
@@ -226,16 +228,38 @@
                             >
                                 {arcoRights.map((arcoRight, index) => {
                                     return (
-                                        <li key={index} onClick={() => {setActionButton(arcoRight); setDropdownMenuOpen(false);}}>
-                                            
+                                        <li key={index} onClick={() => {
+                                            setActionButton(arcoRight); 
+                                            setDropdownMenuOpen(false);
+                                            if (index === 0) {
+                                                setModalisEditable(false);
+                                                setModalarchoRight("Acceso");
+                                            }  
+                                            else if (index === 1){
+                                                setModalisEditable(true);
+                                                setModalarchoRight("Rectificación");
+                                            }
+                                            else if (index === 2){
+                                                setModalisEditable(false);
+                                                setModalarchoRight("Cancelación");
+                                            }
+                                            else if (index === 3){
+                                                setModalisEditable(false);
+                                                setModalarchoRight("Oposición");
+                                            }
+                                            }}>
                                             <a
                                                 href="#"
                                                 className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm"
-                                            >{`${arcoRight} - ${arcoRight[0]}`}</a>
+                                            >
+                                                {`${arcoRight} - ${arcoRight[0]}`}</a>
                                         </li>
+                                
                                     );
                                 })}
+                                
                             </ul>
+                            
                         </div>
                     )}
                 </div>
@@ -253,7 +277,7 @@
                             pagination
                             className="z-0 w-full text-sm text-left text-black dark:text-black"
                             />
-                           <ModalClient isOpen={modalOpen} onClose={() => setModalOpen(false)} userData={modalData} arcoRight={"Acceso"} />
+                           <ModalClient isOpen={modalOpen} arcoRight={modalarcoRight} isEditable={modalisEditable} onClose={() => setModalOpen(false)} userData={modalData}/>
                          </>
                     )}
                 </div>
