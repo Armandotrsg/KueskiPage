@@ -8,23 +8,22 @@
         const [loading, setLoading] = useState(false);
         const [searchText, setSearchText] = useState("");
         const [searchBy, setSearchBy] = useState("name");
+        const [dropdownMenuOpen, setDropdownMenuOpen] = useState(false);
         const [actionButton, setActionButton] = useState("Acceso");
         const [shouldRefetch, setShouldRefetch] = useState(false);
         const [modalOpen, setModalOpen] = useState(false);
         const [modalData, setModalData] = useState(null);
         const [modalisEditable, setModalisEditable] = useState(false);
         const [modalarcoRight, setModalarchoRight] = useState(null);
-
-
+        
         const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
-        //const filtroBusqueda = ["ID", "Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC"];
 
+        //Toggle para el DropDown Menu
         const handleDropdownToggle = () => {
             setDropdownMenuOpen(!dropdownMenuOpen);
         };
 
-        const [dropdownMenuOpen, setDropdownMenuOpen] = useState(false);
-
+        //Definimos las variables del modal según el derecho ARCO que se seleccione
         const arcoRightOptions = {
             Acceso: { isEditable: false, archoRightModal: "Acceso" },
             Rectificación: { isEditable: true, archoRightModal: "Rectificación" },
@@ -32,6 +31,7 @@
             Oposición: { isEditable: false, archoRightModal: "Oposición" }
         };
 
+        //Definimos las columnas de nuestra tabla
         const columns = [
             {
                 name: "ID",
@@ -97,7 +97,9 @@
                 allowOverflow: true,
                 button: true,
             },
-        ];   
+        ];  
+
+        //Carga todos los datos de los "users" desde la API
         useEffect(() => {
             setLoading(true);
             fetch("/api/users")
@@ -111,11 +113,13 @@
             setShouldRefetch(true);
         };
 
+        //Función para buscar el texto ingresado
         const handleSearch = (e) => {
             setSearchText(e.target.value);
         };
 
-        const handleSearchByChange = (e) => { // Función para manejar el cambio de campo de búsqueda
+        // Función dinámica para manejar el cambio de campo de búsqueda
+        const handleSearchByChange = (e) => { 
             setSearchBy(e.target.value);
             setSearchText(""); // Borrar texto de búsqueda al cambiar el campo de búsqueda
         };
@@ -124,6 +128,7 @@
         item[searchBy].toLowerCase().includes(searchText.toLowerCase())
         );
 
+        //Carga los datos de la fila seleccionada a partir de la API y carga el modal una vez se presione el botón "Ver" de la misma
         const handleView = (row) => {
             fetch(`/api/users/${row.user_id}`)
                 .then((response) => response.json())
@@ -259,7 +264,7 @@
                 </div>
                                 
                 <div>
-                    {/* Creación de la tabla*/}
+                    {/* Creación de la tabla y el modal*/}
         
                     {loading ? (
                         <Loader />
