@@ -5,7 +5,9 @@ import { Checkbox } from "./Checkbox";
 export const UserData = ({ atributo, valor, isEditable }) => {
     const [isChecked, setIsChecked] = useState(true);
     const [inputText, setInputText] = useState(valor);
-
+    const convertDateFormat = () => {
+        setInputText(inputText.split("T")[0]);
+    }
     let input = null;
     if (isEditable) {
         let _atributo;
@@ -13,6 +15,7 @@ export const UserData = ({ atributo, valor, isEditable }) => {
             _atributo = "email";
         } else if (atributo === "date_of_birth") {
             _atributo = "date";
+            convertDateFormat;
         } else if (atributo === "phone_number") {
             _atributo = "tel";
         } else {
@@ -38,11 +41,11 @@ export const UserData = ({ atributo, valor, isEditable }) => {
             }`}
         >
             {isEditable && <Checkbox isChecked={isChecked} setIsChecked={setIsChecked} />}
-            <h5 className="text-lg font-semibold">{atributo}: &nbsp;</h5>
+            <h5 className={`text-lg  ${atributo.includes("_id") ? "font-bold" : "font-semibold"}`}>{atributo}: &nbsp;</h5>
             {isEditable ? (
                 input
             ) : (
-                <p className="text-lg text-gray-900">{valor}</p>
+                <p className={`text-lg text-gray-900`}>{valor}</p>
             )}
         </li>
     );
