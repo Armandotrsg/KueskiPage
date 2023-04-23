@@ -87,8 +87,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                     console.log(err);
                 })
             });
-            showMessage();
         }
+        showMessage();
     }
 
     //Check for null or undefined
