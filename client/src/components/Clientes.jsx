@@ -10,6 +10,8 @@
         const [searchBy, setSearchBy] = useState("name");
         const [actionButton, setActionButton] = useState("Acceso");
         const [shouldRefetch, setShouldRefetch] = useState(false);
+        const [modalOpen, setModalOpen] = useState(false);
+        const [modalData, setModalData] = useState({});
 
 
         const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
@@ -114,8 +116,14 @@
         );
 
         const handleView = (row) => {
-            setSelectedRow(row);
-            setIsModalOpen(true);
+            fetch(`/api/users/${row.user_id}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setActionButton("Ver");
+                    setModalData(data[0]);
+                    setModalOpen(true);
+                }
+            )
         };
         
 
@@ -237,12 +245,15 @@
                     {loading ? (
                         <Loader />
                     ) : (
-                        <DataTable
-                        columns={columns}
-                        data={filteredData}
-                        pagination
-                        className="z-0 w-full text-sm text-left text-black dark:text-black"
-                        />
+                        <>
+                            <DataTable
+                            columns={columns}
+                            data={filteredData}
+                            pagination
+                            className="z-0 w-full text-sm text-left text-black dark:text-black"
+                            />
+                            <ModalClient isOpen={modalOpen} onClose={() => setModalOpen(false)} userData={modalData} arcoRight={"Acceso"} />
+                        </>
                     )}
                 </div>
 
