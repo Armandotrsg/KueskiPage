@@ -11,7 +11,7 @@
         const [actionButton, setActionButton] = useState("Acceso");
         const [shouldRefetch, setShouldRefetch] = useState(false);
         const [modalOpen, setModalOpen] = useState(false);
-        const [modalData, setModalData] = useState({});
+        const [modalData, setModalData] = useState(null);
 
 
         const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
@@ -122,6 +122,7 @@
                     setActionButton("Ver");
                     setModalData(data[0]);
                     setModalOpen(true);
+                    console.log(data[0]);
                 }
             )
         };
@@ -252,8 +253,8 @@
                             pagination
                             className="z-0 w-full text-sm text-left text-black dark:text-black"
                             />
-                            <ModalClient isOpen={modalOpen} onClose={() => setModalOpen(false)} userData={modalData} arcoRight={"Acceso"} />
-                        </>
+                           <ModalClient isOpen={modalOpen} onClose={() => setModalOpen(false)} userData={modalData} arcoRight={"Acceso"} />
+                         </>
                     )}
                 </div>
 

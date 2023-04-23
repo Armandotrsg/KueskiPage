@@ -10,7 +10,8 @@ import { Loader } from "./Loader";
 
 
 export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, children }) => {
-    if (!userData){
+    //Check for null or undefined
+    if (userData === null || userData === undefined) {
         return (
             <Modal isOpen={isOpen} onClose={onClose}>
                 <Loader />
