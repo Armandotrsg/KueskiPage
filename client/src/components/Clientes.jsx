@@ -25,6 +25,13 @@
 
         const [dropdownMenuOpen, setDropdownMenuOpen] = useState(false);
 
+        const arcoRightOptions = {
+            Acceso: { isEditable: false, archoRightModal: "Acceso" },
+            Rectificación: { isEditable: true, archoRightModal: "Rectificación" },
+            Cancelación: { isEditable: false, archoRightModal: "Cancelación" },
+            Oposición: { isEditable: false, archoRightModal: "Oposición" }
+        };
+
         const columns = [
             {
                 name: "ID",
@@ -227,26 +234,13 @@
                                 aria-labelledby="dropdownActionButton"
                             >
                                 {arcoRights.map((arcoRight, index) => {
+                                    const { isEditable, archoRightModal } = arcoRightOptions[arcoRight];
                                     return (
                                         <li key={index} onClick={() => {
                                             setActionButton(arcoRight); 
                                             setDropdownMenuOpen(false);
-                                            if (index === 0) {
-                                                setModalisEditable(false);
-                                                setModalarchoRight("Acceso");
-                                            }  
-                                            else if (index === 1){
-                                                setModalisEditable(true);
-                                                setModalarchoRight("Rectificación");
-                                            }
-                                            else if (index === 2){
-                                                setModalisEditable(false);
-                                                setModalarchoRight("Cancelación");
-                                            }
-                                            else if (index === 3){
-                                                setModalisEditable(false);
-                                                setModalarchoRight("Oposición");
-                                            }
+                                            setModalisEditable(isEditable);
+                                            setModalarchoRight(archoRightModal);
                                             }}>
                                             <a
                                                 href="#"
