@@ -45,7 +45,7 @@ El resto de los campos funcionan igual. A continuación se muestra un ejemplo:
 ```
 {
     "column": {
-        "sector": "address",
+        "sector": "addresses",
         "mode": "single",
         "name": "state",
         "address_id": 0
