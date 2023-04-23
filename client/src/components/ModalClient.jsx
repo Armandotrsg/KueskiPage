@@ -18,6 +18,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
     const [isAlert2Open, setIsAlert2Open] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showFeedback, setShowFeedback] = useState(false)
+    const [serverResponse, setServerResponse] = useState("Error");
+    const [serverSuccess, setServerSuccess] = useState(false);
 
     const showMessage = () => {
         setShowFeedback(true);
@@ -82,6 +84,15 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(item)
+                })
+                .then((res) => {
+                    if (res.status === 200) {
+                        setServerResponse("Datos actualizados correctamente");
+                        setServerSuccess(true);
+                    } else {
+                        setServerResponse("Error al actualizar los datos");
+                        setServerSuccess(false);
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -239,7 +250,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
             </Modal>
             <Alert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)} message={alertMessage} onCloseOther={onClose} acceptFunction={() => setIsAlertOpen(false)} />
             <Alert isOpen={isAlert2Open} onClose={() => setIsAlert2Open(false)} message={alertMessage} onCloseOther={onClose} acceptFunction={() => acceptProcedure(arcoRight[0])} />
-            {showFeedback && <Feedback feedback={"Operación realizada con éxito"} />}
+            {showFeedback && <Feedback feedback={serverResponse} success={serverSuccess} />}
         </>
     );
 };

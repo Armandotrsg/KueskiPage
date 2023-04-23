@@ -4,8 +4,10 @@ import { Checkbox } from "./Checkbox";
 
 export const UserData = ({ atributo, valor, isEditable, id }) => {
     const [isChecked, setIsChecked] = useState(true);
+    let [inputText, setInputText] = useState(valor);
     const convertDateFormat = () => {
         valor = valor.split("T")[0];
+        inputText = inputText.split("T")[0];
     }
     if (atributo === "date_of_birth") {
         convertDateFormat();
@@ -27,7 +29,8 @@ export const UserData = ({ atributo, valor, isEditable, id }) => {
         input = (
             <input
                 type={inputType}
-                value={valor}
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
                 className={`text-lg border-[1px] ${
                     isChecked ? "border-gray-300" : "border-gray-400"
                 } rounded-md p-1 ml-1 mt-2 w-[100%] lg:w-[80%] xl:w-[50%]`}
