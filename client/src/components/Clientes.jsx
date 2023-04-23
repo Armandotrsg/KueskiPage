@@ -14,7 +14,7 @@
         const [modalOpen, setModalOpen] = useState(false);
         const [modalData, setModalData] = useState(null);
         const [modalisEditable, setModalisEditable] = useState(false);
-        const [modalarcoRight, setModalarchoRight] = useState(null);
+        const [modalarcoRight, setModalarchoRight] = useState("Acceso");
         
         const arcoRights = ["Acceso", "Rectificación", "Cancelación", "Oposición"];
 
@@ -141,7 +141,7 @@
             fetch(`/api/users/${row.user_id}`)
                 .then((response) => response.json())
                 .then((data) => {
-                    setActionButton("Ver");
+                    //setActionButton("Ver");
                     setModalData(data[0]);
                     setModalOpen(true);       
                     console.log(data[0]);

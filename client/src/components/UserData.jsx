@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Checkbox } from "./Checkbox";
 
 
-export const UserData = ({ atributo, valor, isEditable }) => {
+export const UserData = ({ atributo, valor, isEditable, id }) => {
     const [isChecked, setIsChecked] = useState(true);
     const [inputText, setInputText] = useState(valor);
     const convertDateFormat = () => {
@@ -31,6 +31,8 @@ export const UserData = ({ atributo, valor, isEditable }) => {
                 } rounded-md p-1 ml-1 mt-2 w-[100%] lg:w-[80%] xl:w-[50%]`}
                 disabled={isChecked}
                 required
+                name={atributo}
+                attributeid = {id}
             />
         );
     }
