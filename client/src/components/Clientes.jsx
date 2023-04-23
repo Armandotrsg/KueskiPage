@@ -161,12 +161,14 @@
                 <div className=" overflow-x-auto shadow-md sm:rounded-lg mt-5"></div>
 
                 {/*Busqueda*/}
-                <div className="flex pb-4 bg-white dark:bg-white ">
+                <div className="flex items-start pb-4 bg-white dark:bg-white ">
                     <label for="table-search" className="sr-only">
                         Search
                     </label>
-                    <div className="flex flex-row-reverse relative mt-1 space-x-4">
-                        <div className="absolute inset-y-0 left-3.5 flex items-center pl-3 pointer-events-none">
+                    <div className="flex flex-col lg:flex-row relative mt-1 space-x-4">
+                        
+                        {/* Lupa de la barra de búsqueda */}
+                        <div className="absolute left-4 top-2 flex items-center pl-3 pointer-events-none">
                             <svg
                                 className="w-5 h-5 text-gray-500 dark:text-gray-400"
                                 aria-hidden="true"
@@ -180,18 +182,31 @@
                                     clip-rule="evenodd"
                                 ></path>
                             </svg>
+                            
+                            
                         </div>
-                        
-                        
+
+                        {/* Input de la búsqueda */}
+                        <div>
+                            <input
+                                type="text"
+                                value={searchText}
+                                onChange={handleSearch}
+                                id="table-search"
+                                className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-white-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Buscar"
+                            />
+                        </div>
+
                         {/* Filtro pra la busqueda */}
-                        <div className="flex pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4">
-                            <label htmlFor="FiltroBusqueda" className="flex text-lg text-center font-semibold font-sm top-4 text-gray-900 dark:text-black">Filtro de busqueda:</label>
+                        <div className="flex pb-1 bg-white dark:bg-white d-flex justify-content-start lg:w-1/2 mt-5 items-center lg:mt-0 items-center">
+                            <label htmlFor="FiltroBusqueda" className="flex text-lg text-center font-semibold font-sm top-10 text-gray-900 dark:text-black">Filtro de búsqueda:</label>
                             <select 
                                 id="FiltroBusqueda" 
                                 value={searchBy} 
                                 onChange={handleSearchByChange}
                                 data-dropdown-toggle="dropdownAction"
-                                className="flex w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400"
+                                className="flex ml-1 mt-1 w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400"
                                 type="button"
                             >
                                 <option value="name">Nombre</option>
@@ -199,21 +214,11 @@
                                 <option value="second_last_name">Apellido Materno</option>
                                 <option value="curp">CURP</option>
                                 {/* <option value="rfc">RFC</option> */}
-                            </select>
-                            
-                        </div>
-
-
-                        <input
-                            type="text"
-                            value={searchText}
-                            onChange={handleSearch}
-                            id="table-search"
-                            className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-white-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Buscar"
-                        />
+                            </select>  
+                        </div>  
                     </div>
                 </div>
+                
                 {/*Filtro ARCO*/}
                 <div className="pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4">
                     <button
