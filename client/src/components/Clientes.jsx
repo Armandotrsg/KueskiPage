@@ -1,6 +1,7 @@
     import DataTable from "react-data-table-component";
     import { useState, useEffect } from "react";
     import {ModalClient} from "./ModalClient"
+    import { Loader } from "./Loader";
 
     export const Clientes = () => {
         const [tableData, setTableData] = useState([]);
@@ -159,10 +160,10 @@
                                 type="button"
                             >
                                 <option value="name">Nombre</option>
-                                <option value="apellidoPaterno">Apellido Paterno</option>
-                                <option value="apellidoMaterno">Apellido Materno</option>
+                                <option value="first_last_name">Apellido Paterno</option>
+                                <option value="second_last_name">Apellido Materno</option>
                                 <option value="curp">CURP</option>
-                                <option value="rfc">RFC</option>
+                                {/* <option value="rfc">RFC</option> */}
                             </select>
                             
                         </div>
@@ -234,12 +235,13 @@
                     {/* Creación de la tabla*/}
         
                     {loading ? (
-                        <p>Loading...</p>
+                        <Loader />
                     ) : (
                         <DataTable
                         columns={columns}
-                        data={tableData}
+                        data={filteredData}
                         pagination
+                        className="z-0 w-full text-sm text-left text-black dark:text-black"
                         />
                     )}
                 </div>
