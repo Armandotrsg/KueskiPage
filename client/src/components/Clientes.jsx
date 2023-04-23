@@ -6,7 +6,7 @@ export const Clientes = () => {
     const [data, setData] = React.useState(null);
 
     React.useEffect(() => {
-        fetch("http://localhost:3001/api/users")
+        fetch("/api/users")
             .then((res) => res.json())
             .then((data) => {
                 setData(data[0].name);
