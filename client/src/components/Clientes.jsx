@@ -104,11 +104,12 @@
             fetch("/api/users")
                 .then((response) => response.json())
                 .then((data) => {
-                    //Map through the data and remove the repated user_id's
+                    //Map through the data and remove the repated user_id's and don't add the ones where the name is null
                     const uniqueData = data.filter(
                         (item, index, self) =>
                             index ===
                             self.findIndex((t) => t.user_id === item.user_id)
+                            && item.name !== null
                     );
                     setTableData(uniqueData);
                 })
