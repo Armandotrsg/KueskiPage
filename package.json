@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "deploy": "cd client && npm run build && cd .. && vercel && vercel --prod",
+        "deploy": "cd client && npm run build && cd .. && vercel",
         "dev": "cd client && npm run dev"
     },
     "keywords": [],
