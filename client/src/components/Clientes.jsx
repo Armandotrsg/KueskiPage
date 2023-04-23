@@ -104,7 +104,15 @@
             setLoading(true);
             fetch("/api/users")
                 .then((response) => response.json())
-                .then((data) => setTableData(data))
+                .then((data) => {
+                    //Map through the data and remove the repated user_id's
+                    const uniqueData = data.filter(
+                        (item, index, self) =>
+                            index ===
+                            self.findIndex((t) => t.user_id === item.user_id)
+                    );
+                    setTableData(uniqueData);
+                })
                 .catch((error) => console.log(error))
                 .finally(() => setLoading(false));
         }, [shouldRefetch]); // add shouldRefetch as a dependency
