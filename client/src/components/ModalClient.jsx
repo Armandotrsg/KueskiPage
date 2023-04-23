@@ -12,14 +12,13 @@ import { Alert } from "./Alert";
 import { useState } from "react";
 import { Feedback } from "./Feedback";
 
-
 export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, children }) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isAlert2Open, setIsAlert2Open] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showFeedback, setShowFeedback] = useState(false)
-    const [serverResponse, setServerResponse] = useState("Error");
-    const [serverSuccess, setServerSuccess] = useState(false);
+    const [serverResponse, setServerResponse] = useState("");
+    const [serverSuccess, setServerSuccess] = useState(true);
 
     const showMessage = () => {
         setShowFeedback(true);
@@ -86,12 +85,12 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                     body: JSON.stringify(item)
                 })
                 .then((res) => {
-                    if (res.status === 200) {
-                        setServerResponse("Datos actualizados correctamente");
+                    if (res.ok) {
                         setServerSuccess(true);
+                        setServerResponse("Datos actualizados correctamente");
                     } else {
-                        setServerResponse("Error al actualizar los datos");
                         setServerSuccess(false);
+                        setServerResponse("Error al actualizar los datos");
                     }
                 })
                 .catch((err) => {

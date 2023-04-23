@@ -1,6 +1,5 @@
 import { Modal } from "./Modal"
 import { Button } from "./Button"
-import { Feedback } from "./Feedback"
 
 export const Alert = ({ isOpen, onClose, onCloseOther, message, acceptFunction}) => {
     const acceptProcedure = () => {
@@ -19,7 +18,7 @@ export const Alert = ({ isOpen, onClose, onCloseOther, message, acceptFunction})
                             className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
                             id={"cancel-button"}
                             toolTipContent={"Regresar a la vista de los datos del usuario"}
-                        > Cancelar </Button>
+                        > Regresar </Button>
                         <Button
                             onClick={acceptProcedure}
                             className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ml-3"

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Checkbox } from "./Checkbox";
 
-
 export const UserData = ({ atributo, valor, isEditable, id }) => {
     const [isChecked, setIsChecked] = useState(true);
     let [inputText, setInputText] = useState(valor);
