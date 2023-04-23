@@ -6,13 +6,21 @@ import {
     ModalContainer,
 } from "./Modal";
 import { UserData } from "./UserData";
+import { Loader } from "./Loader";
 
 
 export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, children }) => {
+    if (!userData){
+        return (
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <Loader />
+            </Modal>
+        );
+    }
     const keys = Object.keys(userData);
     const addressesKeys = Object.keys(userData.addresses[0]);
-    const identificationKeys = Object.keys(userData.identification[0]);
-    const otherKeys = Object.keys(userData.user_data);
+    const identificationKeys = Object.keys(userData.identifications[0]);
+    const otherKeys = userData.user_data !== null ? Object.keys(userData.user_data) : [];
     return (
         <Modal
             isOpen={isOpen}
@@ -30,9 +38,9 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                             {keys.map((key, index) => {
                                 if (
                                     key !== "addresses" &&
-                                    key !== "identification" &&
+                                    key !== "identifications" &&
                                     key !== "user_data" &&
-                                    key !== "registros_arco"
+                                    key !== "registros_arco" 
                                 ) {
                                     return (
                                         <UserData
@@ -50,7 +58,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                             })}
                         </ColSection>
                         <ColSection title="Identificaciones">
-                            {userData.identification.map(
+                            {userData.identifications.map(
                                 (identification, _index) => {
                                     return (
                                         <div
@@ -59,6 +67,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                                         >
                                             {identificationKeys.map(
                                                 (key, index) => {
+                                                    if (key !== "user_id")
                                                     return (
                                                         <UserData
                                                             key={index}
@@ -93,6 +102,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                                         className="flex flex-col space-y-4"
                                     >
                                         {addressesKeys.map((key, index) => {
+                                            if (key !== "user_id")
                                             return (
                                                 <UserData
                                                     key={index}
