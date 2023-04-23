@@ -47,7 +47,7 @@ export const UserData = ({ atributo, valor, isEditable, id }) => {
             {isEditable ? (
                 input
             ) : (
-                <p className={`text-lg text-gray-900`}>{valor}</p>
+                <p className={`text-lg text-gray-900`}>{inputText}</p>
             )}
         </li>
     );

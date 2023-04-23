@@ -10,7 +10,7 @@ export const Feedback = ({ feedback }) => {
             </p>
 
             <div
-                className={`bg-blue-600 h-2 rounded-full transition-all animate-decrease`}
+                className={`bg-blue-500 h-2 rounded-full transition-all animate-decrease`}
             ></div>
         </div>
     );

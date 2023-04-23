@@ -10,12 +10,23 @@ import { Loader } from "./Loader";
 import { Button } from "./Button";
 import { Alert } from "./Alert";
 import { useState } from "react";
+import { Feedback } from "./Feedback";
 
 
 export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, children }) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isAlert2Open, setIsAlert2Open] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
+    const [showFeedback, setShowFeedback] = useState(false)
+
+    const showMessage = () => {
+        setShowFeedback(true);
+        setTimeout(() => {
+            setShowFeedback(false);
+            //Reload the page
+            window.location.reload();
+        }, 3500);
+    }
 
     const acceptProcedure = (arcoRightLetter) => {
         console.log("Accept");
@@ -38,12 +49,12 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                 if (input.getAttribute("attributeid").includes("address")) {
                     data.push({
                         column: {
-                            sector: "address",
+                            sector: "addresses",
                             mode: "single",
                             name: input.getAttribute("name"),
-                            address_id: input.getAttribute("attributeID").split("_")[1],
+                            address_id: input.getAttribute("attributeID").split("_")[1]
                         },
-                        data: input.value,
+                        data: input.value === "N/A" ? null : input.value
                     });
                 } else if (input.getAttribute("attributeID").includes("identification")) {
                     data.push({
@@ -51,35 +62,32 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                             sector: "identification",
                             mode: "single",
                             name: input.getAttribute("name"),
-                            identification_id: input.getAttribute("attributeID").split("_")[1],
+                            identification_id: input.getAttribute("attributeID").split("_")[1]
                         },
-                        data: input.value,
+                        data: input.value === "N/A" ? null : input.value
                     });
                 } else if (input.getAttribute("attributeID").includes("user")) {
                     data.push({
                         column: input.getAttribute("name"),
-                        data: input.value,
+                        data: input.value === "N/A" ? null : input.value
                     });
                 }
             });
             // Map through the data to make the request to the server
             data.map((item) => {
-                console.log(item);
-                // fetch(`/api/users/${userData.user_id}`,{
-                //     method: "PUT",
-                //     headers: {
-                //         "Content-Type": "application/json",
-                //     },
-                //     body: item,
-                // })
-                // .then((res) => res.json())
-                // .then((data) => {
-                //     console.log(data);
-                // })
-                // .catch((err) => {
-                //     console.log(err);
-                // })
+                console.log(JSON.stringify(item));
+                fetch(`/api/users/${userData.user_id}`,{
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(item)
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
             });
+            showMessage();
         }
     }
 
@@ -231,6 +239,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
             </Modal>
             <Alert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)} message={alertMessage} onCloseOther={onClose} acceptFunction={() => setIsAlertOpen(false)} />
             <Alert isOpen={isAlert2Open} onClose={() => setIsAlert2Open(false)} message={alertMessage} onCloseOther={onClose} acceptFunction={() => acceptProcedure(arcoRight[0])} />
+            {showFeedback && <Feedback feedback={"Operación realizada con éxito"} />}
         </>
     );
 };
