@@ -4,28 +4,30 @@ import { Checkbox } from "./Checkbox";
 
 export const UserData = ({ atributo, valor, isEditable, id }) => {
     const [isChecked, setIsChecked] = useState(true);
-    const [inputText, setInputText] = useState(valor);
     const convertDateFormat = () => {
-        setInputText(inputText.split("T")[0]);
+        valor = valor.split("T")[0];
+    }
+    if (atributo === "date_of_birth") {
+        convertDateFormat();
+    } else if (atributo.includes("_at")) {
+        convertDateFormat();
     }
     let input = null;
     if (isEditable) {
-        let _atributo;
+        let inputType;
         if (atributo === "email") {
-            _atributo = "email";
+            inputType = "email";
         } else if (atributo === "date_of_birth") {
-            _atributo = "date";
-            convertDateFormat;
+            inputType = "date";
         } else if (atributo === "phone_number") {
-            _atributo = "tel";
+            inputType = "tel";
         } else {
-            _atributo = "text";
+            inputType = "text";
         }
         input = (
             <input
-                type={_atributo}
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
+                type={inputType}
+                value={valor}
                 className={`text-lg border-[1px] ${
                     isChecked ? "border-gray-300" : "border-gray-400"
                 } rounded-md p-1 ml-1 mt-2 w-[100%] lg:w-[80%] xl:w-[50%]`}
@@ -47,7 +49,7 @@ export const UserData = ({ atributo, valor, isEditable, id }) => {
             {isEditable ? (
                 input
             ) : (
-                <p className={`text-lg text-gray-900`}>{inputText}</p>
+                <p className={`text-lg text-gray-900`}>{valor}</p>
             )}
         </li>
     );
