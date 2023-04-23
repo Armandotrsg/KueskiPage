@@ -31,6 +31,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
     const acceptProcedure = (arcoRightLetter) => {
         console.log("Accept");
         if (arcoRightLetter === "R") {
+            let bandera = true;
             //Update the database with the new data that changed
             // Get the value of all the inputs that are not a checkbox child of the modal
             const inputs = document.querySelectorAll(".modal input:not([type=checkbox])");
@@ -46,7 +47,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
             } */
             let data = [];
             inputs.forEach((input) => {
-                if (input.getAttribute("attributeid").includes("address")) {
+                if (input.getAttribute("attributeid").includes("address") && input.value != input.getAttribute("formerdata")) {
+                    bandera = false;
                     data.push({
                         column: {
                             sector: "addresses",
@@ -56,7 +58,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                         },
                         data: input.value === "N/A" ? null : input.value
                     });
-                } else if (input.getAttribute("attributeID").includes("identification")) {
+                } else if (input.getAttribute("attributeID").includes("identification") && input.value != input.getAttribute("formerdata")) {
+                    bandera = false;
                     data.push({
                         column: {
                             sector: "identification",
@@ -66,7 +69,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                         },
                         data: input.value === "N/A" ? null : input.value
                     });
-                } else if (input.getAttribute("attributeID").includes("user")) {
+                } else if (input.getAttribute("attributeID").includes("user") && input.value != input.getAttribute("formerdata")) {
+                    bandera = false;
                     data.push({
                         column: input.getAttribute("name"),
                         data: input.value === "N/A" ? null : input.value
@@ -96,8 +100,10 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                     console.log(err);
                 })
             });
+            if (!bandera) {
+                showMessage();
+            }
         }
-        showMessage();
     }
 
     //Check for null or undefined
