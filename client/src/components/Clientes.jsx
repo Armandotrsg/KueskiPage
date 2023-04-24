@@ -3,6 +3,7 @@
     import {ModalClient} from "./ModalClient"
     import { Loader } from "./Loader";
     import { Tooltip } from "react-tooltip";
+    import { Button } from "./Button";
 
     export const Clientes = () => {
         const [tableData, setTableData] = useState([]);
@@ -93,7 +94,7 @@
                 name: 'Ver',
                 selector: 'id',
                 sortable: false,
-                cell: (row) => <button onClick={() => handleView(row)} className="hover:underline">Ver</button>,
+                cell: (row) => <Button onClick={() => handleView(row)} toolTipContent={modalarcoRight} id={Math.floor(Math.random() * 10000).toString()} toolTipHide={1800} className={"hover:underline"}>Ver</Button>,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
