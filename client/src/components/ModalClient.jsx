@@ -35,7 +35,6 @@ export const ModalClient = ({
             loadData();
         }, 3500);
     };
-
     const acceptProcedure = (arcoRightLetter) => {
         console.log("Accept");
         if (arcoRightLetter === "R") {
@@ -185,6 +184,7 @@ export const ModalClient = ({
             </Modal>
         );
     }
+    
     const keys = Object.keys(userData);
     const addressesKeys = Object.keys(userData.addresses[0]);
     const identificationKeys = Object.keys(userData.identifications[0]);
