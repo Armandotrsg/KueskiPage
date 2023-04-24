@@ -113,6 +113,10 @@ app.get("/api/users/:id", (req, res) => {
 
 app.patch("/api/users/:id", (req, res) => {
   const id = req.params.id;
+  const curr_date = new Date().toLocaleDateString(
+    'es-ES',
+    { day: '2-digit', month: '2-digit', year: 'numeric' }).split('/').reverse().join('-');
+  
   if (Object.keys(req.body).length === 0) {
     return res.status(400).send('No se pudo interpretar la información recibida.');
   }
@@ -126,10 +130,12 @@ app.patch("/api/users/:id", (req, res) => {
   const new_val = req.body.data;
 
   var query = "";
+  var query2 = "";
 
   if (typeof column === 'string') {
     console.log("Normal Patch.");
     query = "UPDATE users SET " + column + " = '" + new_val + "' WHERE user_id = " + id + ";";
+    query2 = "UPDATE users SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
   }
   else if (column.sector === "addresses"){
     if (!column.mode || !column.name) {
@@ -144,9 +150,11 @@ app.patch("/api/users/:id", (req, res) => {
         return;
       }
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND address_id = " + column.address_id + ";";
+      query2 = "UPDATE addresses SET updated_at = '" + curr_date + "' WHERE user_id = " + id + " AND address_id = " + column.address_id + ";";
     }
     else if (column.mode === "multiple"){
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
+      query2 = "UPDATE addresses SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
     }
   }
   else if (column.sector === "identification"){
@@ -162,9 +170,11 @@ app.patch("/api/users/:id", (req, res) => {
         return;
       }
       query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND identification_id = " + column.identification_id + ";";
+      query2 = "UPDATE identification SET updated_at = '" + curr_date + "' WHERE user_id = " + id + " AND identification_id = " + column.identification_id + ";";
     }
     else if (column.mode === "multiple"){
       query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
+      query2 = "UPDATE identification SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
     }
   }
   else {
@@ -186,10 +196,20 @@ app.patch("/api/users/:id", (req, res) => {
         res.status(500).send("No se pudo leer la base de datos.");
         return;
       } else {
-        console.log("Query exitosa");
+        connection.query(
+          query2
+          , function (err, results, fields) {
+          if (err) {
+            console.error(err);
+            res.status(500).send("No se pudo leer la base de datos.");
+            return;
+          } else {
+            console.log("Query exitosa");
+          }
+          connection.release(); // <-- libera la conexión después de realizar la consulta
+          res.end("Cambio realizado.");
+        });
       }
-      connection.release(); // <-- libera la conexión después de realizar la consulta
-      res.end("Cambio realizado.");
     });
   });
 });
@@ -197,6 +217,9 @@ app.patch("/api/users/:id", (req, res) => {
 app.delete("/api/users/:id", async (req, res) => {
   // Encontrar usuario y sus datos
   const id = req.params.id;
+  const curr_date = new Date().toLocaleDateString(
+    'es-ES',
+    { day: '2-digit', month: '2-digit', year: 'numeric' }).split('/').reverse().join('-');
 
   pool.getConnection(function (err, connection) {
     let query = `SELECT * FROM users WHERE user_id = ` + id + `;`;
@@ -222,10 +245,12 @@ app.delete("/api/users/:id", async (req, res) => {
           query = "UPDATE users SET ";
           const columns = Object.keys(results[0]);
           columns.forEach(column => {
-            if (column != 'user_id'){
+            if (column != 'user_id' && column != 'created_at' && column != 'updated_at' && column != 'deleted_at'){
               query += column + " = NULL, ";
             }
           });
+
+          query += "deleted_at = '" + curr_date + "', ";
 
           query = query.substring(0, query.length - 2);
           query += " WHERE user_id = " + id + ";";
@@ -263,10 +288,12 @@ app.delete("/api/users/:id", async (req, res) => {
                       query = "UPDATE identification SET ";
                       const columns = Object.keys(results[0]);
                       columns.forEach(column => {
-                        if (column != 'user_id' && column != 'identification_id'){
+                        if (column != 'user_id' && column != 'identification_id'  && column != 'created_at' && column != 'updated_at' && column != 'deleted_at'){
                           query += column + " = NULL, ";
                         }
                       });
+
+                      query += "deleted_at = '" + curr_date + "', ";
             
                       query = query.substring(0, query.length - 2);
                       query += " WHERE user_id = " + id + ";";
@@ -291,10 +318,12 @@ app.delete("/api/users/:id", async (req, res) => {
                   query = "UPDATE addresses SET ";
                   const columns = Object.keys(results[0]);
                   columns.forEach(column => {
-                    if (column != 'user_id' && column != 'address_id'){
+                    if (column != 'user_id' && column != 'address_id'  && column != 'created_at' && column != 'updated_at' && column != 'deleted_at'){
                       query += column + " = NULL, ";
                     }
                   });
+
+                  query += "deleted_at = '" + curr_date + "', ";
         
                   query = query.substring(0, query.length - 2);
                   query += " WHERE user_id = " + id + ";";
@@ -322,10 +351,12 @@ app.delete("/api/users/:id", async (req, res) => {
                           query = "UPDATE identification SET ";
                           const columns = Object.keys(results[0]);
                           columns.forEach(column => {
-                            if (column != 'user_id' && column != 'identification_id'){
+                            if (column != 'user_id' && column != 'identification_id'  && column != 'created_at' && column != 'updated_at' && column != 'deleted_at'){
                               query += column + " = NULL, ";
                             }
                           });
+
+                          query += "deleted_at = '" + curr_date + "', ";
                 
                           query = query.substring(0, query.length - 2);
                           query += " WHERE user_id = " + id + ";";
@@ -364,24 +395,163 @@ app.delete("/api/users/:id", async (req, res) => {
   });
 });
 
-// ARCO Registers--------------------------
+// ARCO Registers-----------------------------------------------------------------------------------
 
 app.get("/api/arco_registers", (req, res) => {
-  fs.readFile( __dirname + "/" + "users.json", "utf8", (err, data) => {
+  var answer;
+  pool.getConnection(function (err, connection) {
     if (err) {
-      res.status(500).send("No se pudo leer la base de datos.");
+      console.error(err);
+    } else {
+      connection.query(`
+      SELECT * FROM registros_arco;
+      `, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+          console.log(results);
+          answer = JSON.stringify(results, null, 2);
+          res.end(answer);
+          console.log("Query exitosa");
+        }
+        connection.release(); // <-- libera la conexión después de realizar la consulta
+      });
     }
-    console.log( data );
-    res.end( data );
+  });
+});
+
+app.get("/api/arco_registers/:id", (req, res) => {
+  const id = req.params.id;
+
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.error(err);
+    } else {
+      let query =  `SELECT * FROM registros_arco WHERE registro_arco_id = ` + id + `;`;
+      connection.query(
+        query, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+          console.log(results);
+          answer = JSON.stringify(results, null, 2);
+          res.end(answer);
+          console.log("Query exitosa");
+        }
+        connection.release(); // <-- libera la conexión después de realizar la consulta
+      });
+    }
   });
 });
 
 app.post("/api/arco_registers", (req, res) => {
-  if (Object.keys(req.body).length === 0) {
-    return res.status(400).send('No se pudo interpretar la información recibida.');
+
+  if (!req.body.user_id || !req.body.arco_type || !req.body.message) {
+    res.status(400).end("Formato incorrecto.");
+    return;
   }
-  console.log('El cuerpo de la peticion:', req.body);
-  res.end( "Recibido!" );
+
+  const user_id = req.body.user_id;
+  const arco_type = req.body.arco_type;
+  const message = req.body.message;
+  const curr_date = new Date().toLocaleDateString(
+    'es-ES',
+    { day: '2-digit', month: '2-digit', year: 'numeric' }).split('/').reverse().join('-');
+
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.error(err);
+    } else {
+      let query =  `SELECT IFNULL(MAX(registro_arco_id) + 1, 1) FROM registros_arco;`;
+
+      connection.query(
+        query, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+          let last_id = results[0]['IFNULL(max(registro_arco_id) + 1, 1)'];
+
+          query =  `ALTER TABLE registros_arco AUTO_INCREMENT = ` + last_id + `;`;
+
+          connection.query(
+            query, function (err, results, fields) {
+            if (err) {
+              res.status(500).send("No se pudo leer la base de datos.");
+            } else {
+              query =  ` INSERT INTO registros_arco (user_id, arco_type, message, created_at, updated_at)`;
+              query += ` VALUES (` + user_id + `,  '`+ arco_type + `', '` + message + `', '` + curr_date + `', '` + curr_date + `');`;
+
+              connection.query(
+                query, function (err, results, fields) {
+                if (err) {
+                  res.status(500).send("No se pudo leer la base de datos.");
+                } else {
+                  res.end("Se añadió un nuevo registro de derecho ARCO para el usuario: " + user_id + ".");
+                  console.log("Query exitosa");
+                }
+                connection.release(); // <-- libera la conexión después de realizar la consulta
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+app.delete("/api/arco_registers", (req, res) => {
+
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.error(err);
+    } else {
+      let query =  `DELETE FROM 
+                      registros_arco
+                    WHERE 
+                      registro_arco_id = (
+                        SELECT 
+                          registro_arco_id
+                        FROM (
+                          SELECT 
+                            MAX(registro_arco_id) AS registro_arco_id
+                          FROM 
+                            registros_arco
+                      ) AS temp
+                    );`;
+
+      connection.query(
+        query, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+
+          query =  `SELECT IFNULL(MAX(registro_arco_id) + 1, 1) FROM registros_arco;`;
+
+          connection.query(
+            query, function (err, results, fields) {
+            if (err) {
+              res.status(500).send("No se pudo leer la base de datos.");
+            } else {
+              let last_id = results[0]['IFNULL(max(registro_arco_id) + 1, 1)'];
+
+              query =  `ALTER TABLE registros_arco AUTO_INCREMENT = ` + last_id + `;`;
+
+              connection.query(
+                query, function (err, results, fields) {
+                if (err) {
+                  res.status(500).send("No se pudo leer la base de datos.");
+                } else {
+                  res.end("Se borró el ultimo registro.");
+                  console.log("Query exitosa");
+                }
+                connection.release(); // <-- libera la conexión después de realizar la consulta
+              });
+            }
+          });
+        }
+      });
+    }
+  });
 });
 
 // Esto hace que NodeJS sirva los archivos resultado del build de ReactJS
