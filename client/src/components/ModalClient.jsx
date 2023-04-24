@@ -126,20 +126,22 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                 message += `${item.column}: ${item.prevData} -> ${item.newData}\n`;
             });
             //Save what changed to the registros_arco table
-            fetch(`/api/arco_registers`,{
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    user_id: userData.user_id,
-                    arco_type: "R",
-                    message: message
+            if (dataChanged.length > 0) {
+                fetch(`/api/arco_registers`,{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        user_id: userData.user_id,
+                        arco_type: "R",
+                        message: message
+                    })
                 })
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+                .catch((err) => {
+                    console.log(err);
+                });
+            }
 
             if (!bandera) {
                 showMessage();
