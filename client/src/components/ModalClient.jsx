@@ -175,7 +175,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                                                         ? userData[key].toString()
                                                         : "N/A"
                                                 }
-                                                isEditable={key !== "user_id" && isEditable && !key.includes("_at")}
+                                                isEditable={key !== "user_id" && isEditable && !key.includes("_at") && !key.includes("is_")}
                                                 id= {"userID_"+userData.user_id}
                                             />
                                         );
