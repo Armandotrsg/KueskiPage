@@ -117,6 +117,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                 })
                 .catch((err) => {
                     console.log(err);
+                    setServerSuccess(false);
+                    setServerResponse("Error al actualizar los datos");
                 })
             });
 
@@ -146,32 +148,6 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
             if (!bandera) {
                 showMessage();
             }
-        } else if (arcoRightLetter === "C") {
-            if (userData.is_client) {
-                setServerSuccess(false);
-                setServerResponse("No se puede eliminar el usuario porque es cliente");
-            } else {
-                console.log("Cancel");
-                fetch(`/api/users/${userData.user_id}`,{
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                .then((res) => {
-                    if (res.ok) {
-                        setServerSuccess(true);
-                        setServerResponse("Usuario eliminado correctamente");
-                    } else {
-                        setServerSuccess(false);
-                        setServerResponse("Error al eliminar el usuario");
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-            }
-            showMessage();
         }
     }
 

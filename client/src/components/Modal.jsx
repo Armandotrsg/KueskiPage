@@ -53,7 +53,7 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
 export const ModalTitle = ({ children }) => {
     return (
         <div className="flex justify-center m-2">
-            <h1 className="text-2xl font-bold">{children}</h1>
+            <h1 className="text-2xl font-bold text-center">{children}</h1>
         </div>
     );
 };

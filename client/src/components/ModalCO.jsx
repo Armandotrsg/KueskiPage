@@ -57,6 +57,8 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                     })
                     .catch((err) => {
                         console.log(err);
+                        setServerSuccess(false);
+                        setServerResponse("Error al eliminar el usuario");
                     })
                     //Post the new register
                     fetch(`/api/arco_registers`, {
@@ -82,22 +84,31 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                 setServerResponse("No se puede oponer al tratamiento de los datos porque no se ha ingresado un motivo");
             } else {
                 //Post the new register
-                fetch(`/api/arco_registers`, {
+                fetch(`/api/arco_registers`,{
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
                         user_id: userData.user_id,
-                        arco_right: arcoRightLetter,
+                        arco_type: "O",
                         message: message
-                    }),
+                    })
+                })
+                .then((res) => {
+                    if (res.ok) {
+                        setServerSuccess(true);
+                        setServerResponse("Se ha enviado la solicitud correctamente");
+                    } else {
+                        setServerSuccess(false);
+                        setServerResponse("Error al enviar la solicitud");
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
+                    setServerSuccess(false);
+                    setServerResponse("Error al enviar la solicitud");
                 })
-                setServerSuccess(true);
-                setServerResponse("Se ha enviado la solicitud de oposición al tratamiento de datos");
             }
             showMessage();
         }
@@ -116,13 +127,15 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
             <Modal
                 isOpen={isOpen}
                 onClose={onClose}
-                className={`w-[98%] sm:w-[50%] h-[50%]`}
+                className={`w-[98%] sm:w-[50%] h-fit`}
             >
                 <div className="flex flex-col flex-wrap">
                     <ModalTitle>{`Derecho de ${arcoRight}`} </ModalTitle>
                     <ModalContainer>
                         <p className="text-center m-5">
-                            {arcoRight === "Cancelación" ? `¿Estás seguro de borrar los datos de ${userData.name}? Ingresa el motivo de la cancelación de los datos` : `Ingresa la razón por la que te vas a oponer al tratamiento de los datos de ${userData.name}`}
+                            {arcoRight === "Cancelación" ? `¿Estás seguro de borrar los datos de ` : `Ingresa la razón por la que te vas a oponer al tratamiento de los datos de `}
+                            <strong>{`${userData.name} ${userData.first_last_name} ${userData.second_last_name}`}</strong>
+                            {arcoRight === "Cancelación" ? `? Esta acción no se puede deshacer. Ingresa el motivo de la cancelación de los datos` : ""}
                         </p>
                     </ModalContainer>
                     <ModalContainer isEditable>
