@@ -2,6 +2,7 @@
     import { useState, useEffect } from "react";
     import {ModalClient} from "./ModalClient"
     import { Loader } from "./Loader";
+    import { Tooltip } from "react-tooltip";
 
     export const Clientes = () => {
         const [tableData, setTableData] = useState([]);
@@ -228,6 +229,10 @@
                         data-dropdown-toggle="dropdownAction"
                         className="flex w-max items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 "
                         type="button"
+                        data-tooltip-content={"Escoge qué derecho ARCO deseas realizar"}
+                        data-tooltip-id={"dropdownAction"}
+                        data-tooltip-delay-show={1000}
+                        data-tooltip-variant={"dark"}
                     >
                         {actionButton}
                         <svg
@@ -246,6 +251,7 @@
                             ></path>
                         </svg>
                     </button>
+                    <Tooltip id={"dropdownAction"} place={"right"} type="dark" effect="solid" />
 
                     {dropdownMenuOpen && (
                         <div
