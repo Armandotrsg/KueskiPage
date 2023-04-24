@@ -150,12 +150,12 @@ app.patch("/api/users/:id", (req, res) => {
         return;
       }
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND address_id = " + column.address_id + ";";
+      query2 = "UPDATE addresses SET updated_at = '" + curr_date + "' WHERE user_id = " + id + " AND address_id = " + column.address_id + ";";
     }
     else if (column.mode === "multiple"){
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
+      query2 = "UPDATE addresses SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
     }
-
-    query2 = "UPDATE addresses SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
   }
   else if (column.sector === "identification"){
     if (!column.mode || !column.name) {
@@ -170,12 +170,12 @@ app.patch("/api/users/:id", (req, res) => {
         return;
       }
       query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + " AND identification_id = " + column.identification_id + ";";
+      query2 = "UPDATE identification SET updated_at = '" + curr_date + "' WHERE user_id = " + id + " AND identification_id = " + column.identification_id + ";";
     }
     else if (column.mode === "multiple"){
       query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
+      query2 = "UPDATE identification SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
     }
-    
-    query2 = "UPDATE identificaion SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
   }
   else {
     res.status(402).send("Formato incorrecto.");
