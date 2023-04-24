@@ -46,6 +46,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                 "data": "Guanajuato"
             } */
             let data = [];
+            let dataChanged = [];
             inputs.forEach((input) => {
                 if (input.getAttribute("attributeid").includes("address") && input.value != input.getAttribute("formerdata")) {
                     bandera = false;
@@ -58,6 +59,12 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                         },
                         data: input.value === "N/A" ? null : input.value
                     });
+                    dataChanged.push({
+                        id: input.getAttribute("attributeid"),
+                        column: input.getAttribute("name"),
+                        prevData: input.getAttribute("formerdata"),
+                        newData: input.value === "N/A" ? null : input.value
+                    });
                 } else if (input.getAttribute("attributeID").includes("identification") && input.value != input.getAttribute("formerdata")) {
                     bandera = false;
                     data.push({
@@ -69,11 +76,23 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                         },
                         data: input.value === "N/A" ? null : input.value
                     });
+                    dataChanged.push({
+                        id: input.getAttribute("attributeid"),
+                        column: input.getAttribute("name"),
+                        prevData: input.getAttribute("formerdata"),
+                        newData: input.value === "N/A" ? null : input.value
+                    });
                 } else if (input.getAttribute("attributeID").includes("user") && input.value != input.getAttribute("formerdata")) {
                     bandera = false;
                     data.push({
                         column: input.getAttribute("name"),
                         data: input.value === "N/A" ? null : input.value
+                    });
+                    dataChanged.push({
+                        id: input.getAttribute("attributeid"),
+                        column: input.getAttribute("name"),
+                        prevData: input.getAttribute("formerdata"),
+                        newData: input.value === "N/A" ? null : input.value
                     });
                 }
             });
@@ -100,6 +119,28 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                     console.log(err);
                 })
             });
+
+            let message = "Se actualizaron los datos de: \n";
+            // Convert the JSON to a string
+            dataChanged.map((item) => {
+                message += `${item.column}: ${item.prevData} -> ${item.newData}\n`;
+            });
+            //Save what changed to the registros_arco table
+            fetch(`/api/arco_registers`,{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user_id: userData.user_id,
+                    arco_type: "R",
+                    message: message
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
             if (!bandera) {
                 showMessage();
             }
