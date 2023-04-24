@@ -214,7 +214,7 @@ export const ModalClient = ({
                                     ) {
                                         return (
                                             <UserData
-                                                key={key}
+                                                key={index}
                                                 atributo={key}
                                                 valor={
                                                     userData[key] !== null
