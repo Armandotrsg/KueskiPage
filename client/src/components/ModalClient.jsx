@@ -272,8 +272,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                         </ModalCol>
                         {/* Botones */}
                         <section className="flex flex-wrap w-full items-center justify-center">
-                            <Button onClick={() => {setAlertMessage("¿Está seguro de que desea cancelar la operación?"); setIsAlertOpen(true)}} toolTipContent={"Cancelar la operación"} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" id={"cancel"}>Cancelar</Button>
-                            <Button onClick={() => {setAlertMessage("¿Está seguro de que quieres modificar los datos?"); setIsAlert2Open(true)}} toolTipContent={"Guardar los cambios"} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ml-3" id={"save"}>Guardar</Button>
+                            <Button onClick={() => {setAlertMessage("¿Está seguro de que deseas cancelar la operación?"); setIsAlertOpen(true)}} toolTipContent={"Cancelar la operación"} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" id={"cancel"}>Cancelar</Button>
+                            <Button onClick={() => {setAlertMessage(arcoRight[0] === "A" ? "¿Quieres descargar el reporte en pdf?" : (arcoRight[0] === "R" ? "¿Estás seguro que quieres realizar las modificaciones?" : (arcoRight[0] === "C" ? "¿Estás seguro de que quieres borrar los datos?" : "¿Estás seguro de continuar?"))); setIsAlert2Open(true)}} toolTipContent={(arcoRight[0] === "A" ? "Descargar el reporte en pdf" : (arcoRight[0] === "R" ? "Modificar los datos y descargar el reporte en pdf" : (arcoRight[0] === "C" ? "Borrar los datos del usuario" : "Realizar el derecho de oposición de los datos del cliente")))} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-3" id={"save"}>Continuar</Button>
                         </section>
                     </ModalContainer>
                 </div>

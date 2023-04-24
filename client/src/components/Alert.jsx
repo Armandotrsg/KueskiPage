@@ -21,10 +21,10 @@ export const Alert = ({ isOpen, onClose, onCloseOther, message, acceptFunction})
                         > Regresar </Button>
                         <Button
                             onClick={acceptProcedure}
-                            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ml-3"
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-3"
                             id={"accept-button"}
-                            toolTipContent={"Aceptar la operación y descargar un reporte en pdf"}
-                        > Continuar </Button>
+                            toolTipContent={"Aceptar la operación"}
+                        > Aceptar </Button>
                     </div>
                 </div>
             </Modal>
