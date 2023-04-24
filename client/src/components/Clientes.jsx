@@ -81,19 +81,19 @@
                 format: (row) => <div>{row.curp}</div>,
             },
             {
-                name: "RFC",
-                selector: row => row.rfc,
+                name: "Nacionalidad",
+                selector: row => row.nationality,
                 sortable: true,
                 center: true,
                 grow: 1,
                 width: "flex",
-                format: (row) => <div>{row.rfc}</div>,
+                format: (row) => <div>{row.nationality}</div>,
             },
             {
                 name: 'Ver',
                 selector: 'id',
                 sortable: false,
-                cell: (row) => <button onClick={() => handleView(row)}>Ver</button>,
+                cell: (row) => <button onClick={() => handleView(row)} className="hover:underline">Ver</button>,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
@@ -215,7 +215,7 @@
                                 <option value="first_last_name">Apellido Paterno</option>
                                 <option value="second_last_name">Apellido Materno</option>
                                 <option value="curp">CURP</option>
-                                {/* <option value="rfc">RFC</option> */}
+                                <option value="nationality">Nacionalidad</option>
                             </select>  
                         </div>  
                     </div>
