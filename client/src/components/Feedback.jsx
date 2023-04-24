@@ -1,4 +1,4 @@
-export const Feedback = ({ feedback }) => {
+export const Feedback = ({ feedback, success }) => {
     return (
         <div
             className={
@@ -10,7 +10,7 @@ export const Feedback = ({ feedback }) => {
             </p>
 
             <div
-                className={`bg-blue-600 h-2 rounded-full transition-all animate-decrease`}
+                className={`${success ? "bg-blue-500" : "bg-red-500"} h-2 rounded-full transition-all animate-decrease`}
             ></div>
         </div>
     );

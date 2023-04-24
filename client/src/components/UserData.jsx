@@ -1,26 +1,33 @@
 import { useState } from "react";
 import { Checkbox } from "./Checkbox";
 
-
-export const UserData = ({ atributo, valor, isEditable }) => {
+export const UserData = ({ atributo, valor, isEditable, id }) => {
     const [isChecked, setIsChecked] = useState(true);
-    const [inputText, setInputText] = useState(valor);
-
+    let [inputText, setInputText] = useState(valor);
+    const convertDateFormat = () => {
+        valor = valor.split("T")[0];
+        inputText = inputText.split("T")[0];
+    }
+    if (atributo === "date_of_birth") {
+        convertDateFormat();
+    } else if (atributo.includes("_at")) {
+        convertDateFormat();
+    }
     let input = null;
     if (isEditable) {
-        let _atributo;
+        let inputType;
         if (atributo === "email") {
-            _atributo = "email";
+            inputType = "email";
         } else if (atributo === "date_of_birth") {
-            _atributo = "date";
+            inputType = "date";
         } else if (atributo === "phone_number") {
-            _atributo = "tel";
+            inputType = "tel";
         } else {
-            _atributo = "text";
+            inputType = "text";
         }
         input = (
             <input
-                type={_atributo}
+                type={inputType}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 className={`text-lg border-[1px] ${
@@ -28,6 +35,9 @@ export const UserData = ({ atributo, valor, isEditable }) => {
                 } rounded-md p-1 ml-1 mt-2 w-[100%] lg:w-[80%] xl:w-[50%]`}
                 disabled={isChecked}
                 required
+                name={atributo}
+                attributeid = {id}
+                formerdata = {valor}
             />
         );
     }
@@ -38,11 +48,11 @@ export const UserData = ({ atributo, valor, isEditable }) => {
             }`}
         >
             {isEditable && <Checkbox isChecked={isChecked} setIsChecked={setIsChecked} />}
-            <h5 className="text-lg font-semibold">{atributo}: &nbsp;</h5>
+            <h5 className={`text-lg  ${atributo.includes("_id") ? "font-bold" : "font-semibold"}`}>{atributo}: &nbsp;</h5>
             {isEditable ? (
                 input
             ) : (
-                <p className="text-lg text-gray-900">{valor}</p>
+                <p className={`text-lg text-gray-900`}>{inputText}</p>
             )}
         </li>
     );
