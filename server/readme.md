@@ -98,7 +98,7 @@ Ejemplo del *JSON* a pasar:
 }
 ```
 
-Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin utilizar las llaves del campo inferior):
+Para este método se utiliza el siguiente endpoint:
 ```
 /api/arco_registers
 ```
@@ -106,7 +106,7 @@ Para este método se utiliza el siguiente endpoint (reemplaza id por el id a bus
 ### DELETE
 Permite eliminar el último registro que se añadió.
 
-Para este método se utiliza el siguiente endpoint (reemplaza id por el id a buscar, sin utilizar las llaves del campo inferior):
+Para este método se utiliza el siguiente endpoint:
 ```
 /api/arco_registers
 ```
