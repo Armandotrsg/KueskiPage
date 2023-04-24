@@ -170,7 +170,7 @@ export const Clientes = () => {
     return (
         <div className="flex flex-col pl-5 pr-5 pb-5 h-screen w-screen overflow-scroll ">
             {/*Título de la página*/}
-            <h1 className="text-2xl font-bold mx-auto p-4">Clientes</h1>
+            <h1 className="text-2xl font-bold mx-auto mt-4 p-4">Clientes</h1>
             <section className="flex flex-col md:flex-row md:flex-wrap items-center lg:items-baseline justify-between m-3">
                 <div className="lg:flex">
                     {/* Lupa de la barra de búsqueda */}
