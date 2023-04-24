@@ -73,7 +73,7 @@ app.get("/api/users/:id", (req, res) => {
         if (err) {
           res.status(500).send("No se pudo leer la base de datos.");
         } else if (!results || results.length === 0) {
-          res.status(401).send("No se encontró al usuario.");
+          res.status(400).send("No se encontró al usuario.");
           console.log("Query sin resultados");
         } else {
           const users_results = results;
@@ -122,7 +122,7 @@ app.patch("/api/users/:id", (req, res) => {
   }
 
   if (!req.body.column || !req.body.data) {
-    res.status(402).send("Formato incorrecto.");
+    res.status(400).send("Formato incorrecto.");
     return;
   }
 
@@ -139,13 +139,13 @@ app.patch("/api/users/:id", (req, res) => {
   }
   else if (column.sector === "addresses"){
     if (!column.mode || !column.name) {
-      res.status(402).send("Formato incorrecto.");
+      res.status(400).send("Formato incorrecto.");
       return;
     }
     console.log("Address Patch.");
     if (column.mode === "single"){
       if (!column.address_id) {
-        res.status(402).send("Formato incorrecto.");
+        res.status(400).send("Formato incorrecto.");
         console.log("Aborted");
         return;
       }
@@ -159,13 +159,13 @@ app.patch("/api/users/:id", (req, res) => {
   }
   else if (column.sector === "identification"){
     if (!column.mode || !column.name) {
-      res.status(402).send("Formato incorrecto.");
+      res.status(400).send("Formato incorrecto.");
       return;
     }
     console.log("Identification Patch.");
     if (column.mode === "single"){
       if (!column.identification_id) {
-        res.status(402).send("Formato incorrecto.");
+        res.status(400).send("Formato incorrecto.");
         console.log("Aborted");
         return;
       }
@@ -178,7 +178,7 @@ app.patch("/api/users/:id", (req, res) => {
     }
   }
   else {
-    res.status(402).send("Formato incorrecto.");
+    res.status(400).send("Formato incorrecto.");
     return;
   }
   
@@ -232,11 +232,11 @@ app.delete("/api/users/:id", async (req, res) => {
         if (err) {
           res.status(500).send("No se pudo leer la base de datos.");
         } else if (!results || results.length === 0) {
-          res.status(401).send("No se encontró al usuario.");
+          res.status(400).send("No se encontró al usuario.");
           console.log("Query sin resultados");
           return;
         } else if (results[0].is_client === 1) {
-          res.status(402).send("Usuario es cliente, no se puede nulificar.");
+          res.status(400).send("Usuario es cliente, no se puede nulificar.");
           console.log("Query sin resultados");
           return;
         } else {
@@ -432,6 +432,11 @@ app.get("/api/arco_registers/:id", (req, res) => {
         query, function (err, results, fields) {
         if (err) {
           res.status(500).send("No se pudo leer la base de datos.");
+        } else if (!results || results.length === 0) {
+          console.log("Query sin resultados");
+          res.status(400).end("Usuario no encontrado.");
+          connection.release();
+          return;
         } else {
           console.log(results);
           answer = JSON.stringify(results, null, 2);
