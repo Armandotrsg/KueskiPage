@@ -467,34 +467,48 @@ app.post("/api/arco_registers", (req, res) => {
     if (err) {
       console.error(err);
     } else {
-      let query =  `SELECT IFNULL(MAX(registro_arco_id) + 1, 1) FROM registros_arco;`;
+      let query =  `SELECT user_id FROM users WHERE user_id = ` + user_id + `;`;
 
       connection.query(
         query, function (err, results, fields) {
         if (err) {
           res.status(500).send("No se pudo leer la base de datos.");
+        } else if (!results || results.length === 0) {
+          console.log("Query sin resultados");
+          res.status(400).end("Usuario especificado no existe.");
+          connection.release();
+          return;
         } else {
-          let last_id = results[0]['IFNULL(max(registro_arco_id) + 1, 1)'];
-
-          query =  `ALTER TABLE registros_arco AUTO_INCREMENT = ` + last_id + `;`;
+          query =  `SELECT IFNULL(MAX(registro_arco_id) + 1, 1) FROM registros_arco;`;
 
           connection.query(
             query, function (err, results, fields) {
             if (err) {
               res.status(500).send("No se pudo leer la base de datos.");
             } else {
-              query =  ` INSERT INTO registros_arco (user_id, arco_type, message, created_at, updated_at)`;
-              query += ` VALUES (` + user_id + `,  '`+ arco_type + `', '` + message + `', '` + curr_date + `', '` + curr_date + `');`;
+              let last_id = results[0]['IFNULL(max(registro_arco_id) + 1, 1)'];
+
+              query =  `ALTER TABLE registros_arco AUTO_INCREMENT = ` + last_id + `;`;
 
               connection.query(
                 query, function (err, results, fields) {
                 if (err) {
                   res.status(500).send("No se pudo leer la base de datos.");
                 } else {
-                  res.end("Se añadió un nuevo registro de derecho ARCO para el usuario: " + user_id + ".");
-                  console.log("Query exitosa");
+                  query =  ` INSERT INTO registros_arco (user_id, arco_type, message, created_at, updated_at)`;
+                  query += ` VALUES (` + user_id + `,  '`+ arco_type + `', '` + message + `', '` + curr_date + `', '` + curr_date + `');`;
+
+                  connection.query(
+                    query, function (err, results, fields) {
+                    if (err) {
+                      res.status(500).send("No se pudo leer la base de datos.");
+                    } else {
+                      res.end("Se añadió un nuevo registro de derecho ARCO para el usuario: " + user_id + ".");
+                      console.log("Query exitosa");
+                    }
+                    connection.release(); // <-- libera la conexión después de realizar la consulta
+                  });
                 }
-                connection.release(); // <-- libera la conexión después de realizar la consulta
               });
             }
           });
