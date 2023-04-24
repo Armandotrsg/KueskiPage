@@ -113,6 +113,10 @@ app.get("/api/users/:id", (req, res) => {
 
 app.patch("/api/users/:id", (req, res) => {
   const id = req.params.id;
+  const curr_date = new Date().toLocaleDateString(
+    'es-ES',
+    { day: '2-digit', month: '2-digit', year: 'numeric' }).split('/').reverse().join('-');
+  
   if (Object.keys(req.body).length === 0) {
     return res.status(400).send('No se pudo interpretar la información recibida.');
   }
@@ -126,10 +130,12 @@ app.patch("/api/users/:id", (req, res) => {
   const new_val = req.body.data;
 
   var query = "";
+  var query2 = "";
 
   if (typeof column === 'string') {
     console.log("Normal Patch.");
     query = "UPDATE users SET " + column + " = '" + new_val + "' WHERE user_id = " + id + ";";
+    query2 = "UPDATE users SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
   }
   else if (column.sector === "addresses"){
     if (!column.mode || !column.name) {
@@ -148,6 +154,8 @@ app.patch("/api/users/:id", (req, res) => {
     else if (column.mode === "multiple"){
       query = "UPDATE addresses SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
     }
+
+    query2 = "UPDATE addresses SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
   }
   else if (column.sector === "identification"){
     if (!column.mode || !column.name) {
@@ -166,6 +174,8 @@ app.patch("/api/users/:id", (req, res) => {
     else if (column.mode === "multiple"){
       query = "UPDATE identification SET " + column.name + " = '" + new_val + "' WHERE user_id = " + id + ";";
     }
+    
+    query2 = "UPDATE identificaion SET updated_at = '" + curr_date + "' WHERE user_id = " + id + ";";
   }
   else {
     res.status(402).send("Formato incorrecto.");
@@ -186,10 +196,20 @@ app.patch("/api/users/:id", (req, res) => {
         res.status(500).send("No se pudo leer la base de datos.");
         return;
       } else {
-        console.log("Query exitosa");
+        connection.query(
+          query2
+          , function (err, results, fields) {
+          if (err) {
+            console.error(err);
+            res.status(500).send("No se pudo leer la base de datos.");
+            return;
+          } else {
+            console.log("Query exitosa");
+          }
+          connection.release(); // <-- libera la conexión después de realizar la consulta
+          res.end("Cambio realizado.");
+        });
       }
-      connection.release(); // <-- libera la conexión después de realizar la consulta
-      res.end("Cambio realizado.");
     });
   });
 });
@@ -197,6 +217,9 @@ app.patch("/api/users/:id", (req, res) => {
 app.delete("/api/users/:id", async (req, res) => {
   // Encontrar usuario y sus datos
   const id = req.params.id;
+  const curr_date = new Date().toLocaleDateString(
+    'es-ES',
+    { day: '2-digit', month: '2-digit', year: 'numeric' }).split('/').reverse().join('-');
 
   pool.getConnection(function (err, connection) {
     let query = `SELECT * FROM users WHERE user_id = ` + id + `;`;
@@ -222,10 +245,12 @@ app.delete("/api/users/:id", async (req, res) => {
           query = "UPDATE users SET ";
           const columns = Object.keys(results[0]);
           columns.forEach(column => {
-            if (column != 'user_id'){
+            if (column != 'user_id' && column != 'created_at' && column != 'updated_at' && column != 'deleted_at'){
               query += column + " = NULL, ";
             }
           });
+
+          query += "deleted_at = '" + curr_date + "', ";
 
           query = query.substring(0, query.length - 2);
           query += " WHERE user_id = " + id + ";";
@@ -263,10 +288,12 @@ app.delete("/api/users/:id", async (req, res) => {
                       query = "UPDATE identification SET ";
                       const columns = Object.keys(results[0]);
                       columns.forEach(column => {
-                        if (column != 'user_id' && column != 'identification_id'){
+                        if (column != 'user_id' && column != 'identification_id'  && column != 'created_at' && column != 'updated_at' && column != 'deleted_at'){
                           query += column + " = NULL, ";
                         }
                       });
+
+                      query += "deleted_at = '" + curr_date + "', ";
             
                       query = query.substring(0, query.length - 2);
                       query += " WHERE user_id = " + id + ";";
@@ -291,10 +318,12 @@ app.delete("/api/users/:id", async (req, res) => {
                   query = "UPDATE addresses SET ";
                   const columns = Object.keys(results[0]);
                   columns.forEach(column => {
-                    if (column != 'user_id' && column != 'address_id'){
+                    if (column != 'user_id' && column != 'address_id'  && column != 'created_at' && column != 'updated_at' && column != 'deleted_at'){
                       query += column + " = NULL, ";
                     }
                   });
+
+                  query += "deleted_at = '" + curr_date + "', ";
         
                   query = query.substring(0, query.length - 2);
                   query += " WHERE user_id = " + id + ";";
@@ -322,10 +351,12 @@ app.delete("/api/users/:id", async (req, res) => {
                           query = "UPDATE identification SET ";
                           const columns = Object.keys(results[0]);
                           columns.forEach(column => {
-                            if (column != 'user_id' && column != 'identification_id'){
+                            if (column != 'user_id' && column != 'identification_id'  && column != 'created_at' && column != 'updated_at' && column != 'deleted_at'){
                               query += column + " = NULL, ";
                             }
                           });
+
+                          query += "deleted_at = '" + curr_date + "', ";
                 
                           query = query.substring(0, query.length - 2);
                           query += " WHERE user_id = " + id + ";";

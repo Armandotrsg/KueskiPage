@@ -65,3 +65,13 @@ Para este método se utiliza el siguiente endpoint (reemplaza id por el id a bus
 ```
 /api/users/{id}
 ```
+
+## Endpoint "/api/users"
+
+```
+{
+    "user_id": "1",
+    "arco_type": "R",
+    "message": "Rectificado ahora"
+}
+```
