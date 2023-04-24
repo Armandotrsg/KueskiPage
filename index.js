@@ -364,24 +364,163 @@ app.delete("/api/users/:id", async (req, res) => {
   });
 });
 
-// ARCO Registers--------------------------
+// ARCO Registers-----------------------------------------------------------------------------------
 
 app.get("/api/arco_registers", (req, res) => {
-  fs.readFile( __dirname + "/" + "users.json", "utf8", (err, data) => {
+  var answer;
+  pool.getConnection(function (err, connection) {
     if (err) {
-      res.status(500).send("No se pudo leer la base de datos.");
+      console.error(err);
+    } else {
+      connection.query(`
+      SELECT * FROM registros_arco;
+      `, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+          console.log(results);
+          answer = JSON.stringify(results, null, 2);
+          res.end(answer);
+          console.log("Query exitosa");
+        }
+        connection.release(); // <-- libera la conexión después de realizar la consulta
+      });
     }
-    console.log( data );
-    res.end( data );
+  });
+});
+
+app.get("/api/arco_registers/:id", (req, res) => {
+  const id = req.params.id;
+
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.error(err);
+    } else {
+      let query =  `SELECT * FROM registros_arco WHERE registro_arco_id = ` + id + `;`;
+      connection.query(
+        query, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+          console.log(results);
+          answer = JSON.stringify(results, null, 2);
+          res.end(answer);
+          console.log("Query exitosa");
+        }
+        connection.release(); // <-- libera la conexión después de realizar la consulta
+      });
+    }
   });
 });
 
 app.post("/api/arco_registers", (req, res) => {
-  if (Object.keys(req.body).length === 0) {
-    return res.status(400).send('No se pudo interpretar la información recibida.');
+
+  if (!req.body.user_id || !req.body.arco_type || !req.body.message) {
+    res.status(400).end("Formato incorrecto.");
+    return;
   }
-  console.log('El cuerpo de la peticion:', req.body);
-  res.end( "Recibido!" );
+
+  const user_id = req.body.user_id;
+  const arco_type = req.body.arco_type;
+  const message = req.body.message;
+  const curr_date = new Date().toLocaleDateString(
+    'es-ES',
+    { day: '2-digit', month: '2-digit', year: 'numeric' }).split('/').reverse().join('-');
+
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.error(err);
+    } else {
+      let query =  `SELECT IFNULL(MAX(registro_arco_id) + 1, 1) FROM registros_arco;`;
+
+      connection.query(
+        query, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+          let last_id = results[0]['IFNULL(max(registro_arco_id) + 1, 1)'];
+
+          query =  `ALTER TABLE registros_arco AUTO_INCREMENT = ` + last_id + `;`;
+
+          connection.query(
+            query, function (err, results, fields) {
+            if (err) {
+              res.status(500).send("No se pudo leer la base de datos.");
+            } else {
+              query =  ` INSERT INTO registros_arco (user_id, arco_type, message, created_at, updated_at)`;
+              query += ` VALUES (` + user_id + `,  '`+ arco_type + `', '` + message + `', '` + curr_date + `', '` + curr_date + `');`;
+
+              connection.query(
+                query, function (err, results, fields) {
+                if (err) {
+                  res.status(500).send("No se pudo leer la base de datos.");
+                } else {
+                  res.end("Se añadió un nuevo registro de derecho ARCO para el usuario: " + user_id + ".");
+                  console.log("Query exitosa");
+                }
+                connection.release(); // <-- libera la conexión después de realizar la consulta
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+app.delete("/api/arco_registers", (req, res) => {
+
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.error(err);
+    } else {
+      let query =  `DELETE FROM 
+                      registros_arco
+                    WHERE 
+                      registro_arco_id = (
+                        SELECT 
+                          registro_arco_id
+                        FROM (
+                          SELECT 
+                            MAX(registro_arco_id) AS registro_arco_id
+                          FROM 
+                            registros_arco
+                      ) AS temp
+                    );`;
+
+      connection.query(
+        query, function (err, results, fields) {
+        if (err) {
+          res.status(500).send("No se pudo leer la base de datos.");
+        } else {
+
+          query =  `SELECT IFNULL(MAX(registro_arco_id) + 1, 1) FROM registros_arco;`;
+
+          connection.query(
+            query, function (err, results, fields) {
+            if (err) {
+              res.status(500).send("No se pudo leer la base de datos.");
+            } else {
+              let last_id = results[0]['IFNULL(max(registro_arco_id) + 1, 1)'];
+
+              query =  `ALTER TABLE registros_arco AUTO_INCREMENT = ` + last_id + `;`;
+
+              connection.query(
+                query, function (err, results, fields) {
+                if (err) {
+                  res.status(500).send("No se pudo leer la base de datos.");
+                } else {
+                  res.end("Se borró el ultimo registro.");
+                  console.log("Query exitosa");
+                }
+                connection.release(); // <-- libera la conexión después de realizar la consulta
+              });
+            }
+          });
+        }
+      });
+    }
+  });
 });
 
 // Esto hace que NodeJS sirva los archivos resultado del build de ReactJS
