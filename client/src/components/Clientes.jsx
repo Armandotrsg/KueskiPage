@@ -4,6 +4,7 @@ import { ModalClient } from "./ModalClient";
 import { Loader } from "./Loader";
 import { Tooltip } from "react-tooltip";
 import { Button } from "./Button";
+import { ModalCO } from "./ModalCO";
 
 export const Clientes = () => {
     const [tableData, setTableData] = useState([]);
@@ -287,14 +288,24 @@ export const Clientes = () => {
                             pagination
                             className="z-0 w-full text-sm text-left text-black dark:text-black"
                         />
-                        <ModalClient
+                        {modalarcoRight === "Acceso" || modalarcoRight === "Rectificación" ? 
+                            <ModalClient
                             isOpen={modalOpen}
                             arcoRight={modalarcoRight}
                             isEditable={modalisEditable}
                             onClose={() => setModalOpen(false)}
                             userData={modalData}
                             loadData={loadData}
-                        />
+                            />
+                            :
+                            <ModalCO
+                            isOpen={modalOpen}
+                            arcoRight={modalarcoRight}
+                            onClose={() => setModalOpen(false)}
+                            userData={modalData}
+                            loadData={loadData}
+                            />
+                        }
                     </>
                 )}
             </main>

@@ -12,11 +12,19 @@ import { Alert } from "./Alert";
 import { useState } from "react";
 import { Feedback } from "./Feedback";
 
-export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, children, loadData }) => {
+export const ModalClient = ({
+    isOpen,
+    onClose,
+    userData,
+    isEditable,
+    arcoRight,
+    children,
+    loadData,
+}) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isAlert2Open, setIsAlert2Open] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
-    const [showFeedback, setShowFeedback] = useState(false)
+    const [showFeedback, setShowFeedback] = useState(false);
     const [serverResponse, setServerResponse] = useState("");
     const [serverSuccess, setServerSuccess] = useState(true);
 
@@ -26,15 +34,16 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
             setShowFeedback(false);
             loadData();
         }, 3500);
-    }
-
+    };
     const acceptProcedure = (arcoRightLetter) => {
         console.log("Accept");
         if (arcoRightLetter === "R") {
             let bandera = true;
             //Update the database with the new data that changed
             // Get the value of all the inputs that are not a checkbox child of the modal
-            const inputs = document.querySelectorAll(".modal input:not([type=checkbox])");
+            const inputs = document.querySelectorAll(
+                ".modal input:not([type=checkbox])"
+            );
             //Build the json object to send to the server in the format:
             /* {
                 "column": {
@@ -46,91 +55,126 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                 "data": "Guanajuato"
             } */
             let data = [];
+            let dataChanged = [];
             inputs.forEach((input) => {
-                if (input.getAttribute("attributeid").includes("address") && input.value != input.getAttribute("formerdata")) {
+                if (
+                    input.getAttribute("attributeid").includes("address") &&
+                    input.value != input.getAttribute("formerdata")
+                ) {
                     bandera = false;
                     data.push({
                         column: {
                             sector: "addresses",
                             mode: "single",
                             name: input.getAttribute("name"),
-                            address_id: input.getAttribute("attributeID").split("_")[1]
+                            address_id: input
+                                .getAttribute("attributeID")
+                                .split("_")[1],
                         },
-                        data: input.value === "N/A" ? null : input.value
+                        data: input.value === "N/A" ? null : input.value,
                     });
-                } else if (input.getAttribute("attributeID").includes("identification") && input.value != input.getAttribute("formerdata")) {
+                    dataChanged.push({
+                        id: input.getAttribute("attributeid"),
+                        column: input.getAttribute("name"),
+                        prevData: input.getAttribute("formerdata"),
+                        newData: input.value === "N/A" ? null : input.value,
+                    });
+                } else if (
+                    input
+                        .getAttribute("attributeID")
+                        .includes("identification") &&
+                    input.value != input.getAttribute("formerdata")
+                ) {
                     bandera = false;
                     data.push({
                         column: {
                             sector: "identification",
                             mode: "single",
                             name: input.getAttribute("name"),
-                            identification_id: input.getAttribute("attributeID").split("_")[1]
+                            identification_id: input
+                                .getAttribute("attributeID")
+                                .split("_")[1],
                         },
-                        data: input.value === "N/A" ? null : input.value
+                        data: input.value === "N/A" ? null : input.value,
                     });
-                } else if (input.getAttribute("attributeID").includes("user") && input.value != input.getAttribute("formerdata")) {
+                    dataChanged.push({
+                        id: input.getAttribute("attributeid"),
+                        column: input.getAttribute("name"),
+                        prevData: input.getAttribute("formerdata"),
+                        newData: input.value === "N/A" ? null : input.value,
+                    });
+                } else if (
+                    input.getAttribute("attributeID").includes("user") &&
+                    input.value != input.getAttribute("formerdata")
+                ) {
                     bandera = false;
                     data.push({
                         column: input.getAttribute("name"),
-                        data: input.value === "N/A" ? null : input.value
+                        data: input.value === "N/A" ? null : input.value,
+                    });
+                    dataChanged.push({
+                        id: input.getAttribute("attributeid"),
+                        column: input.getAttribute("name"),
+                        prevData: input.getAttribute("formerdata"),
+                        newData: input.value === "N/A" ? null : input.value,
                     });
                 }
             });
             // Map through the data to make the request to the server
             data.map((item) => {
                 console.log(JSON.stringify(item));
-                fetch(`/api/users/${userData.user_id}`,{
+                fetch(`/api/users/${userData.user_id}`, {
                     method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(item)
+                    body: JSON.stringify(item),
                 })
-                .then((res) => {
-                    if (res.ok) {
-                        setServerSuccess(true);
-                        setServerResponse("Datos actualizados correctamente");
-                    } else {
+                    .then((res) => {
+                        if (res.ok) {
+                            setServerSuccess(true);
+                            setServerResponse(
+                                "Datos actualizados correctamente"
+                            );
+                        } else {
+                            setServerSuccess(false);
+                            setServerResponse("Error al actualizar los datos");
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
                         setServerSuccess(false);
                         setServerResponse("Error al actualizar los datos");
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
+                    });
             });
-            if (!bandera) {
-                showMessage();
-            }
-        } else if (arcoRightLetter === "C") {
-            if (userData.is_client) {
-                setServerSuccess(false);
-                setServerResponse("No se puede eliminar el usuario porque es cliente");
-            } else {
-                console.log("Cancel");
-                fetch(`/api/users/${userData.user_id}`,{
-                    method: "DELETE",
+
+            let message = "Se actualizaron los datos de: \n";
+            // Convert the JSON to a string
+            dataChanged.map((item) => {
+                message += `${item.column}: ${item.prevData} -> ${item.newData}\n`;
+            });
+            //Save what changed to the registros_arco table
+            if (dataChanged.length > 0) {
+                fetch(`/api/arco_registers`, {
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                })
-                .then((res) => {
-                    if (res.ok) {
-                        setServerSuccess(true);
-                        setServerResponse("Usuario eliminado correctamente");
-                    } else {
-                        setServerSuccess(false);
-                        setServerResponse("Error al eliminar el usuario");
-                    }
-                })
-                .catch((err) => {
+                    body: JSON.stringify({
+                        user_id: userData.user_id,
+                        arco_type: "R",
+                        message: message,
+                    }),
+                }).catch((err) => {
                     console.log(err);
-                })
+                });
             }
-            showMessage();
+
+            if (!bandera) {
+                showMessage();
+            }
         }
-    }
+    };
 
     //Check for null or undefined
     if (userData === null || userData === undefined) {
@@ -140,10 +184,12 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
             </Modal>
         );
     }
+    
     const keys = Object.keys(userData);
     const addressesKeys = Object.keys(userData.addresses[0]);
     const identificationKeys = Object.keys(userData.identifications[0]);
-    const otherKeys = userData.user_data !== null ? Object.keys(userData.user_data) : [];
+    const otherKeys =
+        userData.user_data !== null ? Object.keys(userData.user_data) : [];
     return (
         <>
             <Modal
@@ -155,7 +201,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                     {/* Título */}
                     <ModalTitle>{`Derecho de ${arcoRight}`} </ModalTitle>
                     {/* Primera columna con datos del usuario */}
-            
+
                     <ModalContainer isEditable={isEditable}>
                         <ModalCol>
                             <ColSection title="Datos personales">
@@ -164,7 +210,7 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                                         key !== "addresses" &&
                                         key !== "identifications" &&
                                         key !== "user_data" &&
-                                        key !== "registros_arco" 
+                                        key !== "registros_arco"
                                     ) {
                                         return (
                                             <UserData
@@ -172,11 +218,20 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                                                 atributo={key}
                                                 valor={
                                                     userData[key] !== null
-                                                        ? userData[key].toString()
+                                                        ? userData[
+                                                              key
+                                                          ].toString()
                                                         : "N/A"
                                                 }
-                                                isEditable={key !== "user_id" && isEditable && !key.includes("_at") && !key.includes("is_")}
-                                                id= {"userID_"+userData.user_id}
+                                                isEditable={
+                                                    key !== "user_id" &&
+                                                    isEditable &&
+                                                    !key.includes("_at") &&
+                                                    !key.includes("is_")
+                                                }
+                                                id={
+                                                    "userID_" + userData.user_id
+                                                }
                                             />
                                         );
                                     }
@@ -193,23 +248,36 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                                                 {identificationKeys.map(
                                                     (key, index) => {
                                                         if (key !== "user_id")
-                                                        return (
-                                                            <UserData
-                                                                key={index}
-                                                                atributo={key}
-                                                                valor={
-                                                                    identification[
+                                                            return (
+                                                                <UserData
+                                                                    key={index}
+                                                                    atributo={
                                                                         key
-                                                                    ] !== null
-                                                                        ? identification[
-                                                                              key
-                                                                          ].toString()
-                                                                        : "N/A"
-                                                                }
-                                                                isEditable={key !== "identification_id" && isEditable && !key.includes("_at")}
-                                                                id= {"identificationID_"+identification.identification_id}
-                                                            />
-                                                        );
+                                                                    }
+                                                                    valor={
+                                                                        identification[
+                                                                            key
+                                                                        ] !==
+                                                                        null
+                                                                            ? identification[
+                                                                                  key
+                                                                              ].toString()
+                                                                            : "N/A"
+                                                                    }
+                                                                    isEditable={
+                                                                        key !==
+                                                                            "identification_id" &&
+                                                                        isEditable &&
+                                                                        !key.includes(
+                                                                            "_at"
+                                                                        )
+                                                                    }
+                                                                    id={
+                                                                        "identificationID_" +
+                                                                        identification.identification_id
+                                                                    }
+                                                                />
+                                                            );
                                                     }
                                                 )}
                                             </div>
@@ -229,21 +297,32 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                                         >
                                             {addressesKeys.map((key, index) => {
                                                 if (key !== "user_id")
-                                                return (
-                                                    <UserData
-                                                        key={index}
-                                                        atributo={key}
-                                                        valor={
-                                                            address[key] !== null
-                                                                ? address[
-                                                                      key
-                                                                  ].toString()
-                                                                : "N/A"
-                                                        }
-                                                        isEditable={key !== "address_id" && isEditable && !key.includes("_at")}
-                                                        id={"addressID_"+address.address_id}
-                                                    />
-                                                );
+                                                    return (
+                                                        <UserData
+                                                            key={index}
+                                                            atributo={key}
+                                                            valor={
+                                                                address[key] !==
+                                                                null
+                                                                    ? address[
+                                                                          key
+                                                                      ].toString()
+                                                                    : "N/A"
+                                                            }
+                                                            isEditable={
+                                                                key !==
+                                                                    "address_id" &&
+                                                                isEditable &&
+                                                                !key.includes(
+                                                                    "_at"
+                                                                )
+                                                            }
+                                                            id={
+                                                                "addressID_" +
+                                                                address.address_id
+                                                            }
+                                                        />
+                                                    );
                                             })}
                                         </div>
                                     );
@@ -257,7 +336,8 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                                                 key={index}
                                                 atributo={key}
                                                 valor={
-                                                    userData.user_data[key] !== null
+                                                    userData.user_data[key] !==
+                                                    null
                                                         ? userData.user_data[
                                                               key
                                                           ].toString()
@@ -272,15 +352,59 @@ export const ModalClient = ({ isOpen, onClose, userData, isEditable, arcoRight, 
                         </ModalCol>
                         {/* Botones */}
                         <section className="flex flex-wrap w-full items-center justify-center">
-                            <Button onClick={() => {setAlertMessage("¿Está seguro de que deseas cancelar la operación?"); setIsAlertOpen(true)}} toolTipContent={"Cancelar la operación"} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" id={"cancel"}>Cancelar</Button>
-                            <Button onClick={() => {setAlertMessage(arcoRight[0] === "A" ? "¿Quieres descargar el reporte en pdf?" : (arcoRight[0] === "R" ? "¿Estás seguro que quieres realizar las modificaciones?" : (arcoRight[0] === "C" ? "¿Estás seguro de que quieres borrar los datos?" : "¿Estás seguro de continuar?"))); setIsAlert2Open(true)}} toolTipContent={(arcoRight[0] === "A" ? "Descargar el reporte en pdf" : (arcoRight[0] === "R" ? "Modificar los datos y descargar el reporte en pdf" : (arcoRight[0] === "C" ? "Borrar los datos del usuario" : "Realizar el derecho de oposición de los datos del cliente")))} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-3" id={"save"}>Continuar</Button>
+                            <Button
+                                onClick={() => {
+                                    setAlertMessage(
+                                        "¿Está seguro de que deseas cancelar la operación?"
+                                    );
+                                    setIsAlertOpen(true);
+                                }}
+                                toolTipContent={"Cancelar la operación"}
+                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                                id={"cancel"}
+                            >
+                                Cancelar
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    setAlertMessage(
+                                        arcoRight[0] === "A"
+                                            ? "¿Quieres descargar el reporte en pdf?"
+                                            : "¿Estás seguro que quieres realizar las modificaciones?"
+                                    );
+                                    setIsAlert2Open(true);
+                                }}
+                                toolTipContent={
+                                    arcoRight[0] === "A"
+                                        ? "Descargar el reporte en pdf"
+                                        : "Modificar los datos y descargar el reporte en pdf"
+                                }
+                                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-3"
+                                id={"save"}
+                            >
+                                Continuar
+                            </Button>
                         </section>
                     </ModalContainer>
                 </div>
             </Modal>
-            <Alert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)} message={alertMessage} onCloseOther={onClose} acceptFunction={() => setIsAlertOpen(false)} />
-            <Alert isOpen={isAlert2Open} onClose={() => setIsAlert2Open(false)} message={alertMessage} onCloseOther={onClose} acceptFunction={() => acceptProcedure(arcoRight[0])} />
-            {showFeedback && <Feedback feedback={serverResponse} success={serverSuccess} />}
+            <Alert
+                isOpen={isAlertOpen}
+                onClose={() => setIsAlertOpen(false)}
+                message={alertMessage}
+                onCloseOther={onClose}
+                acceptFunction={() => setIsAlertOpen(false)}
+            />
+            <Alert
+                isOpen={isAlert2Open}
+                onClose={() => setIsAlert2Open(false)}
+                message={alertMessage}
+                onCloseOther={onClose}
+                acceptFunction={() => acceptProcedure(arcoRight[0])}
+            />
+            {showFeedback && (
+                <Feedback feedback={serverResponse} success={serverSuccess} />
+            )}
         </>
     );
 };
