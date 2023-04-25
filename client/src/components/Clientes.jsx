@@ -218,7 +218,7 @@ export const Clientes = () => {
                         data-dropdown-toggle="dropdownAction"
                         className="flex ml-3 my-auto w-max max-h-10 items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400"
                         data-tooltip-content="Filtra los resultados de la búsqueda por el campo seleccionado"
-                        data-tooltip-delay-show={1800}
+                        data-tooltip-delay-show={1000}
                         data-tooltip-id="FiltroBusquedaTooltip"
                     >
                         <option value="name">Nombre</option>
