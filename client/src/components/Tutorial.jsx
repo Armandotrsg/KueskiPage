@@ -4,7 +4,7 @@ import { FaqsData } from "../shared/FaqsData";
 
 export const Tutorial = () => {
     return (
-        <main className="flex flex-col items-center bg-gray-100 h-screen overflow-scroll">
+        <main className="flex flex-col items-center bg-gray-100 md:h-screen md:overflow-scroll">
             {/* Título */}
             <div className="flex text-center my-10">
                 <h1 className="text-[2.5rem] font-bold ml-4">🤔 ¿Tienes Preguntas? </h1>

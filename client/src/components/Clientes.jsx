@@ -166,7 +166,7 @@ export const Clientes = () => {
     };
 
     return (
-        <div className="flex flex-col pl-5 pr-5 pb-5 h-screen w-screen overflow-scroll ">
+        <div className="flex flex-col pl-5 pr-5 pb-5 md:h-screen w-screen md:overflow-scroll ">
             {/*Título de la página*/}
             <h1 className="text-2xl font-bold mx-auto mt-4 p-4">Clientes</h1>
             <section className="flex flex-col md:flex-row md:flex-wrap items-center lg:items-baseline justify-between m-3">
@@ -235,30 +235,39 @@ export const Clientes = () => {
 
                 {/*Filtro ARCO*/}
                 <div className="flex items-start pb-4 bg-white dark:bg-white mt-5">
-                    <label className="flex text-lg my-auto text-center font-semibold font-sm text-gray-900 dark:text-black" htmlFor="dropdownAction">
+                    <label
+                        className="flex text-lg my-auto text-center font-semibold font-sm text-gray-900 dark:text-black"
+                        htmlFor="dropdownAction"
+                    >
                         Filtro derecho ARCO:
                     </label>
                     <div className="pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4 my-auto">
                         <select
-                        id="dropdownAction"
-                        className="flex items-center w-full sm:w-auto text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-5 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 "
-                        value={actionButton}
-                        onChange={(e) => {
-                            const { value } = e.target;
-                            setActionButton(value);
-                            setModalisEditable(arcoRightOptions[value].isEditable);
-                            setModalarchoRight(arcoRightOptions[value].archoRightModal);
-                        }}
-                        data-tooltip-content={"Escoge qué derecho ARCO deseas realizar"}
-                        data-tooltip-id={"dropdownAction"}
-                        data-tooltip-delay-show={1000}
-                        data-tooltip-variant={"dark"}
+                            id="dropdownAction"
+                            className="flex items-center w-full sm:w-auto text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-5 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 "
+                            value={actionButton}
+                            onChange={(e) => {
+                                const { value } = e.target;
+                                setActionButton(value);
+                                setModalisEditable(
+                                    arcoRightOptions[value].isEditable
+                                );
+                                setModalarchoRight(
+                                    arcoRightOptions[value].archoRightModal
+                                );
+                            }}
+                            data-tooltip-content={
+                                "Escoge qué derecho ARCO deseas realizar"
+                            }
+                            data-tooltip-id={"dropdownAction"}
+                            data-tooltip-delay-show={1000}
+                            data-tooltip-variant={"dark"}
                         >
-                        {arcoRights.map((arcoRight, index) => (
-                            <option key={index} value={arcoRight}>
-                            {`${arcoRight} - ${arcoRight[0]}`}
-                            </option>
-                        ))}
+                            {arcoRights.map((arcoRight, index) => (
+                                <option key={index} value={arcoRight}>
+                                    {`${arcoRight} - ${arcoRight[0]}`}
+                                </option>
+                            ))}
                         </select>
                         <Tooltip id={"dropdownAction"} place={"top"} />
                     </div>

@@ -58,13 +58,13 @@ export const Navbar = () => {
                     alt="Arrow"
                     className={`${
                         isOpen ? "transform-gpu -rotate-180" : ""
-                    } absolute z-50 top-2 left-2 border-2 border-blue-900 rounded-full bg-white duration-300 ease-in-out md:invisible`}
+                    } fixed z-50 top-2 left-2 border-2 border-blue-900 rounded-full bg-white duration-300 ease-in-out md:invisible`}
                 />
             </button>
             <aside
                 className={`${
                     isOpen ? "w-56 md:min-w-[224px]" : "w-0 md:min-w-[80px]"
-                }  h-screen bg-blue-500 flex flex-col justify-start absolute md:relative duration-700 md:duration-500 ease-in-out z-40`}
+                }  h-screen bg-blue-500 flex flex-col justify-start fixed md:relative duration-700 md:duration-500 ease-in-out z-40`}
             >
                 {/* Botón para ocultar y mostrar la navbar */}
                 <button onClick={() => setIsOpen(!isOpen)}>
