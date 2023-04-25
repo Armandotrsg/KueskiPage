@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import arrow from "../assets/img/arrow.svg";
 import kueskiLogo from "../assets/img/kueskiLogo.png";
@@ -7,7 +7,22 @@ import { Tooltip } from "react-tooltip";
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 50 && !isOpen) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, [])
 
     // Componente para renderizar los items de la barra de navegación
     const NavigationItems = ({ name, path, icon }) => {
@@ -52,13 +67,13 @@ export const Navbar = () => {
     return (
         <React.Fragment>
             {/* Botón para ocultar y mostrar la navbar en dispositivos móviles */}
-            <button onClick={() => setIsOpen(!isOpen)}>
+            <button onClick={() => {setIsOpen(!isOpen); setScrolled(false)}}>
                 <img
                     src={arrow}
                     alt="Arrow"
                     className={`${
                         isOpen ? "transform-gpu -rotate-180" : ""
-                    } fixed z-50 top-2 left-2 border-2 border-blue-900 rounded-full bg-white duration-300 ease-in-out md:invisible`}
+                    } fixed z-50 top-2 left-2 border-2 border-blue-900 rounded-full bg-white duration-300 ease-in-out md:invisible hover:opacity-100 ${scrolled ? "opacity-5" : "opacity-100"}`}
                 />
             </button>
             <aside
