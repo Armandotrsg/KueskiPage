@@ -94,7 +94,7 @@ export const Historial = () => {
     return (
         <div className="flex flex-col pl-5 pr-5 pb-5 h-screen w-screen overflow-scroll">
             {/*Título de la página*/}
-            <h1 className="text-2xl font-bold mx-auto p-4">Historial</h1>
+            <h1 className="text-2xl font-bold mx-auto mt-4 p-4">Historial</h1>
             <div className=" overflow-x-auto shadow-md sm:rounded-lg mt-5"></div>
 
             <section>
