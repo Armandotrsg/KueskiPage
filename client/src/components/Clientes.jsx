@@ -160,10 +160,8 @@ export const Clientes = () => {
         fetch(`/api/users/${row.user_id}`)
             .then((response) => response.json())
             .then((data) => {
-                //setActionButton("Ver");
                 setModalData(data[0]);
                 setModalOpen(true);
-                console.log(data[0]);
             });
     };
 
@@ -218,7 +216,9 @@ export const Clientes = () => {
                         onChange={handleSearchByChange}
                         data-dropdown-toggle="dropdownAction"
                         className="flex ml-3 my-auto w-max max-h-10 items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400"
-                        type="button"
+                        data-tooltip-content="Filtra los resultados de la búsqueda por el campo seleccionado"
+                        data-tooltip-delay-show={1800}
+                        data-tooltip-id="FiltroBusquedaTooltip"
                     >
                         <option value="name">Nombre</option>
                         <option value="first_last_name">
@@ -230,15 +230,17 @@ export const Clientes = () => {
                         <option value="curp">CURP</option>
                         <option value="nationality">Nacionalidad</option>
                     </select>
+                    <Tooltip id="FiltroBusquedaTooltip" place="top" />
                 </div>
 
                 {/*Filtro ARCO*/}
                 <div className="flex items-start pb-4 bg-white dark:bg-white mt-5">
-                    <h1 className="flex text-lg my-auto text-center font-semibold font-sm text-gray-900 dark:text-black">
+                    <label className="flex text-lg my-auto text-center font-semibold font-sm text-gray-900 dark:text-black" htmlFor="dropdownAction">
                         Filtro derecho ARCO:
-                    </h1>
+                    </label>
                     <div className="pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4 my-auto">
                         <select
+                        id="dropdownAction"
                         className="flex items-center w-full sm:w-auto text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-5 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 "
                         value={actionButton}
                         onChange={(e) => {
@@ -258,6 +260,7 @@ export const Clientes = () => {
                             </option>
                         ))}
                         </select>
+                        <Tooltip id={"dropdownAction"} place={"top"} />
                     </div>
                 </div>
             </section>
