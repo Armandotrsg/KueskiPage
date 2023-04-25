@@ -22,7 +22,7 @@ export const Navbar = () => {
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, [])
+    }, []);
 
     // Componente para renderizar los items de la barra de navegación
     const NavigationItems = ({ name, path, icon }) => {
@@ -67,15 +67,24 @@ export const Navbar = () => {
     return (
         <React.Fragment>
             {/* Botón para ocultar y mostrar la navbar en dispositivos móviles */}
-            <button onClick={() => {setIsOpen(!isOpen); setScrolled(false)}}>
-                <img
-                    src={arrow}
-                    alt="Arrow"
-                    className={`${
-                        isOpen ? "transform-gpu -rotate-180" : ""
-                    } fixed z-50 top-2 left-2 border-2 border-blue-900 rounded-full bg-white duration-300 ease-in-out md:invisible hover:opacity-100 ${scrolled ? "opacity-5" : "opacity-100"}`}
-                />
-            </button>
+            {window.innerWidth < 768 && (
+                <button
+                    onClick={() => {
+                        setIsOpen(!isOpen);
+                        setScrolled(false);
+                    }}
+                >
+                    <img
+                        src={arrow}
+                        alt="Arrow"
+                        className={`${
+                            isOpen ? "transform-gpu -rotate-180" : ""
+                        } fixed z-50 top-2 left-2 border-2 border-blue-900 rounded-full bg-white duration-300 ease-in-out md:invisible hover:opacity-100 ${
+                            scrolled ? "opacity-5" : "opacity-100"
+                        }`}
+                    />
+                </button>
+            )}
             <aside
                 className={`${
                     isOpen ? "w-56 md:min-w-[224px]" : "w-0 md:min-w-[80px]"
@@ -94,7 +103,10 @@ export const Navbar = () => {
                 {/* Barra de navegación */}
                 <div className="flex flex-col gap-x-4 items-center space-y-7">
                     {/* Logo */}
-                    <a href="/" className="flex flex-col md:flex-row items-center justify-center gap-x-2 mt-5">
+                    <a
+                        href="/"
+                        className="flex flex-col md:flex-row items-center justify-center gap-x-2 mt-5"
+                    >
                         <img
                             src={kueskiLogo}
                             alt="Logo de Kueski"
