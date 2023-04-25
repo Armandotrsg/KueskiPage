@@ -234,85 +234,30 @@ export const Clientes = () => {
 
                 {/*Filtro ARCO*/}
                 <div className="flex items-start pb-4 bg-white dark:bg-white mt-5">
-                    <h1 class="flex text-lg my-auto text-center font-semibold font-sm text-gray-900 dark:text-black">
+                    <h1 className="flex text-lg my-auto text-center font-semibold font-sm text-gray-900 dark:text-black">
                         Filtro derecho ARCO:
                     </h1>
                     <div className="pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4 my-auto">
-                        <button
-                            id="dropdownAction"
-                            onClick={handleDropdownToggle}
-                            data-dropdown-toggle="dropdownAction"
-                            className="flex items-center w-full sm:w-auto text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 "
-                            type="button"
-                            data-tooltip-content={
-                                "Escoge qué derecho ARCO deseas realizar"
-                            }
-                            data-tooltip-id={"dropdownAction"}
-                            data-tooltip-delay-show={1000}
-                            data-tooltip-variant={"dark"}
+                        <select
+                        className="flex items-center w-full sm:w-auto text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-5 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 "
+                        value={actionButton}
+                        onChange={(e) => {
+                            const { value } = e.target;
+                            setActionButton(value);
+                            setModalisEditable(arcoRightOptions[value].isEditable);
+                            setModalarchoRight(arcoRightOptions[value].archoRightModal);
+                        }}
+                        data-tooltip-content={"Escoge qué derecho ARCO deseas realizar"}
+                        data-tooltip-id={"dropdownAction"}
+                        data-tooltip-delay-show={1000}
+                        data-tooltip-variant={"dark"}
                         >
-                            {actionButton}
-                            <svg
-                                className="w-3 h-3 ml-12"
-                                aria-hidden="true"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M19 9l-7 7-7-7"
-                                ></path>
-                            </svg>
-                        </button>
-                        <Tooltip
-                            id={"dropdownAction"}
-                            place={"right"}
-                            type="dark"
-                            effect="solid"
-                        />
-
-                        {dropdownMenuOpen && (
-                            <div
-                                id="dropdownActionButton"
-                                className="absolute flex z-10 w-max text-black bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-100 dark:hover:border-gray-100 dark:focus:ring-gray-200"
-                            >
-                                <ul
-                                    className="py-1 text-sm text-black dark:text-black"
-                                    aria-labelledby="dropdownActionButton"
-                                >
-                                    {arcoRights.map((arcoRight, index) => {
-                                        const { isEditable, archoRightModal } =
-                                            arcoRightOptions[arcoRight];
-                                        return (
-                                            <li
-                                                key={index}
-                                                onClick={() => {
-                                                    setActionButton(arcoRight);
-                                                    setDropdownMenuOpen(false);
-                                                    setModalisEditable(
-                                                        isEditable
-                                                    );
-                                                    setModalarchoRight(
-                                                        archoRightModal
-                                                    );
-                                                }}
-                                            >
-                                                <a
-                                                    href="#"
-                                                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:text-black font-medium rounded-lg text-sm"
-                                                >
-                                                    {`${arcoRight} - ${arcoRight[0]}`}
-                                                </a>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            </div>
-                        )}
+                        {arcoRights.map((arcoRight, index) => (
+                            <option key={index} value={arcoRight}>
+                            {`${arcoRight} - ${arcoRight[0]}`}
+                            </option>
+                        ))}
+                        </select>
                     </div>
                 </div>
             </section>
