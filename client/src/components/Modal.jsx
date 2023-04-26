@@ -19,7 +19,7 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
             <main
                 className={`bg-white rounded-xl shadow p-6 transition-all ${
                     isOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"
-                } overflow-x-hidden ${className}`}
+                } overflow-x-hidden modal ${className}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Closing button */}
@@ -53,7 +53,7 @@ export const Modal = ({ isOpen, onClose, className, children }) => {
 export const ModalTitle = ({ children }) => {
     return (
         <div className="flex justify-center m-2">
-            <h1 className="text-2xl font-bold">{children}</h1>
+            <h1 className="text-2xl font-bold text-center">{children}</h1>
         </div>
     );
 };
