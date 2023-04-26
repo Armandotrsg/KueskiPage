@@ -68,6 +68,26 @@ export const Historial = () => {
             width: "flex",
             format: (row) => <div>{row.created_at.split("T")[0]}</div>,
         },
+
+        {
+            name: "Ver",
+            selector: "id",
+            sortable: false,
+            cell: (row) => (
+                <Button
+                  //  onClick={() => handleView(row)}
+                    toolTipContent={"Ver registro"}
+                    id={Math.floor(Math.random() * 10000).toString()}
+                    toolTipHide={1800}
+                    className={"hover:underline"}
+                >
+                    Ver
+                </Button>
+            ),
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+        },
     ];
 
     const fetchTableData = () => {
