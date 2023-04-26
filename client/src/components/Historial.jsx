@@ -129,7 +129,7 @@ export const Historial = () => {
             <h1 className="text-2xl font-bold mx-auto mt-4 p-4">Historial</h1>
             <div className=" overflow-x-auto shadow-md sm:rounded-lg mt-5"></div>
 
-            <section>
+            <section className="flex flex-col md:flex-row md:justify-between space-x-4">
                 {/*Calendario de búsqueda */}
                 <div class="flex items-center justify-center">
                     <div class="relative">
