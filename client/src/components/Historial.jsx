@@ -8,7 +8,7 @@ export const Historial = () => {
     const [shouldRefetch, setShouldRefetch] = useState(false);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [selectedArcoType, setSelectedArcoType] = useState(null);
+    const [selectedArcoType, setSelectedArcoType] = useState("");
 
 
     const columns = [
@@ -131,12 +131,12 @@ export const Historial = () => {
 
             <section className="flex flex-col md:flex-row md:justify-around space-x-4">
                 {/*Calendario de búsqueda */}
-                <div class="flex items-center justify-center">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <div className="flex items-center justify-center">
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none invisible sm:visible">
                             <svg
                                 aria-hidden="true"
-                                class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                className="w-5 h-5 text-gray-500 dark:text-gray-400"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -153,18 +153,18 @@ export const Historial = () => {
                             type="date"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 "
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:pl-10 p-2.5 "
                             placeholder="Select date start"
                         ></input>
                     </div>
 
-                    <span class="mx-4 text-gray-500">hasta</span>
+                    <span className="mx-4 text-gray-500">hasta</span>
 
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none invisible sm:visible">
                             <svg
                                 aria-hidden="true"
-                                class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                className="w-5 h-5 text-gray-500 dark:text-gray-400"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +181,7 @@ export const Historial = () => {
                             type="date"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:pl-10 p-2.5"
                             placeholder="Select date end"
                         ></input>
                     </div>
