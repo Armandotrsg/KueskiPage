@@ -1,6 +1,7 @@
 import DataTable from "react-data-table-component";
 import { useState, useEffect } from "react";
 import { Loader } from "./Loader";
+import { Button } from "./Button";
 
 export const Historial = () => {
     const [tableData, setTableData] = useState([]);
@@ -9,7 +10,6 @@ export const Historial = () => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [selectedArcoType, setSelectedArcoType] = useState("");
-
 
     const columns = [
         {
@@ -97,7 +97,7 @@ export const Historial = () => {
             let end = endDate && Date.parse(endDate);
             //Add 1 day to include the end date
             //end = end && new Date(end + 86400000).getTime();
-    
+
             if (start && end) {
                 return (
                     createdAt >= start &&
@@ -119,9 +119,13 @@ export const Historial = () => {
             }
         });
     };
-    
 
     const filteredData = filterData(tableData);
+    const clearFilters = () => {
+        setStartDate("");
+        setEndDate("");
+        setSelectedArcoType("");
+    };
 
     return (
         <div className="flex flex-col pl-5 pr-5 pb-5 md:h-screen w-screen md:overflow-scroll">
@@ -186,7 +190,7 @@ export const Historial = () => {
                         ></input>
                     </div>
                 </div>
-                
+
                 {/*Filtro ARCO */}
                 <div className="flex items-center justify-center pb-4 bg-white dark:bg-white mt-5">
                     <label
@@ -196,7 +200,13 @@ export const Historial = () => {
                         Filtrar por derechos ARCO:
                     </label>
                     <div className="pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4 my-auto">
-                        <select value={selectedArcoType} onChange={(e) => setSelectedArcoType(e.target.value)} className="flex items-center w-full sm:w-auto text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-5 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 ">
+                        <select
+                            value={selectedArcoType}
+                            onChange={(e) =>
+                                setSelectedArcoType(e.target.value)
+                            }
+                            className="flex items-center w-full sm:w-auto text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-5 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 "
+                        >
                             <option value="">Todos los accesos</option>
                             <option value="A">Acceso</option>
                             <option value="R">Rectificación</option>
@@ -206,7 +216,17 @@ export const Historial = () => {
                     </div>
                 </div>
 
-                
+                {/* Botón para limpiar filtros */}
+
+                <Button
+                    onClick={clearFilters}
+                    className="bg-gray-50 px-4 py-2 hover:bg-gray-100 duration-200 transition rounded-lg my-auto items-center max-w-fit self-center"
+                    toolTipContent={"Limpiar filtros de búsqueda"}
+                    id={"clearFilters"}
+                    toolTipHide={2000}
+                >
+                    Limpiar Filtros
+                </Button>
             </section>
 
             <main className="mt-5">
