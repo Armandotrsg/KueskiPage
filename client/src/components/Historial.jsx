@@ -96,7 +96,7 @@ export const Historial = () => {
             const start = startDate && Date.parse(startDate);
             let end = endDate && Date.parse(endDate);
             //Add 1 day to include the end date
-            end = end && new Date(end + 86400000).getTime();
+            //end = end && new Date(end + 86400000).getTime();
 
             if (start && end) {
                 return createdAt >= start && createdAt <= end;
