@@ -11,11 +11,10 @@ export const Historial = () => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
 
-    
     const columns = [
         {
             name: "ID",
-            selector: row => row.registro_arco_id,
+            selector: (row) => row.registro_arco_id,
             sortable: true,
             center: true,
             grow: 0.5,
@@ -25,7 +24,7 @@ export const Historial = () => {
         },
         {
             name: "User ID",
-            selector: row => row.user_id,
+            selector: (row) => row.user_id,
             sortable: true,
             center: true,
             grow: 1,
@@ -34,16 +33,26 @@ export const Historial = () => {
         },
         {
             name: "Derecho ARCO",
-            selector: row => row.arco_type,
+            selector: (row) => row.arco_type,
             sortable: true,
             center: true,
             grow: 1,
             width: "flex",
-            format: (row) => <div>{row.arco_type === "A" ? "Acceso" : row.arco_type === "R" ? "Rectificación" : row.arco_type === "C" ? "Cancelación" : "Oposición"}</div>,
+            format: (row) => (
+                <div>
+                    {row.arco_type === "A"
+                        ? "Acceso"
+                        : row.arco_type === "R"
+                        ? "Rectificación"
+                        : row.arco_type === "C"
+                        ? "Cancelación"
+                        : "Oposición"}
+                </div>
+            ),
         },
         {
             name: "Mensaje",
-            selector: row => row.message,
+            selector: (row) => row.message,
             sortable: true,
             center: true,
             grow: 1,
@@ -52,7 +61,7 @@ export const Historial = () => {
         },
         {
             name: "Fecha de cumplimiento",
-            selector: row => row.created_at,
+            selector: (row) => row.created_at,
             sortable: true,
             center: true,
             grow: 1,
@@ -61,7 +70,7 @@ export const Historial = () => {
         },
     ];
 
-   const fetchTableData = () => {
+    const fetchTableData = () => {
         setLoading(true);
         fetch("/api/arco_registers")
             .then((res) => res.json())
@@ -75,7 +84,7 @@ export const Historial = () => {
             .finally(() => {
                 setLoading(false);
             });
-   }
+    };
 
     useEffect(() => {
         fetchTableData();
@@ -83,38 +92,34 @@ export const Historial = () => {
 
     const filterData = (data) => {
         return data.filter((row) => {
-          const createdAt = new Date(row.created_at).getTime();
-          const start = startDate && Date.parse(startDate);
-          let end = endDate && Date.parse(endDate);
-          //Add 1 day to include the end date
-          end = end && new Date(end + 86400000).getTime();
-      
-          if (start && end) {
-            return createdAt >= start && createdAt <= end;
-          } else if (start) {
-            return createdAt >= start;
-          } else if (end) {
-            return createdAt <= end;
-          } else {
-            return true;
-          }
+            const createdAt = new Date(row.created_at).getTime();
+            const start = startDate && Date.parse(startDate);
+            let end = endDate && Date.parse(endDate);
+            //Add 1 day to include the end date
+            end = end && new Date(end + 86400000).getTime();
+
+            if (start && end) {
+                return createdAt >= start && createdAt <= end;
+            } else if (start) {
+                return createdAt >= start;
+            } else if (end) {
+                return createdAt <= end;
+            } else {
+                return true;
+            }
         });
     };
-    
+
     const filteredData = filterData(tableData);
 
     /* const handleSearch = (e) => {
         setSearchText(e.target.value);
     }; */
 
-   /*  const handleSearchByChange = (e) => { // Función para manejar el cambio de campo de búsqueda
+    /*  const handleSearchByChange = (e) => { // Función para manejar el cambio de campo de búsqueda
         setSearchBy(e.target.value);
         setSearchText(""); // Borrar texto de búsqueda al cambiar el campo de búsqueda
     }; */
-
-    /* const filteredData = tableData.filter((item) => // Buscar en el campo seleccionado
-        item[searchBy].toLowerCase().includes(searchText.toLowerCase())
-    ); */
 
     return (
         <div className="flex flex-col pl-5 pr-5 pb-5 md:h-screen w-screen md:overflow-scroll">
@@ -126,52 +131,74 @@ export const Historial = () => {
                 <div class="flex items-center justify-center">
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                            <svg
+                                aria-hidden="true"
+                                class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
                         </div>
-                        <input 
-                            name="start" 
-                            type="date" 
+                        <input
+                            name="start"
+                            type="date"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 " 
-                            placeholder="Select date start">
-                    
-                        </input>
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 "
+                            placeholder="Select date start"
+                        ></input>
                     </div>
 
                     <span class="mx-4 text-gray-500">hasta</span>
 
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                            <svg
+                                aria-hidden="true"
+                                class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
                         </div>
-                        <input 
-                            name="end" 
-                            type="date" 
+                        <input
+                            name="end"
+                            type="date"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" 
-                            placeholder="Select date end"></input>
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                            placeholder="Select date end"
+                        ></input>
                     </div>
                 </div>
             </section>
 
             <main className="mt-5">
                 {/* Creación de la tabla*/}
-                {
-                    loading ? (
-                        <Loader />
-                    ) : (
-                        <DataTable
-                            columns={columns}
-                            data={filteredData}
-                            progressPending={loading}
-                            pagination
-                            searchable
-                            className="z-0 w-full text-sm text-left text-black dark:text-black"
-                        ></DataTable>
-                    )
-                }
+                {loading ? (
+                    <Loader />
+                ) : (
+                    <DataTable
+                        columns={columns}
+                        data={filteredData}
+                        progressPending={loading}
+                        pagination
+                        searchable
+                        className="z-0 w-full text-sm text-left text-black dark:text-black"
+                    ></DataTable>
+                )}
             </main>
         </div>
     );
