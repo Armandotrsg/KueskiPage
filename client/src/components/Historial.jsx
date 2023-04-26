@@ -85,7 +85,9 @@ export const Historial = () => {
         return data.filter((row) => {
           const createdAt = new Date(row.created_at).getTime();
           const start = startDate && Date.parse(startDate);
-          const end = endDate && Date.parse(endDate);
+          let end = endDate && Date.parse(endDate);
+          //Add 1 day to include the end date
+          end = end && new Date(end + 86400000).getTime();
       
           if (start && end) {
             return createdAt >= start && createdAt <= end;
