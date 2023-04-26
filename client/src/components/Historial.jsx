@@ -6,10 +6,10 @@ export const Historial = () => {
     const [tableData, setTableData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [shouldRefetch, setShouldRefetch] = useState(false);
-    // const [searchText, setSearchText] = useState("");
-    // const [searchBy, setSearchBy] = useState("name"); // Por defecto, buscar en la columna "name"
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [selectedArcoType, setSelectedArcoType] = useState(null);
+
 
     const columns = [
         {
@@ -97,29 +97,31 @@ export const Historial = () => {
             let end = endDate && Date.parse(endDate);
             //Add 1 day to include the end date
             //end = end && new Date(end + 86400000).getTime();
-
+    
             if (start && end) {
-                return createdAt >= start && createdAt <= end;
+                return (
+                    createdAt >= start &&
+                    createdAt <= end &&
+                    (!selectedArcoType || row.arco_type === selectedArcoType)
+                );
             } else if (start) {
-                return createdAt >= start;
+                return (
+                    createdAt >= start &&
+                    (!selectedArcoType || row.arco_type === selectedArcoType)
+                );
             } else if (end) {
-                return createdAt <= end;
+                return (
+                    createdAt <= end &&
+                    (!selectedArcoType || row.arco_type === selectedArcoType)
+                );
             } else {
-                return true;
+                return !selectedArcoType || row.arco_type === selectedArcoType;
             }
         });
     };
+    
 
     const filteredData = filterData(tableData);
-
-    /* const handleSearch = (e) => {
-        setSearchText(e.target.value);
-    }; */
-
-    /*  const handleSearchByChange = (e) => { // Función para manejar el cambio de campo de búsqueda
-        setSearchBy(e.target.value);
-        setSearchText(""); // Borrar texto de búsqueda al cambiar el campo de búsqueda
-    }; */
 
     return (
         <div className="flex flex-col pl-5 pr-5 pb-5 md:h-screen w-screen md:overflow-scroll">
@@ -128,6 +130,7 @@ export const Historial = () => {
             <div className=" overflow-x-auto shadow-md sm:rounded-lg mt-5"></div>
 
             <section>
+                {/*Calendario de búsqueda */}
                 <div class="flex items-center justify-center">
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -183,6 +186,27 @@ export const Historial = () => {
                         ></input>
                     </div>
                 </div>
+                
+                {/*Filtro ARCO */}
+                <div className="flex items-center justify-center pb-4 bg-white dark:bg-white mt-5">
+                    <label
+                        className="flex text-lg my-auto text-center font-semibold font-sm text-gray-900 dark:text-black"
+                        htmlFor="dropdownAction"
+                    >
+                        Filtrar por derechos ARCO:
+                    </label>
+                    <div className="pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4 my-auto">
+                        <select value={selectedArcoType} onChange={(e) => setSelectedArcoType(e.target.value)} className="flex items-center w-full sm:w-auto text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-auto px-5 py-1.5 dark:bg-white dark:text-black dark:border-gray-200 dark:hover:bg-gray-300 dark:hover:border-gray-600 dark:focus:ring-gray-400 ">
+                            <option value="">Todos los accesos</option>
+                            <option value="A">Acceso</option>
+                            <option value="R">Rectificación</option>
+                            <option value="C">Cancelación</option>
+                            <option value="O">Oposición</option>
+                        </select>
+                    </div>
+                </div>
+
+                
             </section>
 
             <main className="mt-5">
