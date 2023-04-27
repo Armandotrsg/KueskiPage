@@ -18,7 +18,6 @@ export const ModalClient = ({
     userData,
     isEditable,
     arcoRight,
-    children,
     loadData,
 }) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -57,9 +56,11 @@ export const ModalClient = ({
             let data = [];
             let dataChanged = [];
             inputs.forEach((input) => {
+                //Trim the value of the input to avoid empty spaces at the beginning or end
+                let inputValue = input.value.trim();
                 if (
                     input.getAttribute("attributeid").includes("address") &&
-                    input.value != input.getAttribute("formerdata")
+                    inputValue != input.getAttribute("formerdata")
                 ) {
                     bandera = false;
                     data.push({
@@ -71,19 +72,19 @@ export const ModalClient = ({
                                 .getAttribute("attributeID")
                                 .split("_")[1],
                         },
-                        data: input.value === "N/A" ? null : input.value,
+                        data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
                         id: input.getAttribute("attributeid"),
                         column: input.getAttribute("name"),
                         prevData: input.getAttribute("formerdata"),
-                        newData: input.value === "N/A" ? null : input.value,
+                        newData: inputValue === "N/A" ? null : inputValue,
                     });
                 } else if (
                     input
                         .getAttribute("attributeID")
                         .includes("identification") &&
-                    input.value != input.getAttribute("formerdata")
+                    inputValue != input.getAttribute("formerdata")
                 ) {
                     bandera = false;
                     data.push({
@@ -95,28 +96,28 @@ export const ModalClient = ({
                                 .getAttribute("attributeID")
                                 .split("_")[1],
                         },
-                        data: input.value === "N/A" ? null : input.value,
+                        data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
                         id: input.getAttribute("attributeid"),
                         column: input.getAttribute("name"),
                         prevData: input.getAttribute("formerdata"),
-                        newData: input.value === "N/A" ? null : input.value,
+                        newData: inputValue === "N/A" ? null : inputValue,
                     });
                 } else if (
                     input.getAttribute("attributeID").includes("user") &&
-                    input.value != input.getAttribute("formerdata")
+                    inputValue != input.getAttribute("formerdata")
                 ) {
                     bandera = false;
                     data.push({
                         column: input.getAttribute("name"),
-                        data: input.value === "N/A" ? null : input.value,
+                        data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
                         id: input.getAttribute("attributeid"),
                         column: input.getAttribute("name"),
                         prevData: input.getAttribute("formerdata"),
-                        newData: input.value === "N/A" ? null : input.value,
+                        newData: inputValue === "N/A" ? null : inputValue,
                     });
                 }
             });
