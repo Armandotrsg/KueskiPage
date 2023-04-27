@@ -23,6 +23,7 @@ export const UserData = ({ atributo, valor, isEditable, id }) => {
         created_at: "Fecha de creación",
         updated_at: "Fecha de actualización",
         deleted_at: "Fecha de eliminación",
+        rfc: "RFC"
     }
     const spanishKeysAddresses = {
         address_id: "ID de dirección",

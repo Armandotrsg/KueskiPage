@@ -1,8 +1,4 @@
-import {
-    Modal,
-    ModalTitle,
-    ModalContainer,
-} from "./Modal";
+import { Modal, ModalTitle, ModalContainer } from "./Modal";
 import { Loader } from "./Loader";
 import { Button } from "./Button";
 import { Alert } from "./Alert";
@@ -29,10 +25,64 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
         console.log("Accept");
         if (arcoRightLetter === "C") {
             if (userData.is_client) {
-                setServerSuccess(false);
-                setServerResponse(
-                    "No se puede eliminar el usuario porque es cliente"
-                );
+                if (message === "") {
+                    setServerSuccess(false);
+                    setServerResponse(
+                        "No se pueden eliminar los datos adicionales del usuario porque no se ha ingresado un motivo"
+                    );
+                } else if (userData.user_data === null) {
+                    setServerSuccess(false);
+                    setServerResponse(
+                        "No se pueden eliminar los datos adicionales del usuario porque no existen"
+                    );
+                } else {
+                    fetch(`/api/users/${userData.user_id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            column: "user_data",
+                            data: "null"
+                        }),
+                    })
+                        .then((res) => {
+                            if (res.ok) {
+                                setServerSuccess(true);
+                                setServerResponse(
+                                    "Se borraron los datos adicionales del usuario correctamente"
+                                );
+                            } else {
+                                setServerSuccess(false);
+                                setServerResponse(
+                                    "Error al eliminar los datos adicionales del usuario"
+                                );
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            setServerSuccess(false);
+                            setServerResponse(
+                                "Error al eliminar los datos adicionales del usuario"
+                            );
+                        });
+                    //Trim the message
+                    const trimmedMessage = message.trim();
+                    //Post the new register
+                    fetch(`/api/arco_registers`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            user_id: userData.user_id,
+                            arco_type: arcoRightLetter,
+                            message: trimmedMessage + " (Datos adicionales)."
+                        }),
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }
             } else {
                 if (message === "") {
                     setServerSuccess(false);
@@ -64,7 +114,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                             console.log(err);
                             setServerSuccess(false);
                             setServerResponse("Error al eliminar el usuario");
-                        });
+                        }); 
                     //Trim the message
                     const trimmedMessage = message.trim();
                     //Post the new register
@@ -75,7 +125,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                         },
                         body: JSON.stringify({
                             user_id: userData.user_id,
-                            arco_right: arcoRightLetter,
+                            arco_type: arcoRightLetter,
                             message: trimmedMessage,
                         }),
                     }).catch((err) => {
@@ -139,7 +189,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
             <Modal
                 isOpen={isOpen}
                 onClose={onClose}
-                className={`w-[98%] sm:w-[50%] h-fit`}
+                className={`w-[98%] md:w-[50%] h-fit`}
             >
                 <div className="flex flex-col flex-wrap">
                     <ModalTitle>{`Derecho de ${arcoRight}`} </ModalTitle>
@@ -150,7 +200,11 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                                 : `Ingresa la razón por la que te vas a oponer al tratamiento de los datos de `}
                             <strong>{`${userData.name} ${userData.first_last_name} ${userData.second_last_name}`}</strong>
                             {arcoRight === "Cancelación"
-                                ? `? Esta acción no se puede deshacer. Ingresa el motivo de la cancelación de los datos`
+                                ? `? Esta acción no se puede deshacer. ${
+                                      userData.is_client
+                                          ? "El usuario es un cliente activo, por lo que solo se pueden eliminar los datos adicionales. Ingresa el motivo de la cancelación de los datos."
+                                          : ""
+                                  }`
                                 : ""}
                         </p>
                     </ModalContainer>

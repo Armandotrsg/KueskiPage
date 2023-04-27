@@ -40,9 +40,13 @@ export const ModalClient = ({
             let bandera = true;
             //Update the database with the new data that changed
             // Get the value of all the inputs that are not a checkbox child of the modal
-            const inputs = document.querySelectorAll(
+            let inputs = document.querySelectorAll(
                 ".modal input:not([type=checkbox])"
             );
+            //Filter the inputs where the attributeid does not include "userData"
+            inputs = Array.from(inputs).filter((input) => {
+                return !input.getAttribute("attributeid").includes("userData");
+            });
             //Build the json object to send to the server in the format:
             /* {
                 "column": {
@@ -75,7 +79,6 @@ export const ModalClient = ({
                         data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
-                        id: input.getAttribute("attributeid"),
                         column: input.getAttribute("name"),
                         prevData: input.getAttribute("formerdata"),
                         newData: inputValue === "N/A" ? null : inputValue,
@@ -99,13 +102,12 @@ export const ModalClient = ({
                         data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
-                        id: input.getAttribute("attributeid"),
                         column: input.getAttribute("name"),
                         prevData: input.getAttribute("formerdata"),
                         newData: inputValue === "N/A" ? null : inputValue,
                     });
                 } else if (
-                    input.getAttribute("attributeID").includes("user") &&
+                    input.getAttribute("attributeID").includes("userID") &&
                     inputValue != input.getAttribute("formerdata")
                 ) {
                     bandera = false;
@@ -114,13 +116,49 @@ export const ModalClient = ({
                         data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
-                        id: input.getAttribute("attributeid"),
                         column: input.getAttribute("name"),
                         prevData: input.getAttribute("formerdata"),
                         newData: inputValue === "N/A" ? null : inputValue,
                     });
                 }
             });
+
+            //Get all the inputs where the attributeid includes "userData"
+            let inputJSON = document.querySelectorAll(
+                ".modal input[attributeid*=userData]"
+            );
+            
+            let json = '{';
+            let somethingChanged = false; //Flag to know if something changed in the additional data
+            inputJSON.forEach((input) => {
+                let inputValue = input.value.trim();
+                if (inputValue !== input.getAttribute("formerdata")) {
+                    somethingChanged = true;
+                    bandera = false;
+                    dataChanged.push({
+                        column: input.getAttribute("name"),
+                        prevData: input.getAttribute("formerdata"),
+                        newData: inputValue === "N/A" ? null : inputValue,
+                    });
+                }
+            })
+            if (somethingChanged) { //If something did changed, build the JSON object
+                inputJSON.forEach((input) => {
+                    let inputValue = input.value.trim();
+                    json += '"' + input.getAttribute("name") + '": "' + (inputValue === "N/A" ? null : inputValue) + '",';
+                })
+                json = json.slice(0, -1);
+                json += '}';
+                console.log(json);
+            }
+
+            if (json !== "{") { //If the JSON object is not empty, add it to the data array
+                data.push({
+                    column: "user_data",
+                    data: json
+                })
+            }
+
             // Map through the data to make the request to the server
             data.map((item) => {
                 console.log(JSON.stringify(item));
@@ -345,6 +383,7 @@ export const ModalClient = ({
                                                         : "N/A"
                                                 }
                                                 isEditable={isEditable}
+                                                id={"userData_" + key}
                                             />
                                         );
                                     })}
