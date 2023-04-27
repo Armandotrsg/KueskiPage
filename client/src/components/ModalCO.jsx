@@ -1,11 +1,8 @@
 import {
     Modal,
-    ModalCol,
     ModalTitle,
-    ColSection,
     ModalContainer,
 } from "./Modal";
-import { UserData } from "./UserData";
 import { Loader } from "./Loader";
 import { Button } from "./Button";
 import { Alert } from "./Alert";
@@ -68,6 +65,8 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                             setServerSuccess(false);
                             setServerResponse("Error al eliminar el usuario");
                         });
+                    //Trim the message
+                    const trimmedMessage = message.trim();
                     //Post the new register
                     fetch(`/api/arco_registers`, {
                         method: "POST",
@@ -77,7 +76,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                         body: JSON.stringify({
                             user_id: userData.user_id,
                             arco_right: arcoRightLetter,
-                            message: message,
+                            message: trimmedMessage,
                         }),
                     }).catch((err) => {
                         console.log(err);
@@ -92,6 +91,8 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                     "No se puede oponer al tratamiento de los datos porque no se ha ingresado un motivo"
                 );
             } else {
+                //Trim the message
+                const trimmedMessage = message.trim();
                 //Post the new register
                 fetch(`/api/arco_registers`, {
                     method: "POST",
@@ -101,7 +102,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                     body: JSON.stringify({
                         user_id: userData.user_id,
                         arco_type: "O",
-                        message: message,
+                        message: trimmedMessage,
                     }),
                 })
                     .then((res) => {
