@@ -76,7 +76,7 @@ export const UserData = ({ atributo, valor, isEditable, id }) => {
                 onChange={(e) => setInputText(e.target.value)}
                 className={`text-lg border-[1px] ${
                     isChecked ? "border-gray-300" : "border-gray-400"
-                } rounded-md p-1 ml-1 mt-2 w-[100%] lg:w-[80%] xl:w-[50%]`}
+                } rounded-md p-1 my-2 md:my-[0.4em] ml-1 w-[100%] lg:w-[80%] xl:w-[50%]`}
                 disabled={isChecked}
                 required
                 name={atributo}
@@ -92,7 +92,7 @@ export const UserData = ({ atributo, valor, isEditable, id }) => {
             }`}
         >
             {isEditable && <Checkbox isChecked={isChecked} setIsChecked={setIsChecked} />}
-            <h5 className={`text-lg  ${atributo.includes("_id") ? "font-bold" : "font-semibold"}`}>{`${spanishKeysUsers[atributo] || spanishKeysAddresses[atributo] || spanishKeysIdentifications[atributo] || atributo}: `} &nbsp;</h5>
+            <h5 className={`text-lg ${atributo.includes("_id") ? "font-bold" : "font-semibold"}`}>{`${spanishKeysUsers[atributo] || spanishKeysAddresses[atributo] || spanishKeysIdentifications[atributo] || atributo}: `} &nbsp;</h5>
             {isEditable ? (
                 input
             ) : (
