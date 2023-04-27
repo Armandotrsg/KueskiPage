@@ -255,7 +255,7 @@ export const Clientes = () => {
                         className="flex text-lg my-auto text-center font-semibold font-sm text-gray-900 dark:text-black"
                         htmlFor="dropdownAction"
                     >
-                        Filtro derecho ARCO:
+                        Derecho ARCO:
                     </label>
                     <div className="pb-1 bg-white dark:bg-white d-flex justify-content-start ml-4 my-auto">
                         <select
