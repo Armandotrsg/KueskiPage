@@ -150,11 +150,23 @@ export const Clientes = () => {
         setSearchText(""); // Borrar texto de búsqueda al cambiar el campo de búsqueda
     };
 
-    const filteredData = tableData.filter(
-        (
-            item // Buscar en el campo seleccionado
-        ) => item[searchBy].toLowerCase().includes(searchText.toLowerCase())
-    );
+const filteredData = tableData.filter((item) => {
+    if (searchText === "") {
+        return item;
+    } else if (searchBy === "fullname") {
+        const fullName = `${item.name} ${item.first_last_name} ${item.second_last_name}`;
+        return fullName.toLowerCase().includes(searchText.toLowerCase());
+    } else if (
+        item[searchBy] &&
+        item[searchBy]
+            .toString()
+            .toLowerCase()
+            .includes(searchText.toLowerCase())
+    ) {
+        return item;
+    }
+});
+
 
     //Carga los datos de la fila seleccionada a partir de la API y carga el modal una vez se presione el botón "Ver" de la misma
     const handleView = (row) => {
@@ -221,6 +233,8 @@ export const Clientes = () => {
                         data-tooltip-delay-show={1000}
                         data-tooltip-id="FiltroBusquedaTooltip"
                     >
+                        <option value="user_id">ID</option>
+                        <option value="fullname">Nombre Completo</option>
                         <option value="name">Nombre</option>
                         <option value="first_last_name">
                             Apellido Paterno
