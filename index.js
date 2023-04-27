@@ -8,7 +8,7 @@ const mysql = require('mysql2');
 const path = require("path");
 require('dotenv').config();
 
-const connectionUrl = url.parse(process.env.DATABASE_URL='mysql://pwi7a6giocm5y279gv5b:pscale_pw_44QfZJ2Mu2O7aTq33iPiLLJnDDGuIll1z6IjiImEXqv@aws.connect.psdb.cloud/kueskidb?ssl={"rejectUnauthorized":true}');
+const connectionUrl = url.parse(process.env.DATABASE_URL);
 const auth = connectionUrl.auth.split(':');
 
 const pool = mysql.createPool({
