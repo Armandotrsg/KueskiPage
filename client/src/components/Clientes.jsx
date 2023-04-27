@@ -83,13 +83,13 @@ export const Clientes = () => {
             format: (row) => <div>{row.curp}</div>,
         },
         {
-            name: "Nacionalidad",
-            selector: (row) => row.nationality,
+            name: "RFC",
+            selector: (row) => row.rfc,
             sortable: true,
             center: true,
             grow: 1,
             width: "flex",
-            format: (row) => <div>{row.nationality}</div>,
+            format: (row) => <div>{row.rfc}</div>,
         },
         {
             name: "Ver",
@@ -244,7 +244,7 @@ export const Clientes = () => {
                             Apellido Materno
                         </option>
                         <option value="curp">CURP</option>
-                        <option value="nationality">Nacionalidad</option>
+                        <option value="rfc">RFC</option>
                     </select>
                     <Tooltip id="FiltroBusquedaTooltip" place="top" />
                 </div>
