@@ -150,23 +150,22 @@ export const Clientes = () => {
         setSearchText(""); // Borrar texto de búsqueda al cambiar el campo de búsqueda
     };
 
-const filteredData = tableData.filter((item) => {
-    if (searchText === "") {
-        return item;
-    } else if (searchBy === "fullname") {
-        const fullName = `${item.name} ${item.first_last_name} ${item.second_last_name}`;
-        return fullName.toLowerCase().includes(searchText.toLowerCase());
-    } else if (
-        item[searchBy] &&
-        item[searchBy]
-            .toString()
-            .toLowerCase()
-            .includes(searchText.toLowerCase())
-    ) {
-        return item;
-    }
-});
-
+    const filteredData = tableData.filter((item) => {
+        if (searchText === "") {
+            return item;
+        } else if (searchBy === "fullname") {
+            const fullName = `${item.name} ${item.first_last_name} ${item.second_last_name}`;
+            return fullName.toLowerCase().includes(searchText.toLowerCase());
+        } else if (
+            item[searchBy] &&
+            item[searchBy]
+                .toString()
+                .toLowerCase()
+                .includes(searchText.toLowerCase())
+        ) {
+            return item;
+        }
+    });
 
     //Carga los datos de la fila seleccionada a partir de la API y carga el modal una vez se presione el botón "Ver" de la misma
     const handleView = (row) => {
@@ -302,24 +301,25 @@ const filteredData = tableData.filter((item) => {
                             pagination
                             className="z-0 w-full text-sm text-left text-black dark:text-black"
                         />
-                        {modalarcoRight === "Acceso" || modalarcoRight === "Rectificación" ? 
+                        {modalarcoRight === "Acceso" ||
+                        modalarcoRight === "Rectificación" ? (
                             <ModalClient
-                            isOpen={modalOpen}
-                            arcoRight={modalarcoRight}
-                            isEditable={modalisEditable}
-                            onClose={() => setModalOpen(false)}
-                            userData={modalData}
-                            loadData={loadData}
+                                isOpen={modalOpen}
+                                arcoRight={modalarcoRight}
+                                isEditable={modalisEditable}
+                                onClose={() => setModalOpen(false)}
+                                userData={modalData}
+                                loadData={loadData}
                             />
-                            :
+                        ) : (
                             <ModalCO
-                            isOpen={modalOpen}
-                            arcoRight={modalarcoRight}
-                            onClose={() => setModalOpen(false)}
-                            userData={modalData}
-                            loadData={loadData}
+                                isOpen={modalOpen}
+                                arcoRight={modalarcoRight}
+                                onClose={() => setModalOpen(false)}
+                                userData={modalData}
+                                loadData={loadData}
                             />
-                        }
+                        )}
                     </>
                 )}
             </main>
