@@ -156,6 +156,8 @@ export const Clientes = () => {
         } else if (searchBy === "fullname") {
             const fullName = `${item.name} ${item.first_last_name} ${item.second_last_name}`;
             return fullName.toLowerCase().includes(searchText.toLowerCase());
+        } else if (searchBy === "user_id") {
+            return item.user_id.toString() === searchText;
         } else if (
             item[searchBy] &&
             item[searchBy]
