@@ -228,17 +228,20 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                             <strong>{`${userData.name} ${userData.first_last_name} ${userData.second_last_name}`}</strong>
                             {arcoRight === "Cancelación"
                                 ? `? Esta acción no se puede deshacer.`
-                                : " desea oponerse al tratamiento de sus datos personales"}
-                            {arcoRight === "Cancelación" ? (
+                                : " desea oponerse al tratamiento de sus datos personales. "}
+                            {arcoRight === "Cancelación" && userData.is_client ? (
                                 <strong>
                                     {" "}
                                     El usuario es un cliente activo, por lo que
                                     solo se pueden eliminar los datos
                                     adicionales.
                                 </strong>
+                            ) : (arcoRight === "Oposición" && userData.is_client) ? (
+                                <strong>
+                                    El usuario es un cliente por lo que solo podrás seleccionar razones secundarias.
+                                </strong>
                             ) : (
-                                ""
-                            )}
+                            "")}
                             {arcoRight === "Cancelación"
                                 ? " Ingresa el motivo de la cancelación de los datos."
                                 : ""}
