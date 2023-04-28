@@ -10,23 +10,24 @@ import { Loader } from "./Loader";
 
 export const ModalArco = ({
     isOpen,
-    onClose
+    onClose,
+    userData
     //arcoRegister
     
     ,}) => {
 
     //Check for null or undefined
-    // if (userData === null || userData === undefined) {
-    //     return (
-    //         <Modal isOpen={isOpen} onClose={onClose}>
-    //             <Loader />
-    //         </Modal>
-    //     );
-    // }
+    if (userData === null || userData === undefined) {
+        return (
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <Loader />
+            </Modal>
+        );
+    }
 
     return(
         <Modal isOpen={isOpen} onClose={onClose}>
-            Hola
+            {userData.user_id}        
         </Modal>
     )
     

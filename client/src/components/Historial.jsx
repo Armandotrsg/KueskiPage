@@ -13,6 +13,8 @@ export const Historial = () => {
     const [endDate, setEndDate] = useState("");
     const [selectedArcoType, setSelectedArcoType] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalData, setModalData] = useState(null); //pasar data al modal
+
 
 
     const columns = [
@@ -153,13 +155,13 @@ export const Historial = () => {
 
     //Carga los datos de la fila seleccionada a partir de la API y carga el modal una vez se presione el botón "Ver" de la misma
     const handleView = (row) => {
-        // fetch(`/api/users/${row.user_id}`)
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         setModalData(data[0]);
-        //         setModalOpen(true);
-        //     });
-        setModalOpen(true);
+        fetch(`/api/users/${row.user_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setModalData(data[0]);
+                setModalOpen(true);
+            });
+        //setModalOpen(true);
     };
 
 
@@ -284,6 +286,7 @@ export const Historial = () => {
                     isOpen = {modalOpen}
                     onClose = {() => setModalOpen(false)}   // Modificar estos atributos
                     //arcoRegister = {modalArcoRegister} 
+                    userData = {modalData}
                     />
 
                 </>
