@@ -4,6 +4,7 @@ import { Button } from "./Button";
 import { Alert } from "./Alert";
 import { useState } from "react";
 import { Feedback } from "./Feedback";
+import { Tooltip } from "react-tooltip";
 import {
     RazonesPrimarias,
     RazonesSecundarias,
@@ -279,8 +280,8 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                             ) : arcoRight === "Oposición" &&
                               userData.is_client ? (
                                 <strong>
-                                    El usuario es un cliente por lo que solo
-                                    podrás seleccionar razones secundarias.
+                                    El usuario es un cliente activo por lo que
+                                    solo podrás seleccionar razones secundarias.
                                 </strong>
                             ) : (
                                 ""
@@ -305,9 +306,29 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                                 <section
                                     className={`flex flex-col w-[100%] justify-start mx-4 `}
                                 >
-                                    <h4 className="font-semibold p-4 text-center">
-                                        Razones Primarias de Oposición:
-                                    </h4>
+                                    <div className="flex items-center justify-center">
+                                        <div
+                                            data-tooltip-content="Finalidad de uso de datos: prestación de servicios"
+                                            data-tooltip-id="infoPrimaria"
+                                            data-tooltip-variant="info"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                class="bi bi-info-circle"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                            </svg>
+                                            <Tooltip id="infoPrimaria" />
+                                        </div>
+                                        <h4 className="font-semibold p-4 text-center">
+                                            Razones Primarias de Oposición:
+                                        </h4>
+                                    </div>
                                     <ul className="flex flex-col space-y-4 justify-start">
                                         {RazonesPrimarias.options.map(
                                             (option, index) => {
@@ -343,9 +364,29 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                                             }
                                         )}
                                     </ul>
-                                    <h4 className="font-semibold p-4 text-center">
-                                        Razones Secundarias de Oposición:
-                                    </h4>
+
+                                    <div className="flex items-center justify-center">
+                                        <div
+                                            data-tooltip-content="Finalidad de uso de datos: comercial, marketing y testimonial."
+                                            data-tooltip-id="infoSecundaria"
+                                            data-tooltip-variant="info"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                class="bi bi-info-circle"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                            </svg>
+                                        </div>
+                                        <h4 className="font-semibold p-4 text-center">
+                                            Razones Secundarias de Oposición:
+                                        </h4>
+                                    </div>
                                     <ul className="flex flex-col space-y-4 justify-start">
                                         {RazonesSecundarias.options.map(
                                             (option, index) => {
