@@ -5,6 +5,11 @@ import {
     ColSection,
     ModalContainer,
 } from "./Modal";
+import {
+    spanishKeysAddresses,
+    spanishKeysIdentifications,
+    spanishKeysUsers,
+} from "../shared/SpanishKeys";
 import { UserData } from "./UserData";
 import { Loader } from "./Loader";
 import { Button } from "./Button";
@@ -79,7 +84,7 @@ export const ModalClient = ({
                         data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
-                        column: input.getAttribute("name"),
+                        column: spanishKeysAddresses[input.getAttribute("name")],
                         prevData: input.getAttribute("formerdata"),
                         newData: inputValue === "N/A" ? null : inputValue,
                     });
@@ -102,7 +107,7 @@ export const ModalClient = ({
                         data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
-                        column: input.getAttribute("name"),
+                        column: spanishKeysIdentifications[input.getAttribute("name")],
                         prevData: input.getAttribute("formerdata"),
                         newData: inputValue === "N/A" ? null : inputValue,
                     });
@@ -116,7 +121,7 @@ export const ModalClient = ({
                         data: inputValue === "N/A" ? null : inputValue,
                     });
                     dataChanged.push({
-                        column: input.getAttribute("name"),
+                        column: spanishKeysUsers[input.getAttribute("name")],
                         prevData: input.getAttribute("formerdata"),
                         newData: inputValue === "N/A" ? null : inputValue,
                     });
@@ -190,7 +195,7 @@ export const ModalClient = ({
             let message = "Se actualizaron los datos de: \n";
             // Convert the JSON to a string
             dataChanged.map((item) => {
-                message += `${item.column}: ${item.prevData} -> ${item.newData}\n`;
+                message += `\t${item.column}: ${item.prevData} -> ${item.newData}\n`;
             });
             //Save what changed to the registros_arco table
             if (dataChanged.length > 0) {

@@ -4,6 +4,11 @@ import { Button } from "./Button";
 import { Alert } from "./Alert";
 import { useState } from "react";
 import { Feedback } from "./Feedback";
+import { Tooltip } from "react-tooltip";
+import {
+    RazonesPrimarias,
+    RazonesSecundarias,
+} from "../shared/RazonesOposicion";
 
 export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -43,7 +48,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                         },
                         body: JSON.stringify({
                             column: "user_data",
-                            data: "null"
+                            data: "null",
                         }),
                     })
                         .then((res) => {
@@ -77,7 +82,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                         body: JSON.stringify({
                             user_id: userData.user_id,
                             arco_type: arcoRightLetter,
-                            message: trimmedMessage + " (Datos adicionales)."
+                            message: trimmedMessage + " (Datos adicionales).",
                         }),
                     }).catch((err) => {
                         console.log(err);
@@ -114,7 +119,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                             console.log(err);
                             setServerSuccess(false);
                             setServerResponse("Error al eliminar el usuario");
-                        }); 
+                        });
                     //Trim the message
                     const trimmedMessage = message.trim();
                     //Post the new register
@@ -135,14 +140,72 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
             }
             showMessage();
         } else if (arcoRightLetter === "O") {
-            if (message === "") {
+            //Get all the checked checkboxes
+            const checkboxes = document.querySelectorAll(
+                'input[type="checkbox"]:checked'
+            );
+
+            //Check if there is at least one checkbox checked
+            if (checkboxes.length === 0) {
                 setServerSuccess(false);
                 setServerResponse(
-                    "No se puede oponer al tratamiento de los datos porque no se ha ingresado un motivo"
+                    "No se puede enviar la solicitud porque no se ha seleccionado una razón"
                 );
             } else {
+                let razonesPrimarias = [];
+                let razonesSecundarias = [];
+                //Get the values of the checked checkboxes
+                checkboxes.forEach((checkbox) => {
+                    if (checkbox.getAttribute("tiporazon") === "primaria") {
+                        razonesPrimarias.push(checkbox.value);
+                    } else {
+                        razonesSecundarias.push(checkbox.value);
+                    }
+                });
+                let messageOposicion = "";
+                if (razonesPrimarias.length > 0) {
+                    if (razonesPrimarias.length > 1) {
+                        messageOposicion = `Razones primarias:\n\t${razonesPrimarias.join(
+                            "\n\t"
+                        )}`;
+                    } else {
+                        messageOposicion = `Razón primaria:\n\t${razonesPrimarias.join(
+                            ", "
+                        )}`;
+                    }
+                    messageOposicion = `${messageOposicion.slice(0, -1)}.${
+                        razonesSecundarias.length > 0 ? "\n" : ""
+                    }`;
+                }
+
+                if (razonesSecundarias.length > 0) {
+                    if (razonesSecundarias.length > 1) {
+                        messageOposicion = `${messageOposicion} Razones secundarias:\n\t${razonesSecundarias.join(
+                            "\n\t"
+                        )}`;
+                    } else {
+                        messageOposicion = `${messageOposicion} Razón secundaria:\n\t${razonesSecundarias.join(
+                            ""
+                        )}`;
+                    }
+                    // Set the email of the user to null
+                    fetch(`/api/users/${userData.user_id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            column: "email",
+                            data: "N/A",
+                        }),
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }
+
                 //Trim the message
-                const trimmedMessage = message.trim();
+                const trimmedMessage = messageOposicion.trim();
+
                 //Post the new register
                 fetch(`/api/arco_registers`, {
                     method: "POST",
@@ -189,7 +252,11 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
             <Modal
                 isOpen={isOpen}
                 onClose={onClose}
-                className={`w-[98%] md:w-[50%] h-fit`}
+                className={`w-[98%] ${
+                    arcoRight[0] === "O"
+                        ? "h-[75%] md:w-[75%]"
+                        : "h-fit md:w-[50%]"
+                }`}
             >
                 <div className="flex flex-col flex-wrap">
                     <ModalTitle>{`Derecho de ${arcoRight}`} </ModalTitle>
@@ -197,26 +264,160 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                         <p className="text-center m-5">
                             {arcoRight === "Cancelación"
                                 ? `¿Estás seguro de borrar los datos de `
-                                : `Ingresa la razón por la que te vas a oponer al tratamiento de los datos de `}
+                                : `Selecciona la razón por la que  `}
                             <strong>{`${userData.name} ${userData.first_last_name} ${userData.second_last_name}`}</strong>
                             {arcoRight === "Cancelación"
-                                ? `? Esta acción no se puede deshacer. ${
-                                      userData.is_client
-                                          ? "El usuario es un cliente activo, por lo que solo se pueden eliminar los datos adicionales. Ingresa el motivo de la cancelación de los datos."
-                                          : ""
-                                  }`
+                                ? `? Esta acción no se puede deshacer.`
+                                : " desea oponerse al tratamiento de sus datos personales. "}
+                            {arcoRight === "Cancelación" &&
+                            userData.is_client ? (
+                                <strong>
+                                    {" "}
+                                    El usuario es un cliente activo, por lo que
+                                    solo se pueden eliminar los datos
+                                    adicionales.
+                                </strong>
+                            ) : arcoRight === "Oposición" &&
+                              userData.is_client ? (
+                                <strong>
+                                    El usuario es un cliente activo por lo que
+                                    solo podrás seleccionar razones secundarias.
+                                </strong>
+                            ) : (
+                                ""
+                            )}
+                            {arcoRight === "Cancelación"
+                                ? " Ingresa el motivo de la cancelación de los datos."
                                 : ""}
                         </p>
                     </ModalContainer>
                     <ModalContainer isEditable>
-                        <textarea
-                            className="w-full h-32 p-2 border-2 border-gray-300 rounded-md resize-none mt-2 mb-5"
-                            placeholder="Escribe aquí tu mensaje"
-                            onChange={(e) => {
-                                setMessage(e.target.value);
-                            }}
-                            required
-                        />
+                        {arcoRight === "Cancelación" ? (
+                            <textarea
+                                className="w-full h-32 p-2 border-2 border-gray-300 rounded-md resize-none mt-2 mb-5"
+                                placeholder="Escribe aquí tu mensaje"
+                                onChange={(e) => {
+                                    setMessage(e.target.value);
+                                }}
+                                required
+                            />
+                        ) : (
+                            <div className="flex flex-col mb-5">
+                                <section
+                                    className={`flex flex-col w-[100%] justify-start mx-4 `}
+                                >
+                                    <div className="flex items-center justify-center">
+                                        <div
+                                            data-tooltip-content={RazonesPrimarias.description}
+                                            data-tooltip-id="infoPrimaria"
+                                            data-tooltip-variant="info"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                class="bi bi-info-circle"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                            </svg>
+                                            <Tooltip id="infoPrimaria" />
+                                        </div>
+                                        <h4 className="font-semibold p-4 text-center">
+                                            Razones Primarias de Oposición:
+                                        </h4>
+                                    </div>
+                                    <ul className="flex flex-col space-y-4 justify-start">
+                                        {RazonesPrimarias.options.map(
+                                            (option, index) => {
+                                                return (
+                                                    <li
+                                                        key={index}
+                                                        className="flex items-center"
+                                                    >
+                                                        <div>
+                                                            <input
+                                                                type="checkbox"
+                                                                id={`reason-primary-${index}`}
+                                                                name={`reason-primary-${index}`}
+                                                                value={option}
+                                                                tiporazon="primaria"
+                                                                disabled={
+                                                                    userData.is_client
+                                                                }
+                                                            />
+                                                        </div>
+                                                        <label
+                                                            className={`ml-2 ${
+                                                                userData.is_client
+                                                                    ? "text-gray-600"
+                                                                    : ""
+                                                            }`}
+                                                            htmlFor={`reason-primary-${index}`}
+                                                        >
+                                                            {option}
+                                                        </label>
+                                                    </li>
+                                                );
+                                            }
+                                        )}
+                                    </ul>
+
+                                    <div className="flex items-center justify-center">
+                                        <div
+                                            data-tooltip-content={RazonesSecundarias.description}
+                                            data-tooltip-id="infoSecundaria"
+                                            data-tooltip-variant="info"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                class="bi bi-info-circle"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                            </svg>
+                                        </div>
+                                        <h4 className="font-semibold p-4 text-center">
+                                            Razones Secundarias de Oposición:
+                                        </h4>
+                                    </div>
+                                    <ul className="flex flex-col space-y-4 justify-start">
+                                        {RazonesSecundarias.options.map(
+                                            (option, index) => {
+                                                return (
+                                                    <li
+                                                        key={index}
+                                                        className="flex items-center"
+                                                    >
+                                                        <div>
+                                                            <input
+                                                                type="checkbox"
+                                                                id={`reason-secondary-${index}`}
+                                                                name={`reason-secondary-${index}`}
+                                                                value={option}
+                                                                tiporazon="secundaria"
+                                                            />
+                                                        </div>
+                                                        <label
+                                                            className="ml-2"
+                                                            htmlFor={`reason-secondary-${index}`}
+                                                        >
+                                                            {option}
+                                                        </label>
+                                                    </li>
+                                                );
+                                            }
+                                        )}
+                                    </ul>
+                                </section>
+                            </div>
+                        )}
                         <section className="flex flex-wrap w-full items-center justify-center">
                             <Button
                                 onClick={() => {
