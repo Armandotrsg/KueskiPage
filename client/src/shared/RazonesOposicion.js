@@ -17,7 +17,7 @@ export const RazonesPrimarias = {
 }
 
 export const RazonesSecundarias = {
-    description: "Finalidad de uso de datos: comercial, mkt, testimonial. No importa si es cliente o no.",
+    description: "Finalidad de uso de datos: comercial, marketing y testimonial. No importa si es cliente o no.",
     options: [
         "Fines mercadotécnicos, publicitarios y/o de prospección comercial.",
         "Otorgamiento de estímulos o reconocimientos a clientes, cuando participen en nuestras campañas publicitarias, mercadológicas o comerciales.",
