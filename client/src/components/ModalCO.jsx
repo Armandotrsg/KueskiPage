@@ -161,9 +161,49 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                         razonesSecundarias.push(checkbox.value);
                     }
                 });
+                let messageOposicion = "";
+                if (razonesPrimarias.length > 0) {
+                    if (razonesPrimarias.length > 1) {
+                        messageOposicion = `Razones primarias:\n\t${razonesPrimarias.join(
+                            "\n\t"
+                        )}`;
+                    } else {
+                        messageOposicion = `Razón primaria:\n\t${razonesPrimarias.join(
+                            ", "
+                        )}`;
+                    }
+                    messageOposicion = `${messageOposicion.slice(0, -1)}.${
+                        razonesSecundarias.length > 0 ? "\n" : ""
+                    }`;
+                }
 
+                if (razonesSecundarias.length > 0) {
+                    if (razonesSecundarias.length > 1) {
+                        messageOposicion = `${messageOposicion} Razones secundarias:\n\t${razonesSecundarias.join(
+                            "\n\t"
+                        )}`;
+                    } else {
+                        messageOposicion = `${messageOposicion} Razón secundaria:\n\t${razonesSecundarias.join(
+                            ""
+                        )}`;
+                    }
+                    // Set the email of the user to null
+                    fetch(`/api/users/${userData.user_id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            column: "email",
+                            data: "N/A",
+                        }),
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }
 
-                setMessage(message.slice(0, -1));
+                //Trim the message
+                const trimmedMessage = messageOposicion.trim();
 
                 //Post the new register
                 fetch(`/api/arco_registers`, {
@@ -174,7 +214,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                     body: JSON.stringify({
                         user_id: userData.user_id,
                         arco_type: "O",
-                        message: message,
+                        message: trimmedMessage,
                     }),
                 })
                     .then((res) => {
@@ -194,7 +234,6 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                         setServerResponse("Error al enviar la solicitud");
                     });
             }
-
             showMessage();
         }
     };
@@ -229,19 +268,23 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                             {arcoRight === "Cancelación"
                                 ? `? Esta acción no se puede deshacer.`
                                 : " desea oponerse al tratamiento de sus datos personales. "}
-                            {arcoRight === "Cancelación" && userData.is_client ? (
+                            {arcoRight === "Cancelación" &&
+                            userData.is_client ? (
                                 <strong>
                                     {" "}
                                     El usuario es un cliente activo, por lo que
                                     solo se pueden eliminar los datos
                                     adicionales.
                                 </strong>
-                            ) : (arcoRight === "Oposición" && userData.is_client) ? (
+                            ) : arcoRight === "Oposición" &&
+                              userData.is_client ? (
                                 <strong>
-                                    El usuario es un cliente por lo que solo podrás seleccionar razones secundarias.
+                                    El usuario es un cliente por lo que solo
+                                    podrás seleccionar razones secundarias.
                                 </strong>
                             ) : (
-                            "")}
+                                ""
+                            )}
                             {arcoRight === "Cancelación"
                                 ? " Ingresa el motivo de la cancelación de los datos."
                                 : ""}
@@ -279,12 +322,18 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                                                                 id={`reason-primary-${index}`}
                                                                 name={`reason-primary-${index}`}
                                                                 value={option}
-                                                                tiporazon="Primaria"
-                                                                disabled={userData.is_client}
+                                                                tiporazon="primaria"
+                                                                disabled={
+                                                                    userData.is_client
+                                                                }
                                                             />
                                                         </div>
                                                         <label
-                                                            className={`ml-2 ${userData.is_client ? "text-gray-600" : ""}`}
+                                                            className={`ml-2 ${
+                                                                userData.is_client
+                                                                    ? "text-gray-600"
+                                                                    : ""
+                                                            }`}
                                                             htmlFor={`reason-primary-${index}`}
                                                         >
                                                             {option}
@@ -311,7 +360,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                                                                 id={`reason-secondary-${index}`}
                                                                 name={`reason-secondary-${index}`}
                                                                 value={option}
-                                                                tiporazon="Secundaria"
+                                                                tiporazon="secundaria"
                                                             />
                                                         </div>
                                                         <label
