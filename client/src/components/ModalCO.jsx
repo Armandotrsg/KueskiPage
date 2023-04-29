@@ -308,7 +308,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
                                 >
                                     <div className="flex items-center justify-center">
                                         <div
-                                            data-tooltip-content="Finalidad de uso de datos: prestación de servicios"
+                                            data-tooltip-content={RazonesPrimarias.description}
                                             data-tooltip-id="infoPrimaria"
                                             data-tooltip-variant="info"
                                         >
@@ -367,7 +367,7 @@ export const ModalCO = ({ isOpen, onClose, userData, arcoRight, loadData }) => {
 
                                     <div className="flex items-center justify-center">
                                         <div
-                                            data-tooltip-content="Finalidad de uso de datos: comercial, marketing y testimonial."
+                                            data-tooltip-content={RazonesSecundarias.description}
                                             data-tooltip-id="infoSecundaria"
                                             data-tooltip-variant="info"
                                         >
