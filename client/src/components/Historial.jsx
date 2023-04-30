@@ -155,7 +155,7 @@ export const Historial = () => {
 
     //Carga los datos de la fila seleccionada a partir de la API y carga el modal una vez se presione el botón "Ver" de la misma
     const handleView = (row) => {
-        fetch(`/api/arco_registers/${row.user_id}`)
+        fetch(`/api/arco_registers/${row.registro_arco_id}`)
             .then((response) => response.json())
             .then((data) => {
                 setModalData(data[0]);
