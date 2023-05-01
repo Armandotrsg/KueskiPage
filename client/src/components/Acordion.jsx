@@ -16,7 +16,7 @@ export const Acordion = ({question, answer}) => {
             </div>
             {/* Answer */}
             <div  className="transition-all duration-500 origin-top max-h-0 peer-checked:max-h-96">
-                <div className="p-4">
+                <div className="p-4 text-left text-justify">
                     <p>
                         {answer}
                     </p>
