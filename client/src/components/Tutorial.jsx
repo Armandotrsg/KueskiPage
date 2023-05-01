@@ -4,7 +4,10 @@ import { FaqsData } from "../shared/FaqsData";
 
 export const Tutorial = () => {
     return (
-        <main className="flex flex-col items-center bg-gray-100 md:h-screen md:overflow-scroll">
+        <main className="flex flex-col items-center md:h-screen md:overflow-scroll">
+            <div className="flex text-center my-20">
+                <h1 className="text-[2.5rem] font-bold ml-4">🤔 ¿Tienes Preguntas? </h1>
+            </div>
             {/* Div para las FAQ's */}
             <section>
                 <div className="flex flex-col md:flex-row items-center justify-center md:mt-0 w-full bg-white">
