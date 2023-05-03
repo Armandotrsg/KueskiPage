@@ -54,7 +54,7 @@ export const ModalArco = ({
         >
             <div className="justify-center">
                 {/* Titulo del modal */}
-                <ModalTitle>Informacion</ModalTitle>
+                <ModalTitle>Registro ARCO</ModalTitle>
                 {/* Contenido del modal */}
 
                 <ModalContainer title="Datos de solicitud" className="text-xl font-semibold" >
