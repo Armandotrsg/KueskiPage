@@ -1,110 +1,77 @@
+import React from 'react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
-import React from "react";
-import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+function PDFGenerator(props) {
+  const generatePDF = () => {
+    // Crear una nueva instancia de jsPDF
+    const doc = new jsPDF();
 
-const styles = StyleSheet.create({
-  page: {
-    backgroundColor: "#ffffff",
-    padding: "0.5cm",
-    height: "100%",
-    display: "flex",
-    justifyContent: "flex-start",
-    position: "absolute",
-    top: "2cm",
-    left: "0cm",
-  },
-  container: {
-    width: "100%",
-  },
-  section: {
-    marginBottom: "1cm",
-    textAlign: "left",
-    marginLeft: "1.5cm",
-  },
-  heading: {
-    fontWeight: "bold",
-    fontSize: 20,
-    marginBottom: "0.50cm",
-    textAlign: "left",
-    marginLeft: "-0.7cm",
-    borderBottom: "1px solid black",
-    paddingBottom: "0.5cm",
-  },
-  bold: {
-    fontWeight: "bold",
-  },
-  text: {
-    fontSize: "12pt",
-    lineHeight: 1.7,
-  },
-  info: {
-    marginBottom: "0.5cm",
-  },
-  align: {
-    textAlign: "center",
-  }
-});
-  
-  const Button = ({ clientInfo }) => {
-    const generatePDF = () => {
-    };
-  
-    return (
-      <PDFDownloadLink
-        document={
-          <Document>
-            <Page size="A4" style={styles.page}>
-              <View style={styles.container}>
-                <View style={styles.section}>
-                    <Text style={styles.heading}>
-                        <Text>Reporte de información del usuario</Text>
-                    </Text>
-                </View>
-                <View style={styles.section}>
-                <Text style={styles.info}>Información del usuario</Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>ID:</Text> {clientInfo.user_id}
-                  </Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>Nombre:</Text> {clientInfo.name}
-                  </Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>Apellido paterno:</Text>{" "}
-                    {clientInfo.first_last_name}
-                  </Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>Apellido materno:</Text>{" "}
-                    {clientInfo.second_last_name}
-                  </Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>Fecha de nacimiento:</Text>{" "}
-                    {clientInfo.date_of_birth}
-                  </Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>Nacionalidad:</Text>{" "}
-                    {clientInfo.nationality}
-                  </Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>Estado de nacimiento:</Text>{" "}
-                    {clientInfo.state_of_birth}
-                  </Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>Actividad económica:</Text>{" "}
-                    {clientInfo.economic_activity}
-                  </Text>
-                  <Text style={styles.text}>
-                    <Text style={styles.bold}>CURP:</Text> {clientInfo.curp}
-                  </Text>
-                </View>
-              </View>
-            </Page>
-          </Document>
-        }
-        fileName="cliente.pdf"
-      >
-        <button onClick={generatePDF}>Descargar PDF</button>
-      </PDFDownloadLink>
+    // Agregar la imagen
+    doc.addImage(
+      'https://d1.awsstatic.com/case-studies/Latam%20Cases%20Assets/Kueski.309ce0a57d3f89bf47b176fb6f1a985e373d1e90.png',
+      'PNG',
+      167,
+      -2.5,
+      30,
+      20
     );
+
+    // Definir la tabla
+    const tableData = [      ['ID de usuario', props.userId],
+      ['Nombre', props.firstName],
+      ['Apellido paterno', props.lastName1],
+      ['Apellido materno', props.lastName2],
+      ['Fecha de nacimiento', props.birthDate],
+      ['Nacionalidad', props.nationality],
+      ['Estado de nacimiento', props.birthState],
+      ['Actividad económica', props.economicActivity],
+      ['CURP', props.curp],
+      ['Género', props.gender],
+      ['Número de teléfono', props.phone],
+      ['Email', props.email],
+      ['Es cliente', props.isClient],
+      ['Está bloqueado', props.isBlocked],
+      ['Fecha de creación', props.creationDate],
+      ['Fecha de actualización (Cliente)', props.clientUpdateDate],
+      ['Fecha de eliminación (Cliente)', props.clientDeleteDate],
+      ['RFC', props.rfc],
+      ['ID de identificación', props.identificationId],
+      ['Tipo de identificación', props.identificationType],
+      ['Número de identificación', props.identificationNumber],
+      ['Fecha de creación (Identificación)', props.identificationCreationDate],
+      ['Fecha de actualización (Identificación)', props.identificationUpdateDate],
+      ['Fecha de eliminación (Identificación)', props.identificationDeleteDate],
+      ['ID de dirección', props.addressId],
+      ['País', props.country],
+      ['Estado', props.state],
+      ['Ciudad', props.city],
+      ['Colonia', props.neighborhood],
+      ['Código postal', props.postalCode],
+      ['Calle', props.street],
+      ['Número exterior', props.exteriorNumber],
+      ['Número interior', props.interiorNumber],
+      ['Fecha de creación (dirección)', props.addressCreationDate],
+      ['Fecha de actualización (dirección)', props.addressUpdateDate],
+      ['Fecha de eliminación (dirección)', props.addressDeleteDate],
+    ];
+    const tableHeaders = [['Campo', 'Valor']];
+
+    // Agregar la tabla al documento
+    doc.autoTable({
+      head: tableHeaders,
+      body: tableData,
+    });
+
+    // Guardar el documento como un archivo PDF con el nombre 'userData.pdf'
+    doc.save('userData.pdf');
   };
-  
-  export default Button;
+
+  return (
+    <button onClick={generatePDF}>
+      Generar PDF
+    </button>
+  );
+}
+
+export default PDFGenerator;
