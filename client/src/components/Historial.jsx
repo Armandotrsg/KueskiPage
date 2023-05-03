@@ -2,6 +2,8 @@ import DataTable from "react-data-table-component";
 import { useState, useEffect } from "react";
 import { Loader } from "./Loader";
 import { Button } from "./Button";
+import { ModalArco } from "./ModalArco";
+//import { ModalArco } from "./ModalArco";
 
 export const Historial = () => {
     const [tableData, setTableData] = useState([]);
@@ -10,6 +12,10 @@ export const Historial = () => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [selectedArcoType, setSelectedArcoType] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalData, setModalData] = useState(null); //pasar data al modal
+
+
 
     const columns = [
         {
@@ -67,6 +73,26 @@ export const Historial = () => {
             grow: 1,
             width: "flex",
             format: (row) => <div>{row.created_at.split("T")[0]}</div>,
+        },
+
+        {
+            name: "Ver",
+            selector: "id",
+            sortable: false,
+            cell: (row) => (
+                <Button
+                    onClick={() => handleView(row)}
+                    toolTipContent={"Ver registro"}
+                    id={Math.floor(Math.random() * 10000).toString()}
+                    toolTipHide={1800}
+                    className={"hover:underline"}
+                >
+                    Ver
+                </Button>
+            ),
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
         },
     ];
 
@@ -126,6 +152,18 @@ export const Historial = () => {
         setEndDate("");
         setSelectedArcoType("");
     };
+
+    //Carga los datos de la fila seleccionada a partir de la API y carga el modal una vez se presione el botón "Ver" de la misma
+    const handleView = (row) => {
+        fetch(`/api/arco_registers/${row.registro_arco_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setModalData(data[0]);
+                setModalOpen(true);
+            });
+        //setModalOpen(true);
+    };
+
 
     return (
         <div className="flex flex-col pl-5 pr-5 pb-5 md:h-screen w-screen md:overflow-scroll">
@@ -234,6 +272,7 @@ export const Historial = () => {
                 {loading ? (
                     <Loader />
                 ) : (
+                <>
                     <DataTable
                         columns={columns}
                         data={filteredData}
@@ -242,6 +281,15 @@ export const Historial = () => {
                         searchable
                         className="z-0 w-full text-sm text-left text-black dark:text-black"
                     ></DataTable>
+
+                    <ModalArco 
+                    isOpen = {modalOpen}
+                    onClose = {() => setModalOpen(false)}   // Modificar estos atributos
+                    //arcoRegister = {modalArcoRegister} 
+                    userData = {modalData}
+                    />
+
+                </>
                 )}
             </main>
         </div>
