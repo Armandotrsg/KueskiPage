@@ -12,10 +12,13 @@ function PDFGenerator(props) {
       'https://d1.awsstatic.com/case-studies/Latam%20Cases%20Assets/Kueski.309ce0a57d3f89bf47b176fb6f1a985e373d1e90.png',
       'PNG',
       167,
-      -2.5,
+      2.5,
       30,
       20
     );
+
+    // Agregar el título en la esquina contraria a la imagen
+    doc.text('Datos de usuario', 56, 15.4, null, null, 'right');
 
     // Definir la tabla
     const tableData = [      ['ID de usuario', props.userId],
@@ -61,6 +64,7 @@ function PDFGenerator(props) {
     doc.autoTable({
       head: tableHeaders,
       body: tableData,
+      startY: 25, // comenzar la tabla a 30 unidades desde la parte superior
     });
 
     // Guardar el documento como un archivo PDF con el nombre 'userData.pdf'
@@ -75,3 +79,18 @@ function PDFGenerator(props) {
 }
 
 export default PDFGenerator;
+
+/* Ejecutar el componente botón
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Main from './components/userDataPDF';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Main />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+*/

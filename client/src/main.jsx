@@ -1,10 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Main from './components/userDataPDF';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './index.css'
+import 'react-tooltip/dist/react-tooltip.css'
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Main />
+    <App />
   </React.StrictMode>,
-  document.getElementById('root')
-);
+)
