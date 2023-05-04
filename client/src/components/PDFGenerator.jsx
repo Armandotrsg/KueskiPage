@@ -1,11 +1,15 @@
-import React from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { spanishKeysAddresses, spanishKeysIdentifications, spanishKeysUsers } from '../shared/SpanishKeys';
 
-function PDFGenerator(props) {
+export const PDFGenerator = ({userData}) => {
   const generatePDF = () => {
     // Crear una nueva instancia de jsPDF
     const doc = new jsPDF();
+    const keys = Object.keys(userData);
+    const addressesKeys = Object.keys(userData.addresses[0]);
+    const identificationKeys = Object.keys(userData.identifications[0]);
+    const otherKeys = userData.user_data !== null ? Object.keys(userData.user_data) : [];
 
     // Agregar la imagen
     doc.addImage(
@@ -21,43 +25,24 @@ function PDFGenerator(props) {
     doc.text('Datos de usuario', 56, 15.4, null, null, 'right');
 
     // Definir la tabla
-    const tableData = [      ['ID de usuario', props.userId],
-      ['Nombre', props.firstName],
-      ['Apellido paterno', props.lastName1],
-      ['Apellido materno', props.lastName2],
-      ['Fecha de nacimiento', props.birthDate],
-      ['Nacionalidad', props.nationality],
-      ['Estado de nacimiento', props.birthState],
-      ['Actividad económica', props.economicActivity],
-      ['CURP', props.curp],
-      ['Género', props.gender],
-      ['Número de teléfono', props.phone],
-      ['Email', props.email],
-      ['Es cliente', props.isClient],
-      ['Está bloqueado', props.isBlocked],
-      ['Fecha de creación', props.creationDate],
-      ['Fecha de actualización (Cliente)', props.clientUpdateDate],
-      ['Fecha de eliminación (Cliente)', props.clientDeleteDate],
-      ['RFC', props.rfc],
-      ['ID de identificación', props.identificationId],
-      ['Tipo de identificación', props.identificationType],
-      ['Número de identificación', props.identificationNumber],
-      ['Fecha de creación (Identificación)', props.identificationCreationDate],
-      ['Fecha de actualización (Identificación)', props.identificationUpdateDate],
-      ['Fecha de eliminación (Identificación)', props.identificationDeleteDate],
-      ['ID de dirección', props.addressId],
-      ['País', props.country],
-      ['Estado', props.state],
-      ['Ciudad', props.city],
-      ['Colonia', props.neighborhood],
-      ['Código postal', props.postalCode],
-      ['Calle', props.street],
-      ['Número exterior', props.exteriorNumber],
-      ['Número interior', props.interiorNumber],
-      ['Fecha de creación (dirección)', props.addressCreationDate],
-      ['Fecha de actualización (dirección)', props.addressUpdateDate],
-      ['Fecha de eliminación (dirección)', props.addressDeleteDate],
-    ];
+    let tableData = [];
+
+    // Agregar los datos del usuario
+    keys.map((key) => {
+      if (key !== 'addresses' && key !== 'identifications' && key !== 'user_data') {
+        tableData.push([spanishKeysUsers[key], userData[key]]);
+      }
+    })
+
+    // Agregar los datos de otros
+    if (otherKeys.length > 0) {
+      let otherData = [];
+      otherKeys.map((key) => {
+        otherData.push([key, userData.user_data[key]]);
+      })
+      tableData.push(otherData);
+    }
+
     const tableHeaders = [['Campo', 'Valor']];
 
     // Agregar la tabla al documento
@@ -67,18 +52,43 @@ function PDFGenerator(props) {
       startY: 25, // comenzar la tabla a 30 unidades desde la parte superior
     });
 
+    //Agregar una tabla nueva por cada dirección
+    userData.addresses.map((address) => {
+      let addressData = [];
+      addressesKeys.map((key) => {
+        addressData.push([spanishKeysAddresses[key], address[key]]);
+      })
+      const tableHeaders = [['Campo', 'Valor']];
+      doc.autoTable({
+        head: tableHeaders,
+        body: addressData,
+        startY: doc.autoTable.previous.finalY + 10,
+      });
+    })
+
+    //Agregar una tabla nueva por cada identificación
+    userData.identifications.map((identification) => {
+      let identificationData = [];
+      identificationKeys.map((key) => {
+        identificationData.push([spanishKeysIdentifications[key], identification[key]]);
+      })
+      const tableHeaders = [['Campo', 'Valor']];
+      doc.text(`Identificación ${identification.identification_id}`, 10, doc.autoTable.previous.finalY + 20);
+      doc.autoTable({
+        head: tableHeaders,
+        body: identificationData,
+        startY: doc.autoTable.previous.finalY + 10,
+      });
+    })
+
     // Guardar el documento como un archivo PDF con el nombre 'userData.pdf'
     doc.save('userData.pdf');
   };
 
   return (
-    <button onClick={generatePDF}>
-      Generar PDF
-    </button>
+    generatePDF()
   );
 }
-
-export default PDFGenerator;
 
 /* Ejecutar el componente botón
 
