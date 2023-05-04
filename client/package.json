@@ -9,15 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^3.1.9",
+    "jspdf-autotable": "^3.5.28",
     "react": "^18.2.0",
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
-
-    "react-tooltip": "^5.11.1",
-
     "react-router-dom": "^6.10.0",
+    "react-tooltip": "^5.11.1",
     "styled-components": "^5.3.9"
-
   },
   "proxy": "http://localhost:3001",
   "devDependencies": {
