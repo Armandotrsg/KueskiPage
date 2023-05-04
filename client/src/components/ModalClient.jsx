@@ -87,7 +87,7 @@ export const ModalClient = ({
         });
     
         //Agregar una tabla nueva por cada dirección
-        userData.addresses.map((address) => {
+        userData.addresses.map((address, index) => {
             let addressData = [];
             addressesKeys.map((key) => {
                 if (key !== "user_id") {
@@ -97,7 +97,7 @@ export const ModalClient = ({
                     ]);
                 }
             });
-            const tableHeaders = [[`Datos de dirección ${address.address_id}`, "Valor"]];
+            const tableHeaders = [[`Datos de dirección ${index+1}`, "Valor"]];
             doc.autoTable({
                 head: tableHeaders,
                 body: addressData,
@@ -106,7 +106,7 @@ export const ModalClient = ({
         });
     
         //Agregar una tabla nueva por cada identificación
-        userData.identifications.map((identification) => {
+        userData.identifications.map((identification, index) => {
             let identificationData = [];
             identificationKeys.map((key) => {
                 if (key !== "user_id") {
@@ -116,7 +116,7 @@ export const ModalClient = ({
                     ]);
                 }
             });
-            const tableHeaders = [[`Datos de identificación ${identification.identification_id}`, "Valor"]];
+            const tableHeaders = [[`Datos de identificación ${index+1}`, "Valor"]];
             doc.autoTable({
                 head: tableHeaders,
                 body: identificationData,
