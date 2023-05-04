@@ -16,6 +16,8 @@ import { Button } from "./Button";
 import { Alert } from "./Alert";
 import { useState } from "react";
 import { Feedback } from "./Feedback";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export const ModalClient = ({
     isOpen,
@@ -32,6 +34,100 @@ export const ModalClient = ({
     const [serverResponse, setServerResponse] = useState("");
     const [serverSuccess, setServerSuccess] = useState(true);
 
+    const GeneratePDF = () => {
+        // Crear una nueva instancia de jsPDF
+        const doc = new jsPDF();
+        const keys = Object.keys(userData);
+        const addressesKeys = Object.keys(userData.addresses[0]);
+        const identificationKeys = Object.keys(userData.identifications[0]);
+        const otherKeys =
+            userData.user_data !== null ? Object.keys(userData.user_data) : [];
+    
+        // Agregar la imagen
+        doc.addImage(
+            "https://d1.awsstatic.com/case-studies/Latam%20Cases%20Assets/Kueski.309ce0a57d3f89bf47b176fb6f1a985e373d1e90.png",
+            "PNG",
+            167,
+            2.5,
+            30,
+            20
+        );
+    
+        // Agregar el título en la esquina contraria a la imagen
+        doc.text(`Datos de ${userData.name}`, 56, 15.4, null, null, "right");
+    
+        // Definir la tabla
+        let tableData = [];
+    
+        // Agregar los datos del usuario
+        keys.map((key) => {
+            if (
+                key !== "addresses" &&
+                key !== "identifications" &&
+                key !== "user_data"
+            ) {
+                tableData.push([spanishKeysUsers[key], userData[key]]);
+            }
+        });
+    
+        // Agregar los datos de otros
+        if (otherKeys.length > 0) {
+            otherKeys.map((key) => {
+                tableData.push([key, userData.user_data[key]]);
+            });
+        }
+    
+        const tableHeaders = [["Datos de usuario", "Valor"]];
+    
+        // Agregar la tabla al documento
+        doc.autoTable({
+            head: tableHeaders,
+            body: tableData,
+            startY: 25, // comenzar la tabla a 30 unidades desde la parte superior
+        });
+    
+        //Agregar una tabla nueva por cada dirección
+        userData.addresses.map((address) => {
+            let addressData = [];
+            addressesKeys.map((key) => {
+                if (key !== "user_id") {
+                    addressData.push([
+                        spanishKeysAddresses[key],
+                        address[key],
+                    ]);
+                }
+            });
+            const tableHeaders = [[`Datos de dirección ${address.address_id}`, "Valor"]];
+            doc.autoTable({
+                head: tableHeaders,
+                body: addressData,
+                startY: doc.autoTable.previous.finalY + 10,
+            });
+        });
+    
+        //Agregar una tabla nueva por cada identificación
+        userData.identifications.map((identification) => {
+            let identificationData = [];
+            identificationKeys.map((key) => {
+                if (key !== "user_id") {
+                    identificationData.push([
+                        spanishKeysIdentifications[key],
+                        identification[key],
+                    ]);
+                }
+            });
+            const tableHeaders = [[`Datos de identificación ${identification.identification_id}`, "Valor"]];
+            doc.autoTable({
+                head: tableHeaders,
+                body: identificationData,
+                startY: doc.autoTable.previous.finalY + 10,
+            });
+        });
+    
+        // Guardar el documento como un archivo PDF con el nombre 'userData.pdf'
+        doc.save(`DatosDe${userData.name}.pdf`);
+    };
+
     const showMessage = () => {
         setShowFeedback(true);
         setTimeout(() => {
@@ -40,7 +136,7 @@ export const ModalClient = ({
         }, 3500);
     };
     const acceptProcedure = (arcoRightLetter) => {
-        console.log("Accept");
+        console.log(arcoRightLetter);
         if (arcoRightLetter === "R") {
             let bandera = true;
             //Update the database with the new data that changed
@@ -217,6 +313,34 @@ export const ModalClient = ({
             if (!bandera) {
                 showMessage();
             }
+        } else if (arcoRightLetter === "A") {
+            GeneratePDF();
+            // Agrega el registro a la tabla de registros_arco
+            fetch(`/api/arco_registers`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user_id: userData.user_id,
+                    arco_type: "A",
+                    message: "Se generó el PDF de la solicitud de acceso",
+                }),
+            }).then((res) => {
+                if (res.ok) {
+                    setServerSuccess(true);
+                    setServerResponse("PDF generado correctamente");
+                } else {
+                    setServerSuccess(false);
+                    setServerResponse("Error al generar el PDF");
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                setServerSuccess(false);
+                setServerResponse("Error al generar el PDF");
+            });
+            showMessage();
         }
     };
 
@@ -438,7 +562,7 @@ export const ModalClient = ({
                 onClose={() => setIsAlertOpen(false)}
                 message={alertMessage}
                 onCloseOther={onClose}
-                acceptFunction={() => setIsAlertOpen(false)}
+                acceptFunction={() => acceptProcedure(arcoRight[0])}
             />
             <Alert
                 isOpen={isAlert2Open}
